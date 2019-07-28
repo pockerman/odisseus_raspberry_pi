@@ -1,3 +1,6 @@
 CircuitPython
 Flask
 OpenCV
+RPI.GPIO
+adafruit-blinka
+adafruit-circuitpython-motorkit
