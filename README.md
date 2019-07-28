@@ -16,3 +16,4 @@ Make sure that the raspberry pi used satisfies the  requirements in _requirement
 ## Useful Links
 
 - **Installing CircuitPython Libraries on Raspberry Pi:** https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi
+- https://cdn-learn.adafruit.com/downloads/pdf/adafruit-dc-and-stepper-motor-hat-for-raspberry-pi.pdf
