@@ -12,3 +12,7 @@
 ## Installation
 
 Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_
+
+## Useful Links
+
+- **Installing CircuitPython Libraries on Raspberry Pi:** https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi
