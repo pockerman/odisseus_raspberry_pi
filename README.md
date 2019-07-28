@@ -1,6 +1,6 @@
 # Odisseus Raspberry Pi
 
-This is my attempt to develop a four wheels multisensor robot in Raspberry Pi. 
+This is my attempt to develop a four wheels multisensor robot in Raspberry Pi. There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
 
 ## Hardware
 
