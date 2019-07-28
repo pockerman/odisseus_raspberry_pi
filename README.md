@@ -1,5 +1,7 @@
 # Odisseus Raspberry Pi
 
+This is my attempt to develop a four wheels multisensor robot in Raspberry Pi. 
+
 ## Hardware
 
 - 4 Wheels
