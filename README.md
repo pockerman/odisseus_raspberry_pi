@@ -13,7 +13,15 @@ This is my attempt to develop a four wheels multisensor robot in Raspberry Pi. T
 
 ## Installation
 
-Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_
+Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_. All in all
+
+- ```pip3 install RPI.GPIO```
+- ```pip3 install adafruit-blinka```
+- ```sudo pip3 install adafruit-circuitpython-motorkit
+
+**Remarks**
+
+
 
 ## Useful Links
 
