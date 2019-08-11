@@ -21,6 +21,6 @@ def test_move_bwd():
     prop.stop()
 
 
-if __name__ == '__name__':
+if __name__ == '__main__':
     test_move_fwd()
     test_move_bwd()
