@@ -1,4 +1,5 @@
 import time
+import RPi.GPIO as GPIO
 
 from config import IN_PIN_1_MOTOR_1
 from config import IN_PIN_2_MOTOR_1
@@ -24,5 +25,10 @@ def test_move_bwd():
 
 
 if __name__ == '__main__':
+    GPIO.setmode(GPIO.BCM)
+
     test_move_fwd()
+    GPIO.cleanup()
+
     test_move_bwd()
+    GPIO.cleanup()
