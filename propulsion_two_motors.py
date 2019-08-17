@@ -30,45 +30,45 @@ class Propulsion2Motors:
 
     def forward(self, speed):
 
-        if self._pin_enabled[0][0]:
+        if self._pin_enabled[0] !=False and self._pin_enabled[1][0]:
             GPIO.output(self._pin_enabled[0][1], True)
 
-        if self._pin_enabled[1][0]:
+        if self._pin_enabled[1] !=False and self._pin_enabled[1][0]:
             GPIO.output(self._pin_enabled[1][1], False)
 
-        if self._pin_enabled[2][0]:
+        if self._pin_enabled[2] != False and self._pin_enabled[2][0]:
             GPIO.output(self._pin_enabled[2][1], True)
 
-        if self._pin_enabled[3][0]:
+        if self._pin_enabled[3]!= False and self._pin_enabled[3][0]:
             GPIO.output(self._pin_enabled[3][1], False)
 
     def backward(self, speed):
 
-        if self._pin_enabled[0][0]:
+        if self._pin_enabled[0] !=False and self._pin_enabled[0][0]:
             GPIO.output(self._pin_enabled[0][1], False)
 
-        if self._pin_enabled[1][0]:
+        if self._pin_enabled[1] !=False and self._pin_enabled[1][0]:
             GPIO.output(self._pin_enabled[1][1], True)
 
-        if self._pin_enabled[2][0]:
+        if self._pin_enabled[2] != False and self._pin_enabled[2][0]:
             GPIO.output(self._pin_enabled[2][1], False)
 
-        if self._pin_enabled[3][0]:
+        if self._pin_enabled[3]!= False and self._pin_enabled[3][0]:
             GPIO.output(self._pin_enabled[3][1], True)
 
 
     def stop(self):
 
-        if self._pin_enabled[0][0]:
+        if self._pin_enabled[0] !=False and self._pin_enabled[1][0]:
             GPIO.output(self._pin_enabled[0][1], False)
 
-        if self._pin_enabled[1][0]:
+        if self._pin_enabled[1] !=False and self._pin_enabled[1][0]:
             GPIO.output(self._pin_enabled[1][1], False)
 
-        if self._pin_enabled[2][0]:
+        if self._pin_enabled[2] != False and self._pin_enabled[2][0]:
             GPIO.output(self._pin_enabled[2][1], False)
 
-        if self._pin_enabled[3][0]:
+        if self._pin_enabled[3]!= False and self._pin_enabled[3][0]:
             GPIO.output(self._pin_enabled[3][1], False)
 
 
