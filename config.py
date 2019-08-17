@@ -40,13 +40,13 @@ io.setmode(io.BCM)
 
 # the Pins Odisseus is using
 
-IN_PIN_1 = 27
-IN_PIN_2 = 22
-IN_PIN_3 = 20
-IN_PIN_4 = 21
+IN_PIN_1_MOTOR_1 = 17
+IN_PIN_2_MOTOR_1 = 22
+#IN_PIN_3 = 20
+#IN_PIN_4 = 21
 
 # the IR sensor PIN ID
-IR_PIN_ID = 18
+#IR_PIN_ID = 18
 
 #io.setup(IN_PIN_1, io.OUT)
 #io.setup(IN_PIN_2, io.OUT)
