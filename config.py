@@ -42,6 +42,7 @@ io.setmode(io.BCM)
 
 IN_PIN_1_MOTOR_1 = 17
 IN_PIN_2_MOTOR_1 = 22
+ENA_MOTOR_1_PIN_ID = 25
 #IN_PIN_3 = 20
 #IN_PIN_4 = 21
 
