@@ -12,6 +12,7 @@ def test_move_fwd():
     prop = Propulsion2Motors(in_pin_1_motor_1 = IN_PIN_1_MOTOR_1, in_pin_2_motor_1 = IN_PIN_2_MOTOR_1, in_pin_1_motor_2 = None, in_pin_2_motor_2=None)
     prop.forward(10)
     time.sleep(2)
+    GPIO.cleanup()
     prop.stop()
 
 
@@ -21,10 +22,12 @@ def test_move_bwd():
     prop = Propulsion2Motors(in_pin_1_motor_1 = IN_PIN_1_MOTOR_1, in_pin_2_motor_1 = IN_PIN_2_MOTOR_1, in_pin_1_motor_2 = None, in_pin_2_motor_2=None)
     prop.reverse()
     time.sleep(2)
+    GPIO.cleanup()
     prop.stop()
 
 
 if __name__ == '__main__':
+    
     GPIO.setmode(GPIO.BCM)
 
     test_move_fwd()
