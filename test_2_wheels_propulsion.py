@@ -31,11 +31,15 @@ def test_move_bwd():
 
 if __name__ == '__main__':
 
-    GPIO.setmode(GPIO.BCM)
+    try:
 
-    test_move_fwd()
-    GPIO.cleanup()
+        GPIO.setmode(GPIO.BCM)
 
-    GPIO.setmode(GPIO.BCM)
-    test_move_bwd()
-    GPIO.cleanup()
+        test_move_fwd()
+        GPIO.cleanup()
+
+        GPIO.setmode(GPIO.BCM)
+        test_move_bwd()
+        GPIO.cleanup()
+    except:
+        GPIO.cleanup()
