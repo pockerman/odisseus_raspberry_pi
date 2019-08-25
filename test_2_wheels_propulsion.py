@@ -16,7 +16,7 @@ def test_move_fwd():
                              in_pin_1_motor_2 = None, in_pin_2_motor_2=None)
 
     p = GPIO.PWM(ENA_MOTOR_1_PIN_ID, 1000)
-    p.start(10)
+    p.start(255)
     prop.forward(10)
     time.sleep(5)
     prop.stop()
@@ -29,6 +29,8 @@ def test_move_bwd():
                              in_pin_2_motor_1 = IN_PIN_2_MOTOR_1,
                              en_pin_motor_1 = ENA_MOTOR_1_PIN_ID,
                              in_pin_1_motor_2 = None, in_pin_2_motor_2=None)
+    p = GPIO.PWM(ENA_MOTOR_1_PIN_ID, 1000)
+    p.start(255)
     prop.backward(10)
     time.sleep(2)
     prop.stop()
