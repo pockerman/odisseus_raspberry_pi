@@ -33,7 +33,7 @@ class Propulsion2Motors:
 
     def forward(self, speed):
 
-        if self._pin_enabled[0] !=False and self._pin_enabled[1][0]:
+        if self._pin_enabled[0] !=False and self._pin_enabled[0][0]:
             GPIO.output(self._pin_enabled[0][1], GPIO.HIGH)
 
         if self._pin_enabled[1] !=False and self._pin_enabled[1][0]:
