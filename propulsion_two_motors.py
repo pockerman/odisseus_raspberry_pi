@@ -13,10 +13,12 @@ class Propulsion2Motors:
         self._pin_enabled =[False for i in range(4)]
 
         if in_pin_1_motor_1 is not None:
+            print("Set up PIN_1_MOTOR_1 at: ", in_pin_1_motor_1)
             GPIO.setup(in_pin_1_motor_1, GPIO.OUT)
             self._pin_enabled[0] = (True, in_pin_1_motor_1)
 
         if in_pin_2_motor_1 is not None:
+            print("Set up PIN_2_MOTOR_1 at: ", in_pin_2_motor_1)
             GPIO.setup(in_pin_2_motor_1, GPIO.OUT)
             self._pin_enabled[1] = (True, in_pin_2_motor_1)
 
@@ -34,9 +36,11 @@ class Propulsion2Motors:
     def forward(self, speed):
 
         if self._pin_enabled[0] !=False and self._pin_enabled[0][0]:
+            print("Setting to HIGH: ", self._pin_enabled[0][1])
             GPIO.output(self._pin_enabled[0][1], GPIO.HIGH)
 
         if self._pin_enabled[1] !=False and self._pin_enabled[1][0]:
+            print("Setting to LOW: ", self._pin_enabled[1][1])
             GPIO.output(self._pin_enabled[1][1], GPIO.LOW)
 
         if self._pin_enabled[2] != False and self._pin_enabled[2][0]:
@@ -48,9 +52,11 @@ class Propulsion2Motors:
     def backward(self, speed):
 
         if self._pin_enabled[0] !=False and self._pin_enabled[0][0]:
+            print("Setting to LOW: ", self._pin_enabled[0][1])
             GPIO.output(self._pin_enabled[0][1], GPIO.LOW)
 
         if self._pin_enabled[1] !=False and self._pin_enabled[1][0]:
+            print("Setting to HIGH: ", self._pin_enabled[1][1])
             GPIO.output(self._pin_enabled[1][1], GPIO.HIGH)
 
         if self._pin_enabled[2] != False and self._pin_enabled[2][0]:
