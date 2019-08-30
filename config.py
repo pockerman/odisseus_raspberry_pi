@@ -2,7 +2,7 @@
 Configuration file for Odisseus
 """
 
-import RPi.GPIO as io
+#import RPi.GPIO as io
 
 import cv2
 
@@ -10,6 +10,8 @@ import cv2
 ON_RASP_PI = True
 
 DEBUG = True
+ENABLE_LOG = True
+ENABLE_WARNINGS = True
 PORT =  5001
 HOST = '0.0.0.0'
 
@@ -20,6 +22,8 @@ I2CAddr = 0x00000000
 SCREEN_SIZE = (320, 240)
 ENCODE_PARAMS = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 INDEX_DISPLAY_TEMPLATE_NAME = 'image_server.html'
+CONTROL_SERVER_INDEX_TEMPLATE_NAME = 'control_server_index.html'
+PROPULSION_CONTROL_TEMPLATE_NAME = 'propulsion_control.html'
 CAMERA_SLEEP_TIME = 0.05
 NEEDED_CAMERA_ROTATION = 0.0
 
@@ -36,7 +40,7 @@ control_queue = Queue()
 display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
 
 
-io.setmode(io.BCM)
+#io.setmode(io.BCM)
 
 # the Pins Odisseus is using
 
