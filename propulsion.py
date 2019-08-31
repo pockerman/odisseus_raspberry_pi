@@ -1,62 +1,112 @@
 """
-Handles the four motors collectively
+Handles the propulsion system when having
+two motors
 """
+from config import ENABLE_WARNINGS
+from config import ON_RASP_PI
 
-from adafruit_motorkit import MotorKit
+if ON_RASP_PI:
+    import RPi.GPIO as GPIO
+
+
+class PropulsionParams:
+
+    def __init__(self, in_pin_1_motor_1, in_pin_2_motor_1, en_pin_motor_1,
+                 in_pin_1_motor_2, in_pin_2_motor_2, en_pin_motor_2):
+        self.in_pin_1_motor_1 = in_pin_1_motor_1
+        self.in_pin_2_motor_1 = in_pin_2_motor_1
+        self.en_pin_motor_1 = en_pin_motor_1
+
+        self.in_pin_1_motor_2 = in_pin_1_motor_2
+        self.in_pin_2_motor_2 = in_pin_2_motor_2
+        self.en_pin_motor_2 = en_pin_motor_2
 
 class Propulsion:
 
-    def __init__(self):
-        self.__motor_kit = MotorKit()
+    def __init__(self, params):
+
+        self.__params = params
+
+        if self.__params.in_pin_1_motor_1 is not None and \
+           self.__params.in_pin_2_motor_1 is not None and \
+           self.__params.en_pin_motor_1 is not None:
+
+            print("Set up PIN_1_MOTOR_1 at: ", self.__params.in_pin_1_motor_1)
+            print("Set up PIN_2_MOTOR_1 at: ", self.__params.in_pin_2_motor_1)
+            print("Set up PIN_EN_MOTOR_1 at: ", self.__params.en_pin_motor_1)
+
+            if ON_RASP_PI:
+                GPIO.setup(self.__params.in_pin_1_motor_1, GPIO.OUT)
+                GPIO.setup(self.__params.in_pin_2_motor_1, GPIO.OUT)
+                GPIO.setup(self.__params.en_pin_motor_1,   GPIO.OUT)
+
+        elif ENABLE_WARNINGS:
+            print(" Either of the pins for motor 1 is None ")
+
+        if self.__params.in_pin_1_motor_2 is not None and \
+           self.__params.in_pin_2_motor_2 is not None and \
+           self.__params.en_pin_motor_2 is not None:
+
+            print("Set up PIN_1_MOTOR_2 at: ", self.__params.in_pin_1_motor_2)
+            print("Set up PIN_2_MOTOR_2 at: ", self.__params.in_pin_2_motor_2)
+            print("Set up PIN_EN_MOTOR_2 at: ", self.__params.en_pin_motor_2)
+
+            if ON_RASP_PI:
+                GPIO.setup(self.__params.in_pin_1_motor_2, GPIO.OUT)
+                GPIO.setup(self.__params.in_pin_2_motor_2, GPIO.OUT)
+                GPIO.setup(self.__params.en_pin_motor_2,   GPIO.OUT)
+
+        elif ENABLE_WARNINGS:
+            print(" Either of the pins for motor 2 is None ")
+
+    def forward(self, speed):
+
+        # clapm the max speed to 100 as this is
+        # the max dutty speed
+        if(speed > 100):
+            speed = 100
+
+        if ON_RASP_PI:
+            p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
+            p1.start(speed)
+
+            GPIO.output(self.__params.in_pin_1_motor_1, GPIO.HIGH)
+            GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
+
+            p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
+            p2.start(speed)
+            GPIO.output(self.__params.in_pin_1_motor_2, GPIO.HIGH)
+            GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 
 
-    def forward(self,  throttle):
-        """
-        Instruct the four motors to drive forward with throttle
-        :param throttle: throttle should be in [0,1]
-        """
-        self.__motor_kit.motor1.throttle = throttle
-        self.__motor_kit.motor2.throttle = throttle
-        self.__motor_kit.motor3.throttle = throttle
-        self.__motor_kit.motor4.throttle = throttle
+    def backward(self, speed):
 
-    def reverse(self, throttle):
-        """
-        Instruct the four motors to drive backward with throttle
-        :param throttle: throttle should be in [0,1]
-        """
-        self.__motor_kit.motor1.throttle = -throttle
-        self.__motor_kit.motor2.throttle = -throttle
-        self.__motor_kit.motor3.throttle = -throttle
-        self.__motor_kit.motor4.throttle = -throttle
+        if ON_RASP_PI:
+            p1 = GPIO.PWM(self.__params.en_pin_motor_1, 1000)
+            p1.start(speed)
+
+            GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOw)
+            GPIO.output(self.__params.in_pin_2_motor_1, GPIO.HIGH)
+
+            p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
+            p2.start(speed)
+            GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOw)
+            GPIO.output(self.__params.in_pin_2_motor_2, GPIO.HIGH)
+
+    def left(self, speed):
+        pass
+
+    def right(self, speed):
+        pass
 
     def stop(self):
-        """
-        Instruct the four motors to stop. This is done by setting the
-        throttle to zero
-        """
-        self.__motor_kit.motor1.throttle = 0
-        self.__motor_kit.motor2.throttle = 0
-        self.__motor_kit.motor3.throttle = 0
-        self.__motor_kit.motor4.throttle = 0
 
-    def stop_motor(self, motor_id):
-        """
-        Instruct the motor with the given motor_id to stop.
-        This is done by setting the throttle of the motor to zero
-        :param motor_id should be in [0, 3]
-        """
+        if ON_RASP_PI:
+            GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOw)
+            GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
+            GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
+            GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 
-        if motor_id not in [0, 1, 2, 3]:
-            raise ValueError("Invalid motor id")
 
-        if motor_id == 0:
-            self.__motor_kit.motor1.throttle = 0
-        elif motor_id == 1:
-            self.__motor_kit.motor2.throttle = 0
-        elif motor_id == 2:
-            self.__motor_kit.motor3.throttle = 0
-        elif motor_id == 3:
-            self.__motor_kit.motor4.throttle = 0
 
 
