@@ -46,6 +46,11 @@ class Odisseus:
             print("Odisseus was interrupted...")
         self.__interrupted = True
 
+    def remove_interrupt(self):
+        if ENABLE_WARNINGS:
+            print("Odisseus was interrupt removed...")
+        self.__interrupted = False
+
     def stop_raw(self):
         self.__propulsion.stop()
 
