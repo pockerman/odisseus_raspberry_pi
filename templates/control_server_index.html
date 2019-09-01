@@ -12,7 +12,11 @@
         <h2>Main Camera View</h2>
     </div>
 
-     <a href="{{ url_for('control', control_name='propulsion') }}" >Propulsion Control</a>
-     <a href="{{ url_for('control', control_name='interrupt') }}" >Interrupt ( stops Odisseus )</a>
+    <div>
+        <h2>Main Control Items</h2>
+        <a href="{{ url_for('control', control_name='propulsion') }}" >Propulsion Control</a>
+        <a href="{{ url_for('control', control_name='interrupt') }}" >Interrupt ( stops the process Odisseus is attached on )</a>
+        <a href="{{ url_for('control', control_name='start') }}" >Start ( starts a new process for Odisseus )</a>
+    </div>
 </body>
 </html>

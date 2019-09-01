@@ -16,6 +16,11 @@
     <div>
         <h2>Propulsion Control</h2>
 
+        <div>
+            <h3>Instructions</h3>
+            <p>Control the motion of Odisseus from the panel below.</p>
+        </div>
+
         <form method="POST" action="{{ url_for('propulsion_control_view') }}">
 
             <h3>Speed: </h3>
@@ -41,10 +46,20 @@
                 <option value="STOP">Stop</option>
             </select>
 
-             <button type="submit" >Submit</button>
+            <h3>Duration ( in seconds that the CMD should be executed ) : </h3>
+            <input type="number" name="duration"><br>
+
+            <br>
+            <button type="submit" >Submit</button>
 
         </form>
+    </div>
 
+       <div>
+        <h2>Main Control Items</h2>
+        <a href="{{ url_for('control', control_name='propulsion') }}" >Propulsion Control</a>
+        <a href="{{ url_for('control', control_name='interrupt') }}" >Interrupt ( stops the process Odisseus is attached on )</a>
+        <a href="{{ url_for('control', control_name='start') }}" >Start ( starts a new process for Odisseus )</a>
     </div>
 </body>
 </html>
