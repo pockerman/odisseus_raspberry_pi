@@ -4,11 +4,15 @@ Basic control cmds
 
 class ControlCmd(object):
 
-    def __index__(self, name):
+    def __index__(self, name, duration):
         self.__name = name
+        self.__duration = duration
 
     def get_name(self):
         return self.__name
+
+    def get_duration(self):
+        return self.__duration
 
 
 
@@ -16,8 +20,8 @@ class PropulsionCmd(ControlCmd):
 
     DIRECTIONS = ["FWD", "REVERSE", "RIGHT", "LEFT", "STOP"]
 
-    def __init__(self, direction, speed_value):
-        ControlCmd.__init__("PropulsionCmd")
+    def __init__(self, direction, speed_value, duration):
+        ControlCmd.__init__("PropulsionCmd", duration=duration)
 
         if direction not in PropulsionCmd.DIRECTIONS:
             raise ValueError("Invalid Direction. Direction: " + direction + " not in ['FWD', 'REVERSE', 'RIGHT', 'LEFT', 'STOP']")
