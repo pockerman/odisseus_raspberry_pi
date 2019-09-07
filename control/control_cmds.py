@@ -2,9 +2,10 @@
 Basic control cmds
 """
 import time
+from config.config import ENABLE_WARNINGS
 class ControlCmd(object):
 
-    def __index__(self, name, duration):
+    def __init__(self, name, duration):
         self.__name = name
         self.__duration = duration
 
@@ -23,7 +24,7 @@ class PropulsionCmd(ControlCmd):
         ControlCmd.__init__("PropulsionCmd", duration=duration)
 
         if direction not in PropulsionCmd.DIRECTIONS:
-            raise ValueError("Invalid Direction. Direction: " + direction + " not in ['FWD', 'REVERSE', 'RIGHT', 'LEFT', 'STOP']")
+            raise ValueError("Invalid Direction. Direction: " + direction + " not in " + str(PropulsionCmd.DIRECTIONS))
 
         self.__direction = direction
         self.__speed_val = speed_value
@@ -46,6 +47,8 @@ class PropulsionCmd(ControlCmd):
             robot.move_left_raw(self.get_speed_value())
         elif self.__direction == "RIGHT":
             robot.move_right_raw(self.get_speed_value())
+        elif ENABLE_WARNINGS:
+            print("Direction: ", self.__direction, " not in ", str(PropulsionCmd.DIRECTIONS))
 
         time.sleep(self.get_duration())
 
