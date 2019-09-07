@@ -2,6 +2,7 @@
 Handles the propulsion system when having
 two motors
 """
+import time
 from odisseus_config import ENABLE_WARNINGS
 from odisseus_config import ON_RASP_PI
 
@@ -69,11 +70,12 @@ class Propulsion:
 
         print("Set speed at: ", speed)
 
-        #p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
-        #p1.start(speed)
+        p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
+        p1.start(speed)
 
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.HIGH)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
+        time.sleep(5)
 
         #p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
         #p2.start(speed)

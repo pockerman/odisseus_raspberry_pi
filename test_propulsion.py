@@ -23,10 +23,10 @@ def test_move_fwd():
 
     prop = Propulsion(params=params)
 
-    p = GPIO.PWM(ENA_MOTOR_1_PIN_ID, 1000)
-    p.start(100)
+    #p = GPIO.PWM(ENA_MOTOR_1_PIN_ID, 1000)
+    #p.start(100)
     prop.forward(speed=100)
-    time.sleep(5)
+    #time.sleep(5)
     prop.stop()
 
 
