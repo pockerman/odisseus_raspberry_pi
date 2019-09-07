@@ -2,10 +2,13 @@
 Configuration file for Odisseus
 """
 
-import cv2
-
 # Flag indicating if we are on Pi or simply emulating
 ON_RASP_PI = False
+
+if ON_RASP_PI:
+    import cv2
+
+
 
 DEBUG = True
 ENABLE_LOG = True
@@ -18,7 +21,10 @@ I2CAddr = 0x00000000
 
 
 SCREEN_SIZE = (320, 240)
-ENCODE_PARAMS = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+
+if ON_RASP_PI:
+    ENCODE_PARAMS = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
+    
 INDEX_DISPLAY_TEMPLATE_NAME = 'image_server.html'
 CONTROL_SERVER_INDEX_TEMPLATE_NAME = 'control_server_index.html'
 PROPULSION_CONTROL_TEMPLATE_NAME = 'propulsion_control.html'

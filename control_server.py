@@ -8,8 +8,8 @@ from multiprocessing import Process
 from odisseus import Odisseus
 
 # configuration parameters
-from config import ENABLE_LOG
-from config import ON_RASP_PI
+from odisseus_config import ENABLE_LOG
+from odisseus_config import ON_RASP_PI
 
 if ON_RASP_PI:
     import RPi.GPIO as GPIO

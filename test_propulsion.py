@@ -1,14 +1,14 @@
 import time
-from config import ON_RASP_PI
+from odisseus_config import ON_RASP_PI
 
 if ON_RASP_PI:
     import RPi.GPIO as GPIO
 else:
     from gpio_mock import GPIOMock as GPIO
 
-from config import IN_PIN_1_MOTOR_1
-from config import IN_PIN_2_MOTOR_1
-from config import ENA_MOTOR_1_PIN_ID
+from odisseus_config import IN_PIN_1_MOTOR_1
+from odisseus_config import IN_PIN_2_MOTOR_1
+from odisseus_config import ENA_MOTOR_1_PIN_ID
 from propulsion  import Propulsion
 from propulsion import PropulsionParams
 
