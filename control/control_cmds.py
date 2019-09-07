@@ -23,7 +23,7 @@ class PropulsionCmd(ControlCmd):
     DIRECTIONS = ["FWD", "REVERSE", "RIGHT", "LEFT", "STOP"]
 
     def __init__(self, direction, speed_value, duration):
-        ControlCmd.__init__(name="PropulsionCmd", duration=duration)
+        ControlCmd.__init__(self, name="PropulsionCmd", duration=duration)
 
         # TODO: Do we really want this here??
         # Perhaps having a safe mode is better
