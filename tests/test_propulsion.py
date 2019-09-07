@@ -52,6 +52,9 @@ if __name__ == '__main__':
 
     try:
 
+        print("============================")
+        print("Executing Propulsion Tests")
+
         GPIO.setmode(GPIO.BCM)
         test_move_fwd()
         GPIO.cleanup()
@@ -60,6 +63,8 @@ if __name__ == '__main__':
         test_move_bwd()
         GPIO.cleanup()
 
+        print("Done Executing Propulsion Tests")
+        print("============================")
     except Exception as e:
         print("An exception occured whilst runnning the test..." + str(e))
     finally:
