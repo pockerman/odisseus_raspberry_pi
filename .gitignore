@@ -1,2 +1,10 @@
 .idea/
 camera_server/__pycache__/
+control/__pycache__/
+__pycache__/
+config/__pycache__/config.cpython-36.pyc
+config/__pycache__/__init__.cpython-36.pyc
+mocks/__pycache__/__init__.cpython-36.pyc
+mocks/__pycache__/gpio_mock.cpython-36.pyc
+server/__pycache__/__init__.cpython-36.pyc
+server/__pycache__/control_server.cpython-36.pyc
