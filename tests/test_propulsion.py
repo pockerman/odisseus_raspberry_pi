@@ -1,9 +1,16 @@
 import time
-import RPi.GPIO as GPIO
 
-from config import IN_PIN_1_MOTOR_1
-from config import IN_PIN_2_MOTOR_1
-from config import ENA_MOTOR_1_PIN_ID
+from config.config import ON_RASP_PI
+
+if ON_RASP_PI:
+    import RPi.GPIO as GPIO
+else:
+    from mocks.gpio_mock import GPIOMock as GPIO
+
+
+from config.config import IN_PIN_1_MOTOR_1
+from config.config import IN_PIN_2_MOTOR_1
+from config.config import ENA_MOTOR_1_PIN_ID
 from propulsion  import Propulsion
 from propulsion import PropulsionParams
 
@@ -20,7 +27,6 @@ def test_move_fwd():
 
     p = GPIO.PWM(ENA_MOTOR_1_PIN_ID, 1000)
     p.start(100)
-
     prop.forward(10)
     time.sleep(5)
     prop.stop()

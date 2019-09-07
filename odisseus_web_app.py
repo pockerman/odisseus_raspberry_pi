@@ -23,7 +23,6 @@ from config.config import ENABLE_LOG
 from config.config import control_queue
 from server.control_server import ControlServer
 
-from odisseus import Odisseus
 from propulsion import PropulsionParams
 from control.control_cmds import PropulsionCmd
 
@@ -80,7 +79,6 @@ def propulsion_control_view():
 
 @app.route('/control/interrupt')
 def interrupt_control():
-
     """
     Terminates the instance that Odisseus is running on
     """
