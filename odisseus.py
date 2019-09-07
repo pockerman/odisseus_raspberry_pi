@@ -1,4 +1,4 @@
-from config.config import ENABLE_WARNINGS
+from config import ENABLE_WARNINGS
 from propulsion import Propulsion
 
 

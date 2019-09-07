@@ -2,8 +2,8 @@
 Handles the propulsion system when having
 two motors
 """
-from config.config import ENABLE_WARNINGS
-from config.config import ON_RASP_PI
+from config import ENABLE_WARNINGS
+from config import ON_RASP_PI
 
 if ON_RASP_PI:
     import RPi.GPIO as GPIO

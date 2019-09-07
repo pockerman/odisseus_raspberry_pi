@@ -11,17 +11,17 @@ from flask import Response
 from flask import request
 
 # configuration parameters
-from config.config import HOST
-from config.config import DEBUG
-from config.config import PORT
-from config.config import CONTROL_SERVER_INDEX_TEMPLATE_NAME
-from config.config import PROPULSION_CONTROL_TEMPLATE_NAME
-from config.config import IN_PIN_1_MOTOR_1
-from config.config import IN_PIN_2_MOTOR_1
-from config.config import ENA_MOTOR_1_PIN_ID
-from config.config import ENABLE_LOG
-from config.config import control_queue
-from server.control_server import ControlServer
+from config import HOST
+from config import DEBUG
+from config import PORT
+from config import CONTROL_SERVER_INDEX_TEMPLATE_NAME
+from config import PROPULSION_CONTROL_TEMPLATE_NAME
+from config import IN_PIN_1_MOTOR_1
+from config import IN_PIN_2_MOTOR_1
+from config import ENA_MOTOR_1_PIN_ID
+from config import ENABLE_LOG
+from config import control_queue
+from control_server import ControlServer
 
 from propulsion import PropulsionParams
 from control.control_cmds import PropulsionCmd

@@ -1,3 +1,5 @@
-echo "PYTHONPATH ${PYTHONPATH}"
-PYTHONPATH=$PYTHONPATH:${PWD}
-python3 tests/test_propulsion.py
+#!/bin/bash
+#echo "PYTHONPATH ${PYTHONPATH}"
+#PYTHONPATH=.:/config
+#echo "PYTHONPATH ${PYTHONPATH}"
+python3 test_propulsion.py

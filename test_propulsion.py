@@ -1,20 +1,14 @@
 import time
-import os
-import sys
-
-
-
-from config.config import ON_RASP_PI
+from config import ON_RASP_PI
 
 if ON_RASP_PI:
     import RPi.GPIO as GPIO
 else:
-    from mocks.gpio_mock import GPIOMock as GPIO
+    from gpio_mock import GPIOMock as GPIO
 
-
-from config.config import IN_PIN_1_MOTOR_1
-from config.config import IN_PIN_2_MOTOR_1
-from config.config import ENA_MOTOR_1_PIN_ID
+from config import IN_PIN_1_MOTOR_1
+from config import IN_PIN_2_MOTOR_1
+from config import ENA_MOTOR_1_PIN_ID
 from propulsion  import Propulsion
 from propulsion import PropulsionParams
 
