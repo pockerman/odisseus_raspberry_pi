@@ -3,6 +3,8 @@ Basic control cmds
 """
 import time
 from config.config import ENABLE_WARNINGS
+
+
 class ControlCmd(object):
 
     def __init__(self, name, duration):
@@ -21,8 +23,10 @@ class PropulsionCmd(ControlCmd):
     DIRECTIONS = ["FWD", "REVERSE", "RIGHT", "LEFT", "STOP"]
 
     def __init__(self, direction, speed_value, duration):
-        ControlCmd.__init__("PropulsionCmd", duration=duration)
+        ControlCmd.__init__(name="PropulsionCmd", duration=duration)
 
+        # TODO: Do we really want this here??
+        # Perhaps having a safe mode is better
         if direction not in PropulsionCmd.DIRECTIONS:
             raise ValueError("Invalid Direction. Direction: " + direction + " not in " + str(PropulsionCmd.DIRECTIONS))
 
