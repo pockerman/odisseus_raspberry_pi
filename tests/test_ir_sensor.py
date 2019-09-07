@@ -1,4 +1,4 @@
-from ir_sensor import IRSensor
+from sensors.ir_sensor import IRSensor
 from config import IR_PIN_ID
 
 def main():

@@ -11,74 +11,26 @@ from flask import Response
 from flask import request
 
 # configuration parameters
-from config import HOST
-from config import DEBUG
-from config import PORT
-from config import CONTROL_SERVER_INDEX_TEMPLATE_NAME
-from config import PROPULSION_CONTROL_TEMPLATE_NAME
-from config import IN_PIN_1_MOTOR_1
-from config import IN_PIN_2_MOTOR_1
-from config import ENA_MOTOR_1_PIN_ID
-from config import control_queue
-from config import ENABLE_LOG
+from config.config import HOST
+from config.config import DEBUG
+from config.config import PORT
+from config.config import CONTROL_SERVER_INDEX_TEMPLATE_NAME
+from config.config import PROPULSION_CONTROL_TEMPLATE_NAME
+from config.config import IN_PIN_1_MOTOR_1
+from config.config import IN_PIN_2_MOTOR_1
+from config.config import ENA_MOTOR_1_PIN_ID
+from config.config import ENABLE_LOG
+from config.config import control_queue
+from server.control_server import ControlServer
 
 from odisseus import Odisseus
 from propulsion import PropulsionParams
-from control_cmds import PropulsionCmd
+from control.control_cmds import PropulsionCmd
+
+
+
 
 app = Flask(__name__)
-
-
-class ControlServer:
-
-    def __init__(self):
-
-        self.__odisseus = None
-        self.__odisseus_process = None
-
-    def start(self, prop_params):
-
-        self.__odisseus = Odisseus(cmd_queue=control_queue, prop_params=prop_params)
-        self.spawn_odisseus_process()
-
-    def spawn_odisseus_process(self):
-        """
-        Spawns a new process for Odisseus. Assumes that the
-        odisseus robot has been created
-        """
-
-        if self.__odisseus is None:
-                if  ENABLE_LOG:
-                    print("Cannot spawn an odisseus process when Odisseus is None")
-                return
-
-        # is there a reason to spawn the process if it is active?
-        if self.__odisseus_process is not None and self.__odisseus_process.is_alive():
-            if ENABLE_LOG:
-                print("Odisseus process is alive nothing to do here...")
-            return
-
-        # there is no point to start a new procees if Odisseus
-        # is interrupted
-        self.__odisseus.remove_interrupt()
-        self.__odisseus_process = Process(target=self.__odisseus.run, kwargs={})
-        self.__odisseus_process.start()
-
-        if ENABLE_LOG:
-            print("Spawn a new Odisseus process...")
-
-    def add_cmd(self, cmd):
-        self.__odisseus.add_cmd(copy.deepcopy(cmd))
-
-    def terminate_odisseus_process(self):
-
-        if self.__odisseus_process is not None:
-            self.__odisseus_process.terminate()
-            self.__odisseus_process = None
-
-        # there is not control so be safe
-        self.__odisseus.interrupt()
-        self.__odisseus.stop_raw()
 
 # the control server used
 control_server = ControlServer()
@@ -171,6 +123,8 @@ if __name__ == '__main__':
 
     try:
 
+        # reset the mode
+        control_server.reset_mode()
 
         prop_params = PropulsionParams(in_pin_1_motor_1=IN_PIN_1_MOTOR_1, in_pin_2_motor_1=IN_PIN_2_MOTOR_1, en_pin_motor_1=ENA_MOTOR_1_PIN_ID,
                                        in_pin_1_motor_2=None, in_pin_2_motor_2=None, en_pin_motor_2=None)
@@ -179,8 +133,7 @@ if __name__ == '__main__':
         if ENABLE_LOG:
             print("Initializing Odisseus...")
 
-        #control_server = ControlServer()
-        control_server.start(prop_params=prop_params)
+        control_server.start(control_queue=control_queue, prop_params=prop_params)
 
         # finally start the web application
         app.run(host=HOST, debug=DEBUG, port=PORT)
@@ -188,3 +141,4 @@ if __name__ == '__main__':
     finally:
 
         control_server.terminate_odisseus_process()
+        control_server.cleanup_pins()

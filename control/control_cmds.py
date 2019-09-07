@@ -15,7 +15,6 @@ class ControlCmd(object):
         return self.__duration
 
 
-
 class PropulsionCmd(ControlCmd):
 
     DIRECTIONS = ["FWD", "REVERSE", "RIGHT", "LEFT", "STOP"]

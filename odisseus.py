@@ -1,4 +1,4 @@
-from config import ENABLE_WARNINGS
+from config.config import ENABLE_WARNINGS
 from propulsion import Propulsion
 
 
@@ -40,15 +40,22 @@ class Odisseus:
         """
         self.__cmd_queue.put(cmd)
 
-
     def interrupt(self):
+        """
+        Signal Odisseus for interrupt
+        """
         if ENABLE_WARNINGS:
             print("Odisseus was interrupted...")
         self.__interrupted = True
 
     def remove_interrupt(self):
-        if ENABLE_WARNINGS:
-            print("Odisseus was interrupt removed...")
+
+        """
+        Set the interrupt flag to false
+        """
+
+        if ENABLE_WARNINGS and self.__interrupted == True:
+            print("Odisseus has interrupt removed...")
         self.__interrupted = False
 
     def stop_raw(self):

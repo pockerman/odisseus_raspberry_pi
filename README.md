@@ -4,24 +4,25 @@ This is my attempt to develop a four wheels multisensor robot in Raspberry Pi. T
 
 ## Hardware
 
-- 4 Wheels
-- 4 DC motors
+- 2 Wheels
+- 2 DC motors
 - A Pi camera
 - An ultrasound sensor
 - An IR sensor
-- A DC motor hat for raspberry pi
+- An L289N H-bridge
 
 ## Installation
 
-Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_. All in all
+Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_. 
+All in all you need:
 
-- ```pip3 install RPI.GPIO```
-- ```pip3 install adafruit-blinka```
-- ```sudo pip3 install adafruit-circuitpython-motorkit
+- **TODO**
 
-**Remarks**
+## Start the Odisseus server
 
 
+
+- ```python3 odisseus_web_app.py```
 
 ## Useful Links
 
