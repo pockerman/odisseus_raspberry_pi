@@ -67,8 +67,10 @@ class Propulsion:
         if(speed > 100):
             speed = 100
 
-        p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
-        p1.start(speed)
+        print("Set speed at: ", speed)
+
+        #p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
+        #p1.start(speed)
 
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.HIGH)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
@@ -80,8 +82,8 @@ class Propulsion:
 
     def backward(self, speed):
 
-        p1 = GPIO.PWM(self.__params.en_pin_motor_1, 1000)
-        p1.start(speed)
+        #p1 = GPIO.PWM(self.__params.en_pin_motor_1, 1000)
+        #p1.start(speed)
 
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOW)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.HIGH)
