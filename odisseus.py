@@ -62,19 +62,19 @@ class Odisseus:
         self.__propulsion.stop()
 
     def move_fwd_raw(self, speed):
-        self.__propulsion.stop()
+        #self.__propulsion.stop()
         self.__propulsion.forward(speed)
 
     def move_reverse_raw(self, speed):
-        self.__propulsion.stop()
+        #self.__propulsion.stop()
         self.__propulsion.backward(speed)
 
     def move_left_raw(self, speed):
-        self.__propulsion.stop()
+        #self.__propulsion.stop()
         self.__propulsion.left(speed)
 
     def move_right_raw(self, speed):
-        self.__propulsion.stop()
+        #self.__propulsion.stop()
         self.__propulsion.right(speed)
 
 
