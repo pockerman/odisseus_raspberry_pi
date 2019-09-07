@@ -26,7 +26,7 @@ class Odisseus:
             # get a CMD off the queue and execute it
             if( self.__cmd_queue.empty() != True ):
                 cmd = self.__cmd_queue.get()
-                cmd.execute(self)
+                cmd.execute(robot=self)
                 print("executed cmd")
             #elif ENABLE_WARNINGS:
             #    print("CMD Queue is empty...")

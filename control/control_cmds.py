@@ -1,7 +1,7 @@
 """
 Basic control cmds
 """
-
+import time
 class ControlCmd(object):
 
     def __index__(self, name, duration):
@@ -46,5 +46,7 @@ class PropulsionCmd(ControlCmd):
             robot.move_left_raw(self.get_speed_value())
         elif self.__direction == "RIGHT":
             robot.move_right_raw(self.get_speed_value())
+
+        time.sleep(self.get_duration())
 
 
