@@ -1,4 +1,4 @@
-from config import ENABLE_WARNINGS
+from odisseus_config  import ENABLE_WARNINGS
 from propulsion import Propulsion
 
 
@@ -13,7 +13,6 @@ class Odisseus:
         self.__cmd_queue = cmd_queue
         self.__interrupted = False
         self.__propulsion = Propulsion(params=prop_params)
-
 
     def run(self):
 

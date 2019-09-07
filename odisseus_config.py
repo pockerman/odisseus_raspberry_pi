@@ -2,13 +2,13 @@
 Configuration file for Odisseus
 """
 
+from multiprocessing import Queue
+
 # Flag indicating if we are on Pi or simply emulating
 ON_RASP_PI = True
 
 if ON_RASP_PI:
     import cv2
-
-
 
 DEBUG = True
 ENABLE_LOG = True
@@ -18,7 +18,6 @@ HOST = '0.0.0.0'
 
 # The address of the I2C bus
 I2CAddr = 0x00000000
-
 
 SCREEN_SIZE = (320, 240)
 
@@ -35,17 +34,10 @@ NEEDED_CAMERA_ROTATION = 0.0
 USE_MULTIPROCESSING = False
 QUEUE_MAX_SIZE=2
 
-display_queue = None
-control_queue = None
-
-from multiprocessing import Queue
-
 control_queue = Queue()
 display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
 
-
 # the Pins Odisseus is using
-
 IN_PIN_1_MOTOR_1 = 23
 IN_PIN_2_MOTOR_1 = 24
 ENA_MOTOR_1_PIN_ID = 25

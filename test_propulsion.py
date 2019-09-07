@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
         GPIO.setmode(GPIO.BCM)
         test_move_bwd()
-        GPIO.cleanup()
+        #GPIO.cleanup()
 
         print("Done Executing Propulsion Tests")
         print("============================")

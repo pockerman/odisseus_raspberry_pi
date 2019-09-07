@@ -38,7 +38,6 @@ class Propulsion:
             print("Set up PIN_2_MOTOR_1 at: ", self.__params.in_pin_2_motor_1)
             print("Set up PIN_EN_MOTOR_1 at: ", self.__params.en_pin_motor_1)
 
-            #if ON_RASP_PI:
             GPIO.setup(self.__params.in_pin_1_motor_1, GPIO.OUT)
             GPIO.setup(self.__params.in_pin_2_motor_1, GPIO.OUT)
             GPIO.setup(self.__params.en_pin_motor_1,   GPIO.OUT)
@@ -68,7 +67,6 @@ class Propulsion:
         if(speed > 100):
             speed = 100
 
-        #if ON_RASP_PI:
         p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
         p1.start(speed)
 
@@ -80,10 +78,8 @@ class Propulsion:
         #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.HIGH)
         #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 
-
     def backward(self, speed):
 
-        #if ON_RASP_PI:
         p1 = GPIO.PWM(self.__params.en_pin_motor_1, 1000)
         p1.start(speed)
 
@@ -103,7 +99,6 @@ class Propulsion:
 
     def stop(self):
 
-        #if ON_RASP_PI:
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOW)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
         #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
