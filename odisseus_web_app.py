@@ -27,9 +27,6 @@ from odisseus import Odisseus
 from propulsion import PropulsionParams
 from control.control_cmds import PropulsionCmd
 
-
-
-
 app = Flask(__name__)
 
 # the control server used
@@ -87,7 +84,6 @@ def interrupt_control():
     """
     Terminates the instance that Odisseus is running on
     """
-
     control_server.terminate_odisseus_process()
     return index()
 
@@ -97,7 +93,6 @@ def start_control():
     """
     Recreates the Odisseus process
     """
-
     control_server.spawn_odisseus_process()
     return index()
 
@@ -115,7 +110,6 @@ def control(control_name):
     elif control_name == 'start':
         return start_control()
 
-    #control_queue.put(control_name)
     return Response('Error...')
 
 

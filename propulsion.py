@@ -54,10 +54,9 @@ class Propulsion:
             print("Set up PIN_2_MOTOR_2 at: ", self.__params.in_pin_2_motor_2)
             print("Set up PIN_EN_MOTOR_2 at: ", self.__params.en_pin_motor_2)
 
-            #if ON_RASP_PI:
-            GPIO.setup(self.__params.in_pin_1_motor_2, GPIO.OUT)
-            GPIO.setup(self.__params.in_pin_2_motor_2, GPIO.OUT)
-            GPIO.setup(self.__params.en_pin_motor_2,   GPIO.OUT)
+            #GPIO.setup(self.__params.in_pin_1_motor_2, GPIO.OUT)
+            #GPIO.setup(self.__params.in_pin_2_motor_2, GPIO.OUT)
+            #GPIO.setup(self.__params.en_pin_motor_2,   GPIO.OUT)
 
         elif ENABLE_WARNINGS:
             print(" Either of the pins for motor 2 is None ")
@@ -76,10 +75,10 @@ class Propulsion:
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.HIGH)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
 
-        p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
-        p2.start(speed)
-        GPIO.output(self.__params.in_pin_1_motor_2, GPIO.HIGH)
-        GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
+        #p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
+        #p2.start(speed)
+        #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.HIGH)
+        #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 
 
     def backward(self, speed):
@@ -91,10 +90,10 @@ class Propulsion:
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOW)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.HIGH)
 
-        p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
-        p2.start(speed)
-        GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
-        GPIO.output(self.__params.in_pin_2_motor_2, GPIO.HIGH)
+        #p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
+        #p2.start(speed)
+        #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
+        #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.HIGH)
 
     def left(self, speed):
         pass
@@ -107,8 +106,8 @@ class Propulsion:
         #if ON_RASP_PI:
         GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOW)
         GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
-        GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
-        GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
+        #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
+        #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 
 
 
