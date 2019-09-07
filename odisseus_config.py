@@ -3,7 +3,7 @@ Configuration file for Odisseus
 """
 
 # Flag indicating if we are on Pi or simply emulating
-ON_RASP_PI = False
+ON_RASP_PI = True
 
 if ON_RASP_PI:
     import cv2
