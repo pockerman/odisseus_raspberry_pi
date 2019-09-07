@@ -5,7 +5,7 @@ Configuration file for Odisseus
 import cv2
 
 # Flag indicating if we are on Pi or simply emulating
-ON_RASP_PI = False
+ON_RASP_PI = True
 
 DEBUG = True
 ENABLE_LOG = True
