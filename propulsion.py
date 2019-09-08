@@ -3,13 +3,18 @@ Handles the propulsion system when having
 two motors
 """
 import time
-from odisseus_config import ENABLE_WARNINGS
-from odisseus_config import ON_RASP_PI
 
-if ON_RASP_PI:
-    import RPi.GPIO as GPIO
-else:
-    from mocks.gpio_mock import GPIOMock as GPIO
+#from odisseus_config import odisseus_config_obj
+#from odisseus_config import ENABLE_WARNINGS
+#from odisseus_config import ON_RASP_PI
+
+#ENABLE_WARNINGS = odisseus_config_obj.ENABLE_WARNINGS
+#ON_RASP_PI = odisseus_config_obj.ON_RASP_PI
+
+#if ON_RASP_PI:
+#    import RPi.GPIO as GPIO
+#else:
+#    from mocks.gpio_mock import GPIOMock as GPIO
 
 
 class PropulsionParams:
@@ -27,39 +32,51 @@ class PropulsionParams:
 
 class Propulsion:
 
-    def __init__(self, params):
+    def __init__(self, odisseus_config, params):
 
-        self.__params = params
+        self._odisseus_config = odisseus_config
 
-        if self.__params.in_pin_1_motor_1 is not None and \
-           self.__params.in_pin_2_motor_1 is not None and \
-           self.__params.en_pin_motor_1 is not None:
+        if self._odisseus_config.ON_RASP_PI:
+            import RPi.GPIO as GPIO
+            self._GPIO = GPIO
+        else:
+            from mocks.gpio_mock import GPIOMock as GPIO
+            self._GPIO = GPIO
 
-            print("Set up PIN_1_MOTOR_1 at: ", self.__params.in_pin_1_motor_1)
-            print("Set up PIN_2_MOTOR_1 at: ", self.__params.in_pin_2_motor_1)
-            print("Set up PIN_EN_MOTOR_1 at: ", self.__params.en_pin_motor_1)
+        self._params = params
 
-            GPIO.setup(self.__params.in_pin_1_motor_1, GPIO.OUT)
-            GPIO.setup(self.__params.in_pin_2_motor_1, GPIO.OUT)
-            GPIO.setup(self.__params.en_pin_motor_1,   GPIO.OUT)
+        if self._params.in_pin_1_motor_1 is not None and \
+           self._params.in_pin_2_motor_1 is not None and \
+           self._params.en_pin_motor_1 is not None:
 
-        elif ENABLE_WARNINGS:
+            print("Set up PIN_1_MOTOR_1 at: ", self._params.in_pin_1_motor_1)
+            print("Set up PIN_2_MOTOR_1 at: ", self._params.in_pin_2_motor_1)
+            print("Set up PIN_EN_MOTOR_1 at: ", self._params.en_pin_motor_1)
+
+            self._GPIO.setup(self._params.in_pin_1_motor_1, self._GPIO.OUT)
+            self._GPIO.setup(self._params.in_pin_2_motor_1, self._GPIO.OUT)
+            self._GPIO.setup(self._params.en_pin_motor_1,   self._GPIO.OUT)
+
+        elif self._odisseus_config.ENABLE_WARNINGS:
             print(" Either of the pins for motor 1 is None ")
 
-        if self.__params.in_pin_1_motor_2 is not None and \
-           self.__params.in_pin_2_motor_2 is not None and \
-           self.__params.en_pin_motor_2 is not None:
+        if self._params.in_pin_1_motor_2 is not None and \
+           self._params.in_pin_2_motor_2 is not None and \
+           self._params.en_pin_motor_2 is not None:
 
-            print("Set up PIN_1_MOTOR_2 at: ", self.__params.in_pin_1_motor_2)
-            print("Set up PIN_2_MOTOR_2 at: ", self.__params.in_pin_2_motor_2)
-            print("Set up PIN_EN_MOTOR_2 at: ", self.__params.en_pin_motor_2)
+            print("Set up PIN_1_MOTOR_2 at: ", self._params.in_pin_1_motor_2)
+            print("Set up PIN_2_MOTOR_2 at: ", self._params.in_pin_2_motor_2)
+            print("Set up PIN_EN_MOTOR_2 at: ", self._params.en_pin_motor_2)
 
             #GPIO.setup(self.__params.in_pin_1_motor_2, GPIO.OUT)
             #GPIO.setup(self.__params.in_pin_2_motor_2, GPIO.OUT)
             #GPIO.setup(self.__params.en_pin_motor_2,   GPIO.OUT)
 
-        elif ENABLE_WARNINGS:
+        elif self._odisseus_config.ENABLE_WARNINGS:
             print(" Either of the pins for motor 2 is None ")
+
+    def get_parameters(self):
+        return self._params
 
     def forward(self, speed):
 
@@ -68,13 +85,11 @@ class Propulsion:
         if(speed > 100):
             speed = 100
 
-        print("Set speed at: ", speed)
-
-        p1 = GPIO.PWM(self.__params.en_pin_motor_1 , 1000)
+        p1 = self._GPIO.PWM(self._params.en_pin_motor_1 , 1000)
         p1.start(speed)
 
-        GPIO.output(self.__params.in_pin_1_motor_1, GPIO.HIGH)
-        GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
+        self._GPIO.output(self._params.in_pin_1_motor_1, self._GPIO.HIGH)
+        self._GPIO.output(self._params.in_pin_2_motor_1, self._GPIO.LOW)
         time.sleep(5)
 
         #p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
@@ -87,8 +102,8 @@ class Propulsion:
         #p1 = GPIO.PWM(self.__params.en_pin_motor_1, 1000)
         #p1.start(speed)
 
-        GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOW)
-        GPIO.output(self.__params.in_pin_2_motor_1, GPIO.HIGH)
+        self._GPIO.output(self._params.in_pin_1_motor_1, self._GPIO.LOW)
+        self._GPIO.output(self._params.in_pin_2_motor_1, self._GPIO.HIGH)
 
         #p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
         #p2.start(speed)
@@ -103,8 +118,8 @@ class Propulsion:
 
     def stop(self):
 
-        GPIO.output(self.__params.in_pin_1_motor_1, GPIO.LOW)
-        GPIO.output(self.__params.in_pin_2_motor_1, GPIO.LOW)
+        self._GPIO.output(self._params.in_pin_1_motor_1, self._GPIO.LOW)
+        self._GPIO.output(self._params.in_pin_2_motor_1, self._GPIO.LOW)
         #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
         #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 

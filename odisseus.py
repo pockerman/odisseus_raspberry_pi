@@ -1,6 +1,10 @@
-from odisseus_config  import ENABLE_WARNINGS
-from propulsion import Propulsion
 
+#from odisseus_config  import ENABLE_WARNINGS
+#from odisseus_config import odisseus_config_obj
+#from propulsion import Propulsion
+
+
+#ENABLE_WARNINGS = odisseus_config_obj.ENABLE_WARNINGS
 
 class Odisseus:
     """
@@ -9,10 +13,11 @@ class Odisseus:
     Odisseus to do its tasks
     """
 
-    def __init__(self, cmd_queue, prop_params):
-        self.__cmd_queue = cmd_queue
-        self.__interrupted = False
-        self.__propulsion = Propulsion(params=prop_params)
+    def __init__(self, odisseus_config, propulsion, cmd_queue):
+        self._odisseus_config = odisseus_config
+        self._cmd_queue = cmd_queue
+        self._interrupted = False
+        self._propulsion = propulsion
 
     def run(self):
 
@@ -20,32 +25,32 @@ class Odisseus:
         Runs Odisseus indefinitely
         """
 
-        while(self.__interrupted == False):
+        while(self._interrupted == False):
 
             # get a CMD off the queue and execute it
-            if( self.__cmd_queue.empty() != True ):
-                cmd = self.__cmd_queue.get()
+            if( self._cmd_queue.empty() != True ):
+                cmd = self._cmd_queue.get()
                 cmd.execute(robot=self)
                 print("executed cmd")
             #elif ENABLE_WARNINGS:
             #    print("CMD Queue is empty...")
 
-        if(self.__interrupted):
+        if(self._interrupted):
             print("Odisseus was interrupted")
 
     def add_cmd(self, cmd):
         """
         Add a new CMD for the robot to be excuted
         """
-        self.__cmd_queue.put(cmd)
+        self._cmd_queue.put(cmd)
 
     def interrupt(self):
         """
         Signal Odisseus for interrupt
         """
-        if ENABLE_WARNINGS:
+        if self._odisseus_config.ENABLE_WARNINGS:
             print("Odisseus was interrupted...")
-        self.__interrupted = True
+        self._interrupted = True
 
     def remove_interrupt(self):
 
@@ -53,28 +58,28 @@ class Odisseus:
         Set the interrupt flag to false
         """
 
-        if ENABLE_WARNINGS and self.__interrupted == True:
+        if self._odisseus_config.ENABLE_WARNINGS and self._interrupted == True:
             print("Odisseus has interrupt removed...")
-        self.__interrupted = False
+        self._interrupted = False
 
     def stop_raw(self):
-        self.__propulsion.stop()
+        self._propulsion.stop()
 
     def move_fwd_raw(self, speed):
         #self.__propulsion.stop()
-        self.__propulsion.forward(speed)
+        self._propulsion.forward(speed)
 
     def move_reverse_raw(self, speed):
         #self.__propulsion.stop()
-        self.__propulsion.backward(speed)
+        self._propulsion.backward(speed)
 
     def move_left_raw(self, speed):
         #self.__propulsion.stop()
-        self.__propulsion.left(speed)
+        self._propulsion.left(speed)
 
     def move_right_raw(self, speed):
         #self.__propulsion.stop()
-        self.__propulsion.right(speed)
+        self._propulsion.right(speed)
 
 
 

@@ -1,10 +1,7 @@
 import time
-import os
-import sys
 
 
-
-from config.config import ON_RASP_PI
+from odisseus_config import ON_RASP_PI
 
 if ON_RASP_PI:
     import RPi.GPIO as GPIO
@@ -12,9 +9,9 @@ else:
     from mocks.gpio_mock import GPIOMock as GPIO
 
 
-from config.config import IN_PIN_1_MOTOR_1
-from config.config import IN_PIN_2_MOTOR_1
-from config.config import ENA_MOTOR_1_PIN_ID
+from odisseus_config import IN_PIN_1_MOTOR_1
+from odisseus_config import IN_PIN_2_MOTOR_1
+from odisseus_config import ENA_MOTOR_1_PIN_ID
 from propulsion  import Propulsion
 from propulsion import PropulsionParams
 
@@ -51,8 +48,7 @@ def test_move_bwd():
     time.sleep(2)
     prop.stop()
 
-
-if __name__ == '__main__':
+def test():
 
     try:
 
@@ -73,3 +69,8 @@ if __name__ == '__main__':
         print("An exception occured whilst runnning the test..." + str(e))
     finally:
         GPIO.cleanup()
+
+
+if __name__ == '__main__':
+
+   test()

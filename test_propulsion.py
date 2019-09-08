@@ -1,14 +1,21 @@
 import time
-from odisseus_config import ON_RASP_PI
+from odisseus_config import odisseus_config_obj
 
-if ON_RASP_PI:
+#from odisseus_config import ON_RASP_PI
+
+if odisseus_config_obj.ON_RASP_PI:
     import RPi.GPIO as GPIO
 else:
     from gpio_mock import GPIOMock as GPIO
 
-from odisseus_config import IN_PIN_1_MOTOR_1
-from odisseus_config import IN_PIN_2_MOTOR_1
-from odisseus_config import ENA_MOTOR_1_PIN_ID
+#from odisseus_config import IN_PIN_1_MOTOR_1
+#from odisseus_config import IN_PIN_2_MOTOR_1
+#from odisseus_config import ENA_MOTOR_1_PIN_ID
+
+IN_PIN_1_MOTOR_1   = odisseus_config_obj.IN_PIN_1_MOTOR_1
+IN_PIN_2_MOTOR_1   = odisseus_config_obj.IN_PIN_2_MOTOR_1
+ENA_MOTOR_1_PIN_ID = odisseus_config_obj.ENA_MOTOR_1_PIN_ID
+
 from propulsion  import Propulsion
 from propulsion import PropulsionParams
 
@@ -46,7 +53,7 @@ def test_move_bwd():
     prop.stop()
 
 
-if __name__ == '__main__':
+def test():
 
     try:
 
@@ -59,7 +66,6 @@ if __name__ == '__main__':
 
         GPIO.setmode(GPIO.BCM)
         test_move_bwd()
-        #GPIO.cleanup()
 
         print("Done Executing Propulsion Tests")
         print("============================")
@@ -67,3 +73,8 @@ if __name__ == '__main__':
         print("An exception occured whilst runnning the test..." + str(e))
     finally:
         GPIO.cleanup()
+
+
+if __name__ == '__main__':
+
+    test()
