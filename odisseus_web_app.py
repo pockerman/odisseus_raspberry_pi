@@ -25,7 +25,7 @@ control_queue = odisseus_config_obj.control_queue
 from control_server import ControlServer
 from propulsion import PropulsionParams
 from propulsion import Propulsion
-from control.control_cmds import PropulsionCmd
+from control_cmds import PropulsionCmd
 
 app = Flask(__name__)
 

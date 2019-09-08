@@ -4,18 +4,6 @@ two motors
 """
 import time
 
-#from odisseus_config import odisseus_config_obj
-#from odisseus_config import ENABLE_WARNINGS
-#from odisseus_config import ON_RASP_PI
-
-#ENABLE_WARNINGS = odisseus_config_obj.ENABLE_WARNINGS
-#ON_RASP_PI = odisseus_config_obj.ON_RASP_PI
-
-#if ON_RASP_PI:
-#    import RPi.GPIO as GPIO
-#else:
-#    from mocks.gpio_mock import GPIOMock as GPIO
-
 
 class PropulsionParams:
 
@@ -40,7 +28,7 @@ class Propulsion:
             import RPi.GPIO as GPIO
             self._GPIO = GPIO
         else:
-            from mocks.gpio_mock import GPIOMock as GPIO
+            from gpio_mock import GPIOMock as GPIO
             self._GPIO = GPIO
 
         self._params = params
