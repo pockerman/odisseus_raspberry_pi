@@ -63,6 +63,7 @@ def test(odisseus_configuration):
     finally:
         GPIO.cleanup()
 
+
 if __name__ == '__main__':
     from odisseus_config import odisseus_config_obj
     test(odisseus_config_obj)
