@@ -7,18 +7,6 @@ from multiprocessing import Process
 
 from odisseus import Odisseus
 
-# configuration parameters
-#from config.config import ENABLE_LOG
-#from config.config import ON_RASP_PI
-#from odisseus_config import odisseus_config_obj
-#ENABLE_LOG = odisseus_config_obj.ENABLE_LOG
-#ON_RASP_PI = odisseus_config_obj.ON_RASP_PI
-
-#if ON_RASP_PI:
-#    import RPi.GPIO as GPIO
-#else:
-#    from mocks.gpio_mock import GPIOMock as GPIO
-
 
 class ControlServer:
 

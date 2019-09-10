@@ -1,10 +1,7 @@
+"""
+class  Odisseus: API for controlling Odisseus
+"""
 
-#from odisseus_config  import ENABLE_WARNINGS
-#from odisseus_config import odisseus_config_obj
-#from propulsion import Propulsion
-
-
-#ENABLE_WARNINGS = odisseus_config_obj.ENABLE_WARNINGS
 
 class Odisseus:
     """
@@ -25,7 +22,7 @@ class Odisseus:
         Runs Odisseus indefinitely
         """
 
-        while(self._interrupted == False):
+        while self._interrupted is not True:
 
             # get a CMD off the queue and execute it
             if( self._cmd_queue.empty() != True ):
@@ -35,7 +32,7 @@ class Odisseus:
             #elif ENABLE_WARNINGS:
             #    print("CMD Queue is empty...")
 
-        if(self._interrupted):
+        if self._interrupted:
             print("Odisseus was interrupted")
 
     def add_cmd(self, cmd):
