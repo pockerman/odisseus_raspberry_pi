@@ -12,8 +12,8 @@ def run():
         if len(args) < 3 :
             raise ValueError("Invalid number of input arguments")
 
-        print(args[1])
-        print(args[2])
+        print("First argument given: ", args[1])
+        print("Second argument given: ",args[2])
 
         if args[1].split('=')[1]=='Ubuntu':
             odisseus_config_obj.ON_RASP_PI = False
