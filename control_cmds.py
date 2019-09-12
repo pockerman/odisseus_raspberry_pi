@@ -2,7 +2,8 @@
 Basic control cmds
 """
 import time
-from odisseus_config import ENABLE_WARNINGS
+from odisseus_config import odisseus_config_obj
+ENABLE_WARNINGS = odisseus_config_obj.ENABLE_WARNINGS
 
 
 class ControlCmd(object):

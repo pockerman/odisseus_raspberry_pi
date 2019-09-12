@@ -7,28 +7,18 @@ from multiprocessing import Process
 
 from odisseus import Odisseus
 
-# configuration parameters
-from odisseus_config import ENABLE_LOG
-from odisseus_config import ON_RASP_PI
-
-if ON_RASP_PI:
-    import RPi.GPIO as GPIO
-else:
-    from gpio_mock import GPIOMock as GPIO
-
-
-
 
 class ControlServer:
 
-    def __init__(self):
+    def __init__(self, odisseus_config):
 
+        self._odisseus_config = odisseus_config
         self.__odisseus = None
         self.__odisseus_process = None
 
-    def start(self, control_queue, prop_params):
+    def start(self, propulsion, control_queue):
 
-        self.__odisseus = Odisseus(cmd_queue=control_queue, prop_params=prop_params)
+        self.__odisseus = Odisseus(odisseus_config=self._odisseus_config, propulsion=propulsion, cmd_queue=control_queue)
         self.spawn_odisseus_process()
 
     def spawn_odisseus_process(self):
@@ -38,13 +28,13 @@ class ControlServer:
         """
 
         if self.__odisseus is None:
-                if  ENABLE_LOG:
+                if self._odisseus_config.ENABLE_LOG:
                     print("Cannot spawn an odisseus process when Odisseus is None")
                 return
 
         # is there a reason to spawn the process if it is active?
         if self.__odisseus_process is not None and self.__odisseus_process.is_alive():
-            if ENABLE_LOG:
+            if self._odisseus_config.ENABLE_LOG:
                 print("Odisseus process is alive nothing to do here...")
             return
 
@@ -54,7 +44,7 @@ class ControlServer:
         self.__odisseus_process = Process(target=self.__odisseus.run, kwargs={})
         self.__odisseus_process.start()
 
-        if ENABLE_LOG:
+        if self._odisseus_config.ENABLE_LOG:
             print("Spawn a new Odisseus process...")
 
     def add_cmd(self, cmd):
@@ -71,8 +61,13 @@ class ControlServer:
         self.__odisseus.stop_raw()
 
     def cleanup_pins(self):
-        GPIO.cleanup()
 
-    def reset_mode(self, mode=GPIO.BCM):
-        GPIO.setmode(mode)
+        if self._odisseus_config.ON_RASP_PI:
+            import RPi.GPIO as GPIO
+            GPIO.cleanup()
+
+    def reset_mode(self, mod=None):
+        if self._odisseus_config.ON_RASP_PI:
+            import RPi.GPIO as GPIO
+            GPIO.setmode(GPIO.BCM)
 
