@@ -22,7 +22,7 @@ if [[ "$REPLY" =~ ^[0-3]$ ]]; then
 	fi
 	if [[ "$REPLY" -eq 1 ]]; then
 		echo "Running Propulsion tests"	
-		python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+		python3 run_tests.py "PLATFORM=$NAME" "ID=$REPLY"
 		exit 0
 	fi
 	if [[ "$REPLY" -eq 2 ]]; then
