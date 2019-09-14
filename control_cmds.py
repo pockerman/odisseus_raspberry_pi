@@ -9,14 +9,14 @@ ENABLE_WARNINGS = odisseus_config_obj.ENABLE_WARNINGS
 class ControlCmd(object):
 
     def __init__(self, name, duration):
-        self.__name = name
-        self.__duration = duration
+        self._name = name
+        self._duration = duration
 
     def get_name(self):
-        return self.__name
+        return self._name
 
     def get_duration(self):
-        return self.__duration
+        return self._duration
 
 
 class PropulsionCmd(ControlCmd):
@@ -31,29 +31,29 @@ class PropulsionCmd(ControlCmd):
         if direction not in PropulsionCmd.DIRECTIONS:
             raise ValueError("Invalid Direction. Direction: " + direction + " not in " + str(PropulsionCmd.DIRECTIONS))
 
-        self.__direction = direction
-        self.__speed_val = speed_value
+        self._direction = direction
+        self._speed_val = speed_value
 
     def get_direction(self):
-        return self.__direction
+        return self._direction
 
     def get_speed_value(self):
-        return self.__speed_val
+        return self._speed_val
 
     def execute(self, robot):
 
-        if self.__direction == "STOP":
+        if self._direction == "STOP":
             robot.stop_raw()
-        elif self.__direction == "FWD":
+        elif self._direction == "FWD":
             robot.move_fwd_raw(self.get_speed_value())
-        elif self.__direction == "REVERSE":
+        elif self._direction == "REVERSE":
             robot.move_reverse_raw(self.get_speed_value())
-        elif self.__direction == "LEFT":
+        elif self._direction == "LEFT":
             robot.move_left_raw(self.get_speed_value())
-        elif self.__direction == "RIGHT":
+        elif self._direction == "RIGHT":
             robot.move_right_raw(self.get_speed_value())
         elif ENABLE_WARNINGS:
-            print("Direction: ", self.__direction, " not in ", str(PropulsionCmd.DIRECTIONS))
+            print("Direction: ", self._direction, " not in ", str(PropulsionCmd.DIRECTIONS))
 
         time.sleep(self.get_duration())
 

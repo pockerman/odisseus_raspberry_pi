@@ -1,4 +1,6 @@
-
+"""
+Run all the tests or run a specified test [0, 1, 2 ,3]
+"""
 import sys, getopt
 from odisseus_config import odisseus_config_obj
 
