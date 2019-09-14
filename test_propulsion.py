@@ -65,10 +65,12 @@ def test(odisseus_configuration):
                                   en_pin_motor_1=odisseus_configuration.ENA_MOTOR_1_PIN_ID,
                                   in_pin_1_motor_2=None, in_pin_2_motor_2=None, en_pin_motor_2=None)
 
+        # need to set the board mode before doing anything
+        # with the pins
+        GPIO.setmode(GPIO.BCM)
         prop = Propulsion(odisseus_config=odisseus_configuration, params=params)
         kwargs={'time': 2}
 
-        GPIO.setmode(GPIO.BCM)
         test_move_fwd(prop=prop, **kwargs)
         GPIO.cleanup()
 
