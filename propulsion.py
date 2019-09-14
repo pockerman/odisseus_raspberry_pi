@@ -66,11 +66,10 @@ class Propulsion:
     def get_parameters(self):
         return self._params
 
-    def forward(self, speed):
+    def forward(self, speed, **kwargs):
 
-        # clapm the max speed to 100 as this is
-        # the max dutty speed
-        if(speed > 100):
+        # clamp the max speed to 100 as this is the max dutty speed
+        if speed > 100:
             speed = 100
 
         p1 = self._GPIO.PWM(self._params.en_pin_motor_1 , 1000)
@@ -78,17 +77,22 @@ class Propulsion:
 
         self._GPIO.output(self._params.in_pin_1_motor_1, self._GPIO.HIGH)
         self._GPIO.output(self._params.in_pin_2_motor_1, self._GPIO.LOW)
-        time.sleep(5)
 
         #p2 = GPIO.PWM(self.__params.en_pin_motor_2, 1000)
         #p2.start(speed)
         #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.HIGH)
         #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
 
-    def backward(self, speed):
+        time.sleep(kwargs['time'])
 
-        #p1 = GPIO.PWM(self.__params.en_pin_motor_1, 1000)
-        #p1.start(speed)
+    def backward(self, speed, **kwargs):
+
+        # clamp the max speed to 100 as this is the max dutty speed
+        if speed > 100:
+            speed = 100
+
+        p1 = self._GPIO.PWM(self._params.en_pin_motor_1, 1000)
+        p1.start(speed)
 
         self._GPIO.output(self._params.in_pin_1_motor_1, self._GPIO.LOW)
         self._GPIO.output(self._params.in_pin_2_motor_1, self._GPIO.HIGH)
@@ -98,10 +102,14 @@ class Propulsion:
         #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
         #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.HIGH)
 
-    def left(self, speed):
+        time.sleep(kwargs['time'])
+
+    def left(self, speed, **kwargs):
+        time.sleep(kwargs['time'])
         pass
 
-    def right(self, speed):
+    def right(self, speed, **kwargs):
+        time.sleep(kwargs['time'])
         pass
 
     def stop(self):
@@ -110,6 +118,7 @@ class Propulsion:
         self._GPIO.output(self._params.in_pin_2_motor_1, self._GPIO.LOW)
         #GPIO.output(self.__params.in_pin_1_motor_2, GPIO.LOW)
         #GPIO.output(self.__params.in_pin_2_motor_2, GPIO.LOW)
+        #time.sleep(kwargs['time'])
 
 
 
