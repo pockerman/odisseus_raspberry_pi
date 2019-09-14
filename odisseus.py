@@ -57,35 +57,35 @@ class Odisseus:
 
         self._interrupted = False
 
-    def stop_raw(self):
+    def stop_raw(self, **kwargs):
         """
         Stop Odisseus from moving
         """
         self._propulsion.stop()
 
-    def move_fwd_raw(self, speed):
+    def move_fwd_raw(self, speed, **kwargs):
         """
         Move Odisseus fwd with the given speed
         """
-        self._propulsion.forward(speed)
+        self._propulsion.forward(speed, **kwargs)
 
-    def move_reverse_raw(self, speed):
+    def move_reverse_raw(self, speed, **kwargs):
         """
         Move Odisseus backward with the given speed
         """
-        self._propulsion.backward(speed)
+        self._propulsion.backward(speed, **kwargs)
 
-    def move_left_raw(self, speed):
+    def move_left_raw(self, speed, **kwargs):
         """
         Turn Odisseus left with the given speed
         """
-        self._propulsion.left(speed)
+        self._propulsion.left(speed, **kwargs)
 
-    def move_right_raw(self, speed):
+    def move_right_raw(self, speed, **kwargs):
         """
         Turn Odisseus right with the given speed
         """
-        self._propulsion.right(speed)
+        self._propulsion.right(speed, **kwargs)
 
 
 
