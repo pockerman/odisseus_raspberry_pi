@@ -18,6 +18,7 @@ class OdisseusConfig:
     ENABLE_WARNINGS = True
     PORT = 5001
     HOST = '0.0.0.0'
+
     # The address of the I2C bus
     I2CAddr = 0x00000000
     SCREEN_SIZE = (320, 240)
@@ -47,7 +48,7 @@ class OdisseusConfig:
     # the IR sensor PIN ID
     IR_PIN_ID = None  # 18
 
-
+# the global configuration object for Odisseus
 odisseus_config_obj = OdisseusConfig()
 
 #if ON_RASP_PI:

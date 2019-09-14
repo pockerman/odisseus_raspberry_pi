@@ -11,21 +11,20 @@ class Odisseus:
     """
 
     def __init__(self, odisseus_config, propulsion, cmd_queue):
+
         self._odisseus_config = odisseus_config
         self._cmd_queue = cmd_queue
         self._interrupted = False
         self._propulsion = propulsion
 
     def run(self):
-
         """
-        Runs Odisseus indefinitely
+        Runs Odisseus indefinitely until the interrupt flag is set
         """
-
         while self._interrupted is not True:
 
             # get a CMD off the queue and execute it
-            if( self._cmd_queue.empty() != True ):
+            if self._cmd_queue.empty() != True :
                 cmd = self._cmd_queue.get()
                 cmd.execute(robot=self)
                 print("executed cmd")
@@ -50,32 +49,42 @@ class Odisseus:
         self._interrupted = True
 
     def remove_interrupt(self):
-
         """
         Set the interrupt flag to false
         """
-
         if self._odisseus_config.ENABLE_WARNINGS and self._interrupted == True:
-            print("Odisseus has interrupt removed...")
+            print("Odisseus has interrupt flag removed...")
+
         self._interrupted = False
 
     def stop_raw(self):
+        """
+        Stop Odisseus from moving
+        """
         self._propulsion.stop()
 
     def move_fwd_raw(self, speed):
-        #self.__propulsion.stop()
+        """
+        Move Odisseus fwd with the given speed
+        """
         self._propulsion.forward(speed)
 
     def move_reverse_raw(self, speed):
-        #self.__propulsion.stop()
+        """
+        Move Odisseus backward with the given speed
+        """
         self._propulsion.backward(speed)
 
     def move_left_raw(self, speed):
-        #self.__propulsion.stop()
+        """
+        Turn Odisseus left with the given speed
+        """
         self._propulsion.left(speed)
 
     def move_right_raw(self, speed):
-        #self.__propulsion.stop()
+        """
+        Turn Odisseus right with the given speed
+        """
         self._propulsion.right(speed)
 
 

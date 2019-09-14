@@ -58,6 +58,7 @@ def test(odisseus_configuration):
 
         print("Done Executing Propulsion Tests")
         print("============================")
+
     except Exception as e:
         print("An exception occured whilst runnning the test..." + str(e))
     finally:
