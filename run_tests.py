@@ -27,6 +27,9 @@ def run():
     except getopt.GetoptError as e:
         print(str(e))
         sys.exit(2)
+    except ValueError as e:
+        print(str(e))
+        sys.exit(2)
     except:
         print("Unknown error occured whilst running the tests...")
         sys.exit(2)

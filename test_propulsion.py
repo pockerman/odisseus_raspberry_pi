@@ -82,7 +82,7 @@ def test(odisseus_configuration):
 
         GPIO.setmode(GPIO.BCM)
         test_move_left(prop=prop, **kwargs)
-        
+
         print("Done Executing Propulsion Tests")
         print("============================")
 
