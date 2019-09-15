@@ -16,12 +16,13 @@ class ControlServer:
         self._odisseus = None
         self._odisseus_process = None
 
-    def start(self, propulsion, control_queue):
+    def start(self, propulsion, cmd_executor):
         """
         Start Odisseus: It creates a new instance of the robot and spawns a new process to run
         """
 
-        self._odisseus = Odisseus(odisseus_config=self._odisseus_config, propulsion=propulsion, cmd_queue=control_queue)
+        self._odisseus = Odisseus(odisseus_config=self._odisseus_config, propulsion=propulsion, cmd_executor=cmd_executor)
+        cmd_executor.set_odisseus_instance(odisseus=self._odisseus)
         self.spawn_odisseus_process()
 
     def spawn_odisseus_process(self):
