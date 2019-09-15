@@ -26,6 +26,7 @@ from control_server import ControlServer
 from propulsion import PropulsionParams
 from propulsion import Propulsion
 from control_cmds import PropulsionCmd
+from cmd_executor import CMDExecutor
 
 app = Flask(__name__)
 
@@ -133,7 +134,8 @@ def start_odisseus_web_app():
         if ENABLE_LOG:
             print("Initializing Odisseus...")
 
-        control_server.start(propulsion=propulsion, control_queue=control_queue)
+        cmd_executor = CMDExecutor(cmd_queue=control_queue)
+        control_server.start(propulsion=propulsion, cmd_executor=cmd_executor)
 
         # finally start the web application
         app.run(host=HOST, debug=DEBUG, port=PORT)

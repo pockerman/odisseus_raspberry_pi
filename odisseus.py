@@ -10,12 +10,18 @@ class Odisseus:
     Odisseus to do its tasks
     """
 
-    def __init__(self, odisseus_config, propulsion, cmd_queue):
+    def __init__(self, odisseus_config, propulsion, cmd_executor):
 
         self._odisseus_config = odisseus_config
-        self._cmd_queue = cmd_queue
+        self._cmd_executor = cmd_executor
         self._interrupted = False
         self._propulsion = propulsion
+
+    def set_cmd_executor(self, cmd_executor):
+        """
+        Set the instance of the cmd executor
+        """
+        self._cmd_executor = cmd_executor
 
     def run(self):
         """
@@ -24,12 +30,7 @@ class Odisseus:
         while self._interrupted is not True:
 
             # get a CMD off the queue and execute it
-            if self._cmd_queue.empty() != True :
-                cmd = self._cmd_queue.get()
-                cmd.execute(robot=self)
-                print("executed cmd")
-            #elif ENABLE_WARNINGS:
-            #    print("CMD Queue is empty...")
+            self._cmd_executor.run()
 
         if self._interrupted:
             print("Odisseus was interrupted")
@@ -38,7 +39,7 @@ class Odisseus:
         """
         Add a new CMD for the robot to be excuted
         """
-        self._cmd_queue.put(cmd)
+        self._cmd_executor.add_cmd(cmd)
 
     def interrupt(self):
         """
