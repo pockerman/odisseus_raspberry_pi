@@ -25,27 +25,23 @@ def test_move_bwd(prop, **kwargs):
 def test_move_right(prop, **kwargs):
 
     """
-    Test Scenario: Application starts the propulsion system in the forward direction.
-    After some time ( 3 secs ) the propulsion is instructed to generate right turn motion
+    Test Scenario: Application starts the propulsion system by generating right turn motion.
     """
 
     print("Move Right test...")
-    prop.forward(speed=100, **kwargs)
-    prop.stop()
     prop.right(speed=100, **kwargs)
+    prop.stop()
 
 
 def test_move_left(prop, **kwargs):
 
     """
-    Test Scenario: Application starts the propulsion system in the forward direction.
-    After some time ( 3 secs ) the propulsion is instructed to generate left turn motion
+    Test Scenario: Application starts the propulsion system by generating left turn motion.
     """
 
     print("Move Left test...")
-    prop.forward(speed=100, **kwargs)
-    prop.stop()
     prop.left(speed=100, **kwargs)
+    prop.stop()
 
 
 def test(odisseus_configuration):
