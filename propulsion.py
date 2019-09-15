@@ -21,9 +21,17 @@ class PropulsionParams:
 class Propulsion:
 
     def __init__(self, odisseus_config, params):
-
         self._odisseus_config = odisseus_config
+        self._params = params
+        self.setup()
 
+    def get_parameters(self):
+        return self._params
+
+    def setup(self):
+        """
+        Set up the pins using the parameters
+        """
         if self._odisseus_config.ON_RASP_PI:
             import RPi.GPIO as GPIO
             self._GPIO = GPIO
@@ -31,11 +39,9 @@ class Propulsion:
             from gpio_mock import GPIOMock as GPIO
             self._GPIO = GPIO
 
-        self._params = params
-
         if self._params.in_pin_1_motor_1 is not None and \
-           self._params.in_pin_2_motor_1 is not None and \
-           self._params.en_pin_motor_1 is not None:
+                self._params.in_pin_2_motor_1 is not None and \
+                self._params.en_pin_motor_1 is not None:
 
             print("Set up PIN_1_MOTOR_1 at: ", self._params.in_pin_1_motor_1)
             print("Set up PIN_2_MOTOR_1 at: ", self._params.in_pin_2_motor_1)
@@ -43,28 +49,26 @@ class Propulsion:
 
             self._GPIO.setup(self._params.in_pin_1_motor_1, self._GPIO.OUT)
             self._GPIO.setup(self._params.in_pin_2_motor_1, self._GPIO.OUT)
-            self._GPIO.setup(self._params.en_pin_motor_1,   self._GPIO.OUT)
+            self._GPIO.setup(self._params.en_pin_motor_1, self._GPIO.OUT)
 
         elif self._odisseus_config.ENABLE_WARNINGS:
             print(" Either of the pins for motor 1 is None ")
 
         if self._params.in_pin_1_motor_2 is not None and \
-           self._params.in_pin_2_motor_2 is not None and \
-           self._params.en_pin_motor_2 is not None:
+                self._params.in_pin_2_motor_2 is not None and \
+                self._params.en_pin_motor_2 is not None:
 
             print("Set up PIN_1_MOTOR_2 at: ", self._params.in_pin_1_motor_2)
             print("Set up PIN_2_MOTOR_2 at: ", self._params.in_pin_2_motor_2)
             print("Set up PIN_EN_MOTOR_2 at: ", self._params.en_pin_motor_2)
 
-            #GPIO.setup(self.__params.in_pin_1_motor_2, GPIO.OUT)
-            #GPIO.setup(self.__params.in_pin_2_motor_2, GPIO.OUT)
-            #GPIO.setup(self.__params.en_pin_motor_2,   GPIO.OUT)
+            # GPIO.setup(self.__params.in_pin_1_motor_2, GPIO.OUT)
+            # GPIO.setup(self.__params.in_pin_2_motor_2, GPIO.OUT)
+            # GPIO.setup(self.__params.en_pin_motor_2,   GPIO.OUT)
 
         elif self._odisseus_config.ENABLE_WARNINGS:
             print(" Either of the pins for motor 2 is None ")
 
-    def get_parameters(self):
-        return self._params
 
     def forward(self, speed, **kwargs):
 
