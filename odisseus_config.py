@@ -35,13 +35,19 @@ class OdisseusConfig:
     control_queue = Queue()
     display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
 
-    # the Pins Odisseus is using
-    IN_PIN_1_MOTOR_1 = 23
-    IN_PIN_2_MOTOR_1 = 24
-    ENA_MOTOR_1_PIN_ID = 25
-    IN_PIN_1_MOTOR_2 = 20
-    IN_PIN_2_MOTOR_2 = 21
-    ENA_MOTOR_2_PIN_ID = 17
+    # T he Pins Odisseus is using. Pin IDS according to BCM
+    PWM_PIN_ID = 18
+    PWM_FREQUENCY = 1000
+
+    # Front right Motor Pins
+    IN_PIN_1_MOTOR_1 = 23 # Board pin 16
+    IN_PIN_2_MOTOR_1 = 24 # Board pin 18
+    ENA_MOTOR_1_PIN_ID = 25 # Board pin 22
+
+    # Front left Motor Pins
+    IN_PIN_1_MOTOR_2 = 17 # Board pin 11
+    IN_PIN_2_MOTOR_2 = 27 # Board pin 13
+    ENA_MOTOR_2_PIN_ID = 22 # Board pin 15
 
     # the IR sensor PIN ID
     IR_PIN_ID = None  # 18
