@@ -56,14 +56,17 @@ def test(odisseus_configuration):
         else:
             from gpio_mock import GPIOMock as GPIO
 
+        # need to set the board mode before doing anything with the pins
+        GPIO.setmode(GPIO.BCM)
+
         kwargs = {'time': 2}
         params = PropulsionParams(in_pin_1_motor_1=odisseus_configuration.IN_PIN_1_MOTOR_1,
                                   in_pin_2_motor_1=odisseus_configuration.IN_PIN_2_MOTOR_1,
                                   en_pin_motor_1=odisseus_configuration.ENA_MOTOR_1_PIN_ID,
-                                  in_pin_1_motor_2=None, in_pin_2_motor_2=None, en_pin_motor_2=None)
+                                  in_pin_1_motor_2=odisseus_configuration.IN_PIN_1_MOTOR_2,
+                                  in_pin_2_motor_2=odisseus_configuration.IN_PIN_2_MOTOR_2,
+                                  en_pin_motor_2=odisseus_configuration.ENA_MOTOR_2_PIN_ID)
 
-        # need to set the board mode before doing anything with the pins
-        GPIO.setmode(GPIO.BCM)
 
         prop = Propulsion(odisseus_config=odisseus_configuration, params=params)
 
