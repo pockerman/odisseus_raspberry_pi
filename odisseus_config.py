@@ -39,11 +39,9 @@ class OdisseusConfig:
     IN_PIN_1_MOTOR_1 = 23
     IN_PIN_2_MOTOR_1 = 24
     ENA_MOTOR_1_PIN_ID = 25
-    IN_PIN_1_MOTOR_2 = None
-    IN_PIN_2_MOTOR_2 = None
-    ENA_MOTOR_2_PIN_ID = None
-    # IN_PIN_3 = 20
-    # IN_PIN_4 = 21
+    IN_PIN_1_MOTOR_2 = 20
+    IN_PIN_2_MOTOR_2 = 21
+    ENA_MOTOR_2_PIN_ID = 17
 
     # the IR sensor PIN ID
     IR_PIN_ID = None  # 18
