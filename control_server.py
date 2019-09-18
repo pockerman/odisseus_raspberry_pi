@@ -17,6 +17,7 @@ class ControlServer:
         self._odisseus_process = None
 
     def start(self, propulsion, cmd_executor):
+
         """
         Start Odisseus: It creates a new instance of the robot and spawns a new process to run
         """
@@ -26,6 +27,7 @@ class ControlServer:
         self.spawn_odisseus_process()
 
     def spawn_odisseus_process(self):
+
         """
         Spawns a new process for Odisseus. Assumes that the
         odisseus robot has been created
@@ -64,6 +66,7 @@ class ControlServer:
         self._odisseus.stop_raw()
 
     def cleanup_pins(self):
+
         """
         cleanup the pins. Should call reset_mode after this to get functional again
         """
@@ -73,6 +76,7 @@ class ControlServer:
             GPIO.cleanup()
 
     def reset_mode(self, mod=None):
+
         """
         Reset the pins mode
         """

@@ -7,10 +7,12 @@ it applies the CMDs on the robot
 class CMDExecutor:
 
     def __init__(self, cmd_queue, odisseus=None):
+
         self._cmd_queue = cmd_queue
         self._odisseus = odisseus
 
     def set_odisseus_instance(self, odisseus):
+
         """
         Set the instance of odisseus
         """
@@ -18,7 +20,11 @@ class CMDExecutor:
 
     def run(self):
 
-        if self._cmd_queue.empty() is not True:
+        """
+        Execute the commands in the command queue
+        """
+
+        while self._cmd_queue.empty() is not True:
 
             # get the next available CMD
             cmd = self._cmd_queue.get()
@@ -28,9 +34,10 @@ class CMDExecutor:
             else:
                 raise ValueError("Can only handle PropulsionCmd currently...")
 
-            print("executed cmd")
+            print("executed cmd: ", cmd.get_name())
 
     def add_cmd(self, cmd):
+
         """
          Add a new CMD to be queued for execution
         """
@@ -41,6 +48,7 @@ class CMDExecutor:
         self._cmd_queue.put(cmd)
 
     def _handle_propulsion_cmd(self, cmd):
+
         """
         Handle the propulsion CMD
         """
