@@ -13,12 +13,17 @@ from odisseus_config import odisseus_config_obj
 
 HOST = odisseus_config_obj.HOST
 DEBUG = odisseus_config_obj.DEBUG
-PORT =  odisseus_config_obj.PORT
+PORT = odisseus_config_obj.PORT
 CONTROL_SERVER_INDEX_TEMPLATE_NAME =  odisseus_config_obj.CONTROL_SERVER_INDEX_TEMPLATE_NAME
 PROPULSION_CONTROL_TEMPLATE_NAME = odisseus_config_obj.PROPULSION_CONTROL_TEMPLATE_NAME
+
 IN_PIN_1_MOTOR_1 = odisseus_config_obj.IN_PIN_1_MOTOR_1
 IN_PIN_2_MOTOR_1 = odisseus_config_obj.IN_PIN_2_MOTOR_1
 ENA_MOTOR_1_PIN_ID = odisseus_config_obj.ENA_MOTOR_1_PIN_ID
+IN_PIN_1_MOTOR_2 = odisseus_config_obj.IN_PIN_1_MOTOR_2
+IN_PIN_2_MOTOR_2 = odisseus_config_obj.IN_PIN_2_MOTOR_2
+ENA_MOTOR_2_PIN_ID = odisseus_config_obj.ENA_MOTOR_2_PIN_ID
+
 ENABLE_LOG = odisseus_config_obj.ENABLE_LOG
 control_queue = odisseus_config_obj.control_queue
 
@@ -126,15 +131,15 @@ def start_odisseus_web_app():
         control_server.reset_mode()
 
         prop_params = PropulsionParams(in_pin_1_motor_1=IN_PIN_1_MOTOR_1, in_pin_2_motor_1=IN_PIN_2_MOTOR_1, en_pin_motor_1=ENA_MOTOR_1_PIN_ID,
-                                       in_pin_1_motor_2=None, in_pin_2_motor_2=None, en_pin_motor_2=None)
+                                       in_pin_1_motor_2=IN_PIN_1_MOTOR_2, in_pin_2_motor_2=IN_PIN_2_MOTOR_2, en_pin_motor_2=ENA_MOTOR_2_PIN_ID)
 
         propulsion = Propulsion(odisseus_config=odisseus_config_obj, params=prop_params)
+        cmd_executor = CMDExecutor(cmd_queue=control_queue)
 
         # initialize Odisseus
         if ENABLE_LOG:
             print("Initializing Odisseus...")
 
-        cmd_executor = CMDExecutor(cmd_queue=control_queue)
         control_server.start(propulsion=propulsion, cmd_executor=cmd_executor)
 
         # finally start the web application

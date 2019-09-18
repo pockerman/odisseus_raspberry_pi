@@ -35,9 +35,14 @@ class OdisseusConfig:
     control_queue = Queue()
     display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
 
-    # T he Pins Odisseus is using. Pin IDS according to BCM
+    # Max frequency for motor PWM
+    MOTOR_PWM_FREQUENCY = 1000
+
+    # MAximum duty cycle
+    MAX_DUTY_CYCLE = 100
+
+    # The Pins Odisseus is using. Pin IDS according to BCM
     PWM_PIN_ID = 18
-    PWM_FREQUENCY = 1000
 
     # Front right Motor Pins
     IN_PIN_1_MOTOR_1 = 23 # Board pin 16
