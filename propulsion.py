@@ -78,6 +78,14 @@ class Motor:
         elif self._odisseus_config.ENABLE_WARNINGS:
             print(" Either of the pins for motor ", self._name, " is None ")
 
+
+    def is_enabled(self):
+
+        """
+        Returns true of the PIN IDs related with this motor are not None
+        """
+        return self._params[0] is not None and  self._params[1] is not None and  self._params[2] is not None
+
     def forward(self, **kwargs):
 
         """
@@ -105,6 +113,7 @@ class Motor:
         """
         Set the PIN level such that the motor stops operating
         """
+        
         self._GPIO.output(self._params[0], self._GPIO.LOW)
         self._GPIO.output(self._params[1], self._GPIO.LOW)
 
@@ -137,10 +146,14 @@ class Propulsion:
         if speed > self._odisseus_config.MAX_DUTY_CYCLE:
             speed = self._odisseus_config.MAX_DUTY_CYCLE
 
-        p1 = self.motor_A.forward(**kwargs)
-        p2 = self.motor_B.forward(**kwargs)
-        p1.start(speed)
-        p2.start(speed)
+        if self.motor_A.is_enabled():
+            p1 = self.motor_A.forward(**kwargs)
+            p1.start(speed)
+
+        if self.motor_B.is_enabled():
+            p2 = self.motor_B.forward(**kwargs)
+            p2.start(speed)
+
         time.sleep(kwargs['time'])
 
     def backward(self, speed, **kwargs):
@@ -169,9 +182,12 @@ class Propulsion:
         if speed > self._odisseus_config.MAX_DUTY_CYCLE:
             speed = self._odisseus_config.MAX_DUTY_CYCLE
 
-        self.motor_B.stop()
-        p1 = self.motor_A.forward(**kwargs)
-        p1.start(speed)
+        if self.motor_B.is_enabled():
+            self.motor_B.stop()
+
+        if self.motor_A.is_enabled():
+            p1 = self.motor_A.forward(**kwargs)
+            p1.start(speed)
         time.sleep(kwargs['time'])
 
     def right(self, speed, **kwargs):
@@ -184,9 +200,12 @@ class Propulsion:
         if speed > self._odisseus_config.MAX_DUTY_CYCLE:
             speed = self._odisseus_config.MAX_DUTY_CYCLE
 
-        self.motor_A.stop()
-        p1 = self.motor_B.forward(**kwargs)
-        p1.start(speed)
+        if self.motor_A.is_enabled():
+            self.motor_A.stop()
+
+        if self.motor_B.is_enabled():
+            p1 = self.motor_B.forward(**kwargs)
+            p1.start(speed)
         time.sleep(kwargs['time'])
 
     def stop(self):
@@ -194,8 +213,12 @@ class Propulsion:
         """
         Stop both motors
         """
-        self.motor_A.stop()
-        self.motor_B.stop()
+
+        if self.motor_A.is_enabled():
+            self.motor_A.stop()
+
+        if self.motor_B.is_enabled():
+            self.motor_B.stop()
 
 
 
