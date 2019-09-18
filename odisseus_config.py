@@ -38,10 +38,10 @@ class OdisseusConfig:
     # Max frequency for motor PWM
     MOTOR_PWM_FREQUENCY = 1000
 
-    # MAximum duty cycle
+    # Maximum duty cycle
     MAX_DUTY_CYCLE = 100
 
-    # The Pins Odisseus is using. Pin IDS according to BCM
+    # The Pins Odisseus is using. Pin IDs according to BCM
     PWM_PIN_ID = 18
 
     # Front right Motor Pins
