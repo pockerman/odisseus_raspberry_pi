@@ -41,9 +41,6 @@ class OdisseusConfig:
     # Maximum duty cycle
     MAX_DUTY_CYCLE = 100
 
-    # The Pins Odisseus is using. Pin IDs according to BCM
-    PWM_PIN_ID = 18
-
     # Front right Motor Pins
     IN_PIN_1_MOTOR_1 = 23 # Board pin 16
     IN_PIN_2_MOTOR_1 = 24 # Board pin 18
@@ -56,6 +53,16 @@ class OdisseusConfig:
 
     # the IR sensor PIN ID
     IR_PIN_ID = None  # 18
+
+    # Ultrasound sensor pins
+    TRIG_PIN = 5 # Board pin 29
+    ECHO_PIN = 6 # Board pin 31
+    SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR = 2
+    ULTRA_SOUND_TRIGGER_PULSE_TIME = 0.00001
+    MIN_DISTANCE_FROM_OBSTACLE = 15.0 # cm
+    ULTRASOUND_PORT_MAX_SIZE = 20 # maximum size for the Ultrasound sensor port queue
+
+
 
 # the global configuration object for Odisseus
 odisseus_config_obj = OdisseusConfig()
