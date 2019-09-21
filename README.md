@@ -9,7 +9,7 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 - 2 Wheels
 - 2 DC motors
 - A Pi camera
-- An ultrasound sensor
+- An ultrasound sensor (e.g. HC-SR04)
 - An IR sensor
 - An L289N H-bridge
 
@@ -22,7 +22,7 @@ All in all you need to:
 
 - **TODO**
 
-## Start the Odisseus Flask-based server
+## Start the Flask-based control server of Odisseus
 
 
 
@@ -32,3 +32,4 @@ All in all you need to:
 
 - **Installing CircuitPython Libraries on Raspberry Pi:** https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi
 - https://cdn-learn.adafruit.com/downloads/pdf/adafruit-dc-and-stepper-motor-hat-for-raspberry-pi.pdf
+- **HC-SR04 On Raspberry Pi:** https://thepihut.com/blogs/raspberry-pi-tutorials/hc-sr04-ultrasonic-range-sensor-on-the-raspberry-pi
