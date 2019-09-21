@@ -13,6 +13,7 @@ class GPIOMock:
     LOW  = 0
     OUT  = 2
     BCM  = 3
+    IN   = 4
 
     @staticmethod
     def setup(pin_id, mode):
@@ -20,6 +21,10 @@ class GPIOMock:
 
     @staticmethod
     def output(pin_id, mode):
+        pass
+
+    @staticmethod
+    def input(pin_id):
         pass
 
     @staticmethod
