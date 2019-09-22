@@ -38,7 +38,15 @@ def test_assign_msg(odisseus_configuration):
     print("\t test_assign_msg")
 
     port_inst = UltrasoundSensorPort(max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
-    sensor = UltrasoundSensor(odisseus_config=odisseus_configuration, port_inst=port_inst, distance_calculator=distance_calculator)
+
+    dist_calculator = distance_calculator
+
+    if odisseus_configuration.ON_RASP_PI:
+        dist_calculator = UltrasoundSensor.default_distance_calculator
+
+    sensor = UltrasoundSensor(odisseus_config=odisseus_configuration,
+                              port_inst=port_inst,
+                              distance_calculator=dist_calculator)
 
     assert sensor.is_setup(), "Sensor is not setup properly"
 
@@ -53,6 +61,8 @@ def test_assign_msg(odisseus_configuration):
     sensor_process.terminate()
 
     assert port_inst.size() == 1, "No distance message was set"
+    msg = port_inst.get()
+    print(msg)
 
 
 def test(odisseus_configuration):

@@ -13,6 +13,9 @@ class UltrasoundSensorMsg:
         self.id = id
         self.timestamp = timestamp
 
+    def __str__(self):
+        return "Id: "+self.id+", Distance: "+self.distance+", Timestamp: "+self.timestamp
+
 
 class UltrasoundSensorPort:
 
