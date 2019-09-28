@@ -90,6 +90,7 @@ class UltrasoundSensor:
         self._odisseus_config = odisseus_config
         self._port_inst = port_inst
         self._is_setup = False
+        self._sense = False
 
         if distance_calculator is None:
             self._distance_calculator = UltrasoundSensor.default_distance_calculator
@@ -112,6 +113,10 @@ class UltrasoundSensor:
         """
 
         return self._is_setup
+
+
+    def set_sense_flag(self, value):
+        self._sense = value
 
     def setup(self):
 
@@ -139,14 +144,14 @@ class UltrasoundSensor:
         """
         Sense any obstacles around
         """
+        while self._sense:
+            self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.HIGH)
+            time.sleep(kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'])
+            self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
 
-        self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.HIGH)
-        time.sleep(kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'])
-        self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
+            distance = self._distance_calculator(Gpio=self._GPIO, ECHO_PIN=self._odisseus_config.ECHO_PIN)
+            print("Distance calculated: ",distance)
+            self._port_inst.put(distance=distance)
 
-        distance = self._distance_calculator(Gpio=self._GPIO, ECHO_PIN=self._odisseus_config.ECHO_PIN)
-        print("Distance calculated: ",distance)
-        self._port_inst.put(distance=distance)
-
-        # clean the GPIO pins to ensure that all inputs/outputs are reset
-        self._GPIO.cleanup()
+            # clean the GPIO pins to ensure that all inputs/outputs are reset
+            self._GPIO.cleanup()

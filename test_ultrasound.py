@@ -50,6 +50,8 @@ def test_assign_msg(odisseus_configuration):
 
     assert sensor.is_setup(), "Sensor is not setup properly"
 
+    sensor.set_sense_flag(value=True)
+
     kwargs = dict()
     kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'] = odisseus_configuration.ULTRA_SOUND_TRIGGER_PULSE_TIME
 
@@ -58,6 +60,7 @@ def test_assign_msg(odisseus_configuration):
 
     # sleep this process for a three seconds
     time.sleep(3)
+    sensor.set_sense_flag(value=False)
 
     sensor_process.join()
 
