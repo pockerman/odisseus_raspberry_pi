@@ -22,7 +22,9 @@ def test_setup(odisseus_configuration):
 
     print("\t test_setup")
 
-    port_inst = UltrasoundSensorPort(max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
+    # instance of the port the sensor is writing to
+    port_inst = UltrasoundSensorPort(odisseus_config=odisseus_configuration,
+                                     max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
 
     # this will trigger the setup
     sensor = UltrasoundSensor(odisseus_config=odisseus_configuration, port_inst=port_inst)
@@ -37,7 +39,9 @@ def test_assign_msg(odisseus_configuration):
 
     print("\t test_assign_msg")
 
-    port_inst = UltrasoundSensorPort(max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
+    # instance of the port the sensor is writing to
+    port_inst = UltrasoundSensorPort(odisseus_config=odisseus_configuration,
+                                     max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
 
     dist_calculator = distance_calculator
 
@@ -58,8 +62,10 @@ def test_assign_msg(odisseus_configuration):
     sensor_process = Process(target=sensor.run, kwargs=kwargs)
     sensor_process.start()
 
-    # sleep this process for a three seconds
+    # sleep this process for  three seconds
     time.sleep(3)
+
+    # stop sensing
     sensor.set_sense_flag(value=False)
 
     sensor_process.join()

@@ -25,7 +25,9 @@ class UltrasoundSensorPort:
     any distance calculation from the sensor
     """
 
-    def __init__(self, max_size):
+    def __init__(self, odisseus_config, max_size):
+
+        self._odisseus_config = odisseus_config
         self._queue = Queue(maxsize=max_size)
         self._next_available_id = 0
 
@@ -38,7 +40,15 @@ class UltrasoundSensorPort:
         if distance is None:
             raise ValueError("Cannot queue None item...")
 
-        print("Adding distance...to queue")
+        # if we have reached the maximum size then throw away the
+        # oldest measurement
+        if self._queue.qsize() == self._queue.maxsize:
+            msg = self._queue.get()
+            if self._odisseus_config.ENABLE_LOG:
+                print("Removing measurement: ", msg.id)
+
+        if self._odisseus_config.ENABLE_LOG:
+            print("Adding distance...to queue")
 
         msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id, timestamp=time.time())
         self._queue.put(copy.deepcopy(msg))
@@ -47,16 +57,15 @@ class UltrasoundSensorPort:
     def get(self):
 
         """
-        Returns the top disatnce calculation in the queue
+        Returns the top distance calculation in the queue
         """
-        self._queue.get()
+        return self._queue.get()
 
     def size(self):
 
         """
         Returns how many messages are currently in the queue
         """
-
         return self._queue.qsize()
 
 
@@ -68,6 +77,7 @@ class UltrasoundSensor:
 
     @staticmethod
     def default_distance_calculator(Gpio, ECHO_PIN):
+
         """
         Default distance calculator. Uses default speed of sound 34300 cm/sec
         """
@@ -111,9 +121,7 @@ class UltrasoundSensor:
         """
         Returns true if the setup of the port is finished
         """
-
         return self._is_setup
-
 
     def set_sense_flag(self, value):
         self._sense = value
@@ -145,6 +153,9 @@ class UltrasoundSensor:
         Sense any obstacles around
         """
         while self._sense:
+            self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
+            time.sleep(self._odisseus_config.SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR)
+
             self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.HIGH)
             time.sleep(kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'])
             self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
@@ -152,6 +163,3 @@ class UltrasoundSensor:
             distance = self._distance_calculator(Gpio=self._GPIO, ECHO_PIN=self._odisseus_config.ECHO_PIN)
             print("Distance calculated: ",distance)
             self._port_inst.put(distance=distance)
-
-            # clean the GPIO pins to ensure that all inputs/outputs are reset
-            #self._GPIO.cleanup()
