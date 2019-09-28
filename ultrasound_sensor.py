@@ -30,6 +30,7 @@ class UltrasoundSensorPort:
         self._odisseus_config = odisseus_config
         self._queue = Queue(maxsize=max_size)
         self._next_available_id = 0
+        self._max_size = max_size
 
     def put(self, distance):
 
@@ -42,7 +43,7 @@ class UltrasoundSensorPort:
 
         # if we have reached the maximum size then throw away the
         # oldest measurement
-        if self._queue.qsize() == self._queue.maxsize:
+        if self._queue.qsize() == self._maxsize:
             msg = self._queue.get()
             if self._odisseus_config.ENABLE_LOG:
                 print("Removing measurement: ", msg.id)
@@ -67,6 +68,12 @@ class UltrasoundSensorPort:
         Returns how many messages are currently in the queue
         """
         return self._queue.qsize()
+
+    def max_size(self):
+        """
+        :return the maximum size of messages the port supports
+        """
+        return self._max_size
 
 
 class UltrasoundSensor:
