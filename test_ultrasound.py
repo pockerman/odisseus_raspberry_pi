@@ -98,6 +98,7 @@ def test(odisseus_configuration):
         print("An exception occured whilst running the test..." + str(e))
     finally:
         print("Cleaning up GPIO")
+        GPIO.cleanup()
 
 
 if __name__ == '__main__':

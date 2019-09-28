@@ -154,4 +154,4 @@ class UltrasoundSensor:
             self._port_inst.put(distance=distance)
 
             # clean the GPIO pins to ensure that all inputs/outputs are reset
-            self._GPIO.cleanup()
+            #self._GPIO.cleanup()
