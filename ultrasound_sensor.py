@@ -72,7 +72,7 @@ class UltrasoundSensor:
         Default distance calculator. Uses default speed of sound 34300 cm/sec
         """
 
-        SPEED_OF_SOUND = 343000.0 #cm
+        SPEED_OF_SOUND = 34300.0 #cm/sec
 
         while Gpio.input(ECHO_PIN) == 0:
             pulse_start = time.time()
