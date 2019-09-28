@@ -55,8 +55,8 @@ class OdisseusConfig:
     IR_PIN_ID = None  # 18
 
     # Ultrasound sensor pins
-    TRIG_PIN = 5 # Board pin 29
-    ECHO_PIN = 6 # Board pin 31
+    TRIG_PIN = 6 # Board pin 31
+    ECHO_PIN = 5 # Board pin 29
     SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR = 2
     ULTRA_SOUND_TRIGGER_PULSE_TIME = 0.00001
     MIN_DISTANCE_FROM_OBSTACLE = 15.0 # cm

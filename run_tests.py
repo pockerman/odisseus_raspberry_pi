@@ -16,25 +16,43 @@ def run():
 
         print("First argument given: ", args[1])
         print("Second argument given: ", args[2])
+        print("Third argument given: ", args[3])
+        
+        PLATFORM = args[1].split('=')[1]
 
-        if args[1].split('=')[1]=='Ubuntu':
+        if PLATFORM =='Ubuntu':
             odisseus_config_obj.ON_RASP_PI = False
 
-        if args[2].split('=')[1]=='1':
+        if PLATFORM =='Ubuntu' and args[2].split('=')[1]=='1':
+            import test_propulsion
+            test_propulsion.test(odisseus_configuration=odisseus_config_obj)
+        elif PLATFORM =='Raspbian' and args[3].split('=')[1]=='1':
             import test_propulsion
             test_propulsion.test(odisseus_configuration=odisseus_config_obj)
 
-        if args[2].split('=')[1]=='2':
+        if PLATFORM =='Ubuntu' and args[2].split('=')[1]=='2':
+            print("IR tests are not here yet...")
+        elif PLATFORM == 'Raspbian' and args[3].split('=') =='2':
             print("IR tests are not here yet...")
 
-        if args[2].split('=')[1]=='3':
+        if PLATFORM =='Ubuntu' and args[2].split('=')[1]=='3':
+            import test_ultrasound
+            test_ultrasound.test(odisseus_configuration=odisseus_config_obj)
+        elif PLATFORM == 'Raspbian' and args[3].split('=') == '3':
             import test_ultrasound
             test_ultrasound.test(odisseus_configuration=odisseus_config_obj)
 
-        if args[2].split('=')[1]=='4':
+        if PLATFORM =='Ubuntu' and args[2].split('=')[1]=='4':
+            print("Camera tests are not here yet...")
+        elif PLATFORM == 'Raspbian' and args[3].split('=') == '4':
             print("Camera tests are not here yet...")
 
-        if args[2].split('=')[1]=='5':
+        if PLATFORM =='Ubuntu' and args[2].split('=')[1]=='5':
+            import test_propulsion
+            test_propulsion.test(odisseus_configuration=odisseus_config_obj)
+            import test_ultrasound
+            test_ultrasound.test(odisseus_configuration=odisseus_config_obj)
+        elif PLATFORM == 'Raspbian' and args[3].split('=') == '5':
             import test_propulsion
             test_propulsion.test(odisseus_configuration=odisseus_config_obj)
             import test_ultrasound

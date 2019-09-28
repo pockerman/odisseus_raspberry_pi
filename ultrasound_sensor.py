@@ -13,6 +13,9 @@ class UltrasoundSensorMsg:
         self.id = id
         self.timestamp = timestamp
 
+    def __str__(self):
+        return "Id: "+self.id+", Distance: "+self.distance+", Timestamp: "+self.timestamp
+
 
 class UltrasoundSensorPort:
 
@@ -22,9 +25,12 @@ class UltrasoundSensorPort:
     any distance calculation from the sensor
     """
 
-    def __init__(self, max_size):
+    def __init__(self, odisseus_config, max_size):
+
+        self._odisseus_config = odisseus_config
         self._queue = Queue(maxsize=max_size)
         self._next_available_id = 0
+        self._max_size = max_size
 
     def put(self, distance):
 
@@ -35,7 +41,15 @@ class UltrasoundSensorPort:
         if distance is None:
             raise ValueError("Cannot queue None item...")
 
-        print("Adding distance...to queue")
+        # if we have reached the maximum size then throw away the
+        # oldest measurement
+        if self._queue.qsize() == self._max_size:
+            msg = self._queue.get()
+            if self._odisseus_config.ENABLE_LOG:
+                print("Removing measurement: ", msg.id)
+
+        if self._odisseus_config.ENABLE_LOG:
+            print("Adding distance...to queue")
 
         msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id, timestamp=time.time())
         self._queue.put(copy.deepcopy(msg))
@@ -44,17 +58,22 @@ class UltrasoundSensorPort:
     def get(self):
 
         """
-        Returns the top disatnce calculation in the queue
+        Returns the top distance calculation in the queue
         """
-        self._queue.get()
+        return self._queue.get()
 
     def size(self):
 
         """
         Returns how many messages are currently in the queue
         """
-
         return self._queue.qsize()
+
+    def max_size(self):
+        """
+        :return the maximum size of messages the port supports
+        """
+        return self._max_size
 
 
 class UltrasoundSensor:
@@ -65,11 +84,12 @@ class UltrasoundSensor:
 
     @staticmethod
     def default_distance_calculator(Gpio, ECHO_PIN):
+
         """
         Default distance calculator. Uses default speed of sound 34300 cm/sec
         """
 
-        SPEED_OF_SOUND = 343000.0 #cm
+        SPEED_OF_SOUND = 34300.0 #cm/sec
 
         while Gpio.input(ECHO_PIN) == 0:
             pulse_start = time.time()
@@ -87,6 +107,7 @@ class UltrasoundSensor:
         self._odisseus_config = odisseus_config
         self._port_inst = port_inst
         self._is_setup = False
+        self._sense = False
 
         if distance_calculator is None:
             self._distance_calculator = UltrasoundSensor.default_distance_calculator
@@ -107,8 +128,10 @@ class UltrasoundSensor:
         """
         Returns true if the setup of the port is finished
         """
-
         return self._is_setup
+
+    def set_sense_flag(self, value):
+        self._sense = value
 
     def setup(self):
 
@@ -136,13 +159,15 @@ class UltrasoundSensor:
         """
         Sense any obstacles around
         """
+        while self._sense is True:
+            self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
+            time.sleep(self._odisseus_config.SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR)
 
-        self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.HIGH)
-        time.sleep(kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'])
-        self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
+            self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.HIGH)
+            time.sleep(kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'])
+            self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
 
-        distance = self._distance_calculator(Gpio=self._GPIO, ECHO_PIN=self._odisseus_config.ECHO_PIN)
-        self._port_inst.put(distance=distance)
-
-        # clean the GPIO pins to ensure that all inputs/outputs are reset
-        self._GPIO.cleanup()
+            distance = self._distance_calculator(Gpio=self._GPIO,
+                                                 ECHO_PIN=self._odisseus_config.ECHO_PIN)
+            print("Distance calculated: ",distance)
+            self._port_inst.put(distance=distance)
