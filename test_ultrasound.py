@@ -62,7 +62,7 @@ def test_assign_msg(odisseus_configuration):
 
     assert port_inst.size() == 1, "No distance message was set"
     msg = port_inst.get()
-    print(msg)
+    print("Message: ",msg)
 
 
 def test(odisseus_configuration):

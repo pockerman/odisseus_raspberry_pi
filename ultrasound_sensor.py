@@ -145,6 +145,7 @@ class UltrasoundSensor:
         self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
 
         distance = self._distance_calculator(Gpio=self._GPIO, ECHO_PIN=self._odisseus_config.ECHO_PIN)
+        print("Distance calculated: ",distance)
         self._port_inst.put(distance=distance)
 
         # clean the GPIO pins to ensure that all inputs/outputs are reset
