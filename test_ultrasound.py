@@ -22,7 +22,9 @@ def test_setup(odisseus_configuration):
 
     print("\t test_setup")
 
-    port_inst = UltrasoundSensorPort(max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
+    # instance of the port the sensor is writing to
+    port_inst = UltrasoundSensorPort(odisseus_config=odisseus_configuration,
+                                     max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
 
     # this will trigger the setup
     sensor = UltrasoundSensor(odisseus_config=odisseus_configuration, port_inst=port_inst)
@@ -37,22 +39,41 @@ def test_assign_msg(odisseus_configuration):
 
     print("\t test_assign_msg")
 
-    port_inst = UltrasoundSensorPort(max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
-    sensor = UltrasoundSensor(odisseus_config=odisseus_configuration, port_inst=port_inst, distance_calculator=distance_calculator)
+    # instance of the port the sensor is writing to
+    port_inst = UltrasoundSensorPort(odisseus_config=odisseus_configuration,
+                                     max_size = odisseus_configuration.ULTRASOUND_PORT_MAX_SIZE)
+
+    dist_calculator = distance_calculator
+
+    if odisseus_configuration.ON_RASP_PI:
+        dist_calculator = UltrasoundSensor.default_distance_calculator
+
+    sensor = UltrasoundSensor(odisseus_config=odisseus_configuration,
+                              port_inst=port_inst,
+                              distance_calculator=dist_calculator)
 
     assert sensor.is_setup(), "Sensor is not setup properly"
+
+    sensor.set_sense_flag(value=True)
 
     kwargs = dict()
     kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'] = odisseus_configuration.ULTRA_SOUND_TRIGGER_PULSE_TIME
 
     sensor_process = Process(target=sensor.run, kwargs=kwargs)
     sensor_process.start()
-    sensor_process.join()
+
+    # sleep this process for  10 seconds
+    time.sleep(10)
+
+    # stop sensing
+    sensor.set_sense_flag(value=False)
 
     # terminate the sensor process
     sensor_process.terminate()
 
-    assert port_inst.size() == 1, "No distance message was set"
+    #assert port_inst.size() == 1, "No distance message was set"
+    #msg = port_inst.get()
+    #print("Message: ",msg)
 
 
 def test(odisseus_configuration):
@@ -81,6 +102,7 @@ def test(odisseus_configuration):
         print("An exception occured whilst running the test..." + str(e))
     finally:
         print("Cleaning up GPIO")
+        GPIO.cleanup()
 
 
 if __name__ == '__main__':
