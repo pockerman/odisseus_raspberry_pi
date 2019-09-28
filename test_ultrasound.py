@@ -62,13 +62,11 @@ def test_assign_msg(odisseus_configuration):
     sensor_process = Process(target=sensor.run, kwargs=kwargs)
     sensor_process.start()
 
-    # sleep this process for  three seconds
-    time.sleep(3)
+    # sleep this process for  10 seconds
+    time.sleep(10)
 
     # stop sensing
     sensor.set_sense_flag(value=False)
-
-    sensor_process.join()
 
     # terminate the sensor process
     sensor_process.terminate()

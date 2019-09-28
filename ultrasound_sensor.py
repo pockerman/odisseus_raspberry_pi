@@ -159,7 +159,7 @@ class UltrasoundSensor:
         """
         Sense any obstacles around
         """
-        while self._sense:
+        while self._sense is True:
             self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
             time.sleep(self._odisseus_config.SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR)
 
@@ -167,6 +167,7 @@ class UltrasoundSensor:
             time.sleep(kwargs['ULTRA_SOUND_TRIGGER_PULSE_TIME'])
             self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
 
-            distance = self._distance_calculator(Gpio=self._GPIO, ECHO_PIN=self._odisseus_config.ECHO_PIN)
+            distance = self._distance_calculator(Gpio=self._GPIO,
+                                                 ECHO_PIN=self._odisseus_config.ECHO_PIN)
             print("Distance calculated: ",distance)
             self._port_inst.put(distance=distance)
