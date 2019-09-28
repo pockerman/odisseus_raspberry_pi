@@ -43,7 +43,7 @@ class UltrasoundSensorPort:
 
         # if we have reached the maximum size then throw away the
         # oldest measurement
-        if self._queue.qsize() == self._maxsize:
+        if self._queue.qsize() == self._max_size:
             msg = self._queue.get()
             if self._odisseus_config.ENABLE_LOG:
                 print("Removing measurement: ", msg.id)
