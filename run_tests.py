@@ -16,6 +16,8 @@ def run():
 
         print("First argument given: ", args[1])
         print("Second argument given: ", args[2])
+        print("Third argument given: ", args[3])
+        
         PLATFORM = args[1].split('=')[1]
 
         if PLATFORM =='Ubuntu':
