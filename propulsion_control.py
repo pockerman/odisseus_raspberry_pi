@@ -4,27 +4,43 @@ Main module for controlling Odisseus via web
 
 import copy
 from multiprocessing import Process
+from multiprocessing import Queue
 
 from odisseus import Odisseus
+from propulsion import Propulsion
+from cmd_executor import CMDExecutor
 
 
-class ControlServer:
+
+class PropulsionControl:
 
     def __init__(self, odisseus_config):
 
         self._odisseus_config = odisseus_config
         self._odisseus = None
         self._odisseus_process = None
+        self._contorl_queue = Queue()
+        self._cmd_executor = CMDExecutor(cmd_queue=self._contorl_queue)
 
-    def start(self, propulsion, cmd_executor):
+    def start(self, propulsion):
 
         """
         Start Odisseus: It creates a new instance of the robot and spawns a new process to run
         """
 
-        self._odisseus = Odisseus(odisseus_config=self._odisseus_config, propulsion=propulsion, cmd_executor=cmd_executor)
-        cmd_executor.set_odisseus_instance(odisseus=self._odisseus)
+        if propulsion is None:
+            propulsion = Propulsion.create_from_configuration(self._odisseus_config)
+
+        self._odisseus = Odisseus(odisseus_config=self._odisseus_config, propulsion=propulsion, cmd_executor=self._cmd_executor)
+        self._cmd_executor.set_odisseus_instance(odisseus=self._odisseus)
         self.spawn_odisseus_process()
+
+    def stop(self):
+        """
+        Stop this controller from executing
+        """
+        self._odisseus_process.terminate()
+
 
     def spawn_odisseus_process(self):
 

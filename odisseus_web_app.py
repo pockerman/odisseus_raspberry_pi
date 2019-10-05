@@ -27,7 +27,7 @@ ENA_MOTOR_2_PIN_ID = odisseus_config_obj.ENA_MOTOR_2_PIN_ID
 ENABLE_LOG = odisseus_config_obj.ENABLE_LOG
 control_queue = odisseus_config_obj.control_queue
 
-from control_server import ControlServer
+from propulsion_control import PropulsionControl
 from propulsion import PropulsionParams
 from propulsion import Propulsion
 from control_cmds import PropulsionCmd
@@ -36,7 +36,7 @@ from cmd_executor import CMDExecutor
 app = Flask(__name__)
 
 # the control server used
-control_server = ControlServer(odisseus_config=odisseus_config_obj)
+control_server = PropulsionControl(odisseus_config=odisseus_config_obj)
 
 
 @app.route('/')
@@ -134,13 +134,13 @@ def start_odisseus_web_app():
                                        in_pin_1_motor_2=IN_PIN_1_MOTOR_2, in_pin_2_motor_2=IN_PIN_2_MOTOR_2, en_pin_motor_2=ENA_MOTOR_2_PIN_ID)
 
         propulsion = Propulsion(odisseus_config=odisseus_config_obj, params=prop_params)
-        cmd_executor = CMDExecutor(cmd_queue=control_queue)
+        #cmd_executor = CMDExecutor(cmd_queue=control_queue)
 
         # initialize Odisseus
         if ENABLE_LOG:
             print("Initializing Odisseus...")
 
-        control_server.start(propulsion=propulsion, cmd_executor=cmd_executor)
+        control_server.start(propulsion=propulsion) # cmd_executor=cmd_executor)
 
         # finally start the web application
         app.run(host=HOST, debug=DEBUG, port=PORT)
