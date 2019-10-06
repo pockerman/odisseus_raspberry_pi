@@ -6,7 +6,8 @@ point for controlling Odisseus
 
 from multiprocessing import Queue
 
-from propulsion_control import PropulsionControl
+from propulsion_process import PropulsionProcess
+from ultrasound_sensor_process import UltrasoundSensorProcess
 
 class MasterProcess:
 
@@ -14,12 +15,11 @@ class MasterProcess:
     The MasterProcess is the control point for Odisseus
     """
 
-    def __init__(self, odisseus_configuration):
+    def __init__(self, odisseus_configuration, **kwargs):
         self._config = odisseus_configuration
         self._propulsion_control = None
         self._processes = {}
         self._processes_created = False
-
 
     def get_processes_names(self):
         return self._processes.keys()
@@ -33,6 +33,9 @@ class MasterProcess:
             # launch the motor process
             self._create_motors_process()
 
+        if self._config.ENABLE_ULTRASOUND_SENSOR is True:
+            # launch the ultrasound sensor process
+            self._create_ultrasound_process()
         self._processes_created = True
 
     def terminate_all_processes(self):
@@ -40,7 +43,6 @@ class MasterProcess:
 
             for proc_name in self._processes:
                 self._processes[proc_name].stop()
-
 
     def run(self):
 
@@ -66,5 +68,13 @@ class MasterProcess:
         Create the motor process
         """
 
-        self._processes.update({"PropulsionControlProcess": PropulsionControl(odisseus_config=self._config)})
+        self._processes.update({"PropulsionControlProcess": PropulsionProcess(odisseus_config=self._config)})
         self._processes["PropulsionControlProcess"].start(propulsion=None)
+
+    def _create_ultrasound_process(self):
+
+        self._processes.update({UltrasoundSensorProcess.process_name(): UltrasoundSensorProcess(odisseus_config=self._config,
+                                                                                                port_max_size=self._config.ULTRASOUND_SENSOR_PORT_MAX_SIZE,
+                                                                                                distance_calculator=None)})
+        self._processes[UltrasoundSensorProcess.process_name()].start()
+

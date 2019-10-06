@@ -27,7 +27,7 @@ ENA_MOTOR_2_PIN_ID = odisseus_config_obj.ENA_MOTOR_2_PIN_ID
 ENABLE_LOG = odisseus_config_obj.ENABLE_LOG
 control_queue = odisseus_config_obj.control_queue
 
-from propulsion_control import PropulsionControl
+from propulsion_process import PropulsionProcess
 from propulsion import PropulsionParams
 from propulsion import Propulsion
 from control_cmds import PropulsionCmd
@@ -36,7 +36,7 @@ from cmd_executor import CMDExecutor
 app = Flask(__name__)
 
 # the control server used
-control_server = PropulsionControl(odisseus_config=odisseus_config_obj)
+control_server = PropulsionProcess(odisseus_config=odisseus_config_obj)
 
 
 @app.route('/')
