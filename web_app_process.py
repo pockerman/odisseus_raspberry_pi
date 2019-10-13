@@ -31,7 +31,7 @@ from propulsion_process import PropulsionProcess
 from propulsion import PropulsionParams
 from propulsion import Propulsion
 from control_cmds import PropulsionCmd
-from cmd_executor import CMDExecutor
+
 
 app = Flask(__name__)
 
