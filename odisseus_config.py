@@ -16,6 +16,15 @@ class OdisseusConfig:
     DEBUG = True
     ENABLE_LOG = True
     ENABLE_WARNINGS = True
+    ENABLE_ULTRASOUND_SENSOR = True
+    ENABLE_MOTORS = True
+    ENABLE_WEB_SERVER = True
+    ENABLE_CAMERA = False
+    ENABLE_IR_SENSOR = False
+
+    ULTRASOUND_SENSOR_PORT_MAX_SIZE = 20
+
+
     PORT = 5001
     HOST = '0.0.0.0'
 
@@ -61,7 +70,6 @@ class OdisseusConfig:
     ULTRA_SOUND_TRIGGER_PULSE_TIME = 0.00001
     MIN_DISTANCE_FROM_OBSTACLE = 15.0 # cm
     ULTRASOUND_PORT_MAX_SIZE = 20 # maximum size for the Ultrasound sensor port queue
-
 
 
 # the global configuration object for Odisseus

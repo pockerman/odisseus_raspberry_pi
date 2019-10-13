@@ -120,6 +120,22 @@ class Motor:
 
 class Propulsion:
 
+    @staticmethod
+    def create_from_configuration(odisseus_config):
+
+        """
+        Build a propulsion object from configuration
+        :param odisseus_config: The odisseus configuration
+        :return:  Propulsion instance
+        """
+
+        prop_params = PropulsionParams(in_pin_1_motor_1=odisseus_config.IN_PIN_1_MOTOR_1, in_pin_2_motor_1=odisseus_config.IN_PIN_2_MOTOR_1,
+                                       en_pin_motor_1=odisseus_config.ENA_MOTOR_1_PIN_ID, in_pin_1_motor_2=odisseus_config.IN_PIN_1_MOTOR_2,
+                                       in_pin_2_motor_2=odisseus_config.IN_PIN_2_MOTOR_2, en_pin_motor_2=odisseus_config.ENA_MOTOR_2_PIN_ID)
+
+        propulsion = Propulsion(odisseus_config=odisseus_config, params=prop_params)
+        return propulsion
+
     def __init__(self, odisseus_config, params):
 
         self._odisseus_config = odisseus_config
