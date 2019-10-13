@@ -5,9 +5,11 @@ Basic control cmds
 
 class ControlCmd(object):
 
-    def __init__(self, name, duration):
+    def __init__(self, name, duration, value=None):
+
         self._name = name
         self._duration = duration
+        self._value = value
 
     def get_name(self):
         return self._name
@@ -15,6 +17,11 @@ class ControlCmd(object):
     def get_duration(self):
         return self._duration
 
+    def get_value(self):
+        return self._value
+
+    def set_value(self, value):
+        self._value = value
 
 class PropulsionCmd(ControlCmd):
 
@@ -45,6 +52,18 @@ class PropulsionCmd(ControlCmd):
         Returns the speed of the motion
         """
         return self._speed_val
+
+class TerminateProcessCMD(ControlCmd):
+
+    def __init__(self, process_name):
+        ControlCmd.__init__(self, name="TerminateProcessCMD", duration=None, value=process_name)
+
+class StartProcessCMD(ControlCmd):
+
+    def __init__(self, process_name):
+        ControlCmd.__init__(self, name="StartProcessCMD", duration=None, value=process_name)
+
+
 
 
 
