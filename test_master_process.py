@@ -37,8 +37,8 @@ def test_create_processes(odisseus_config_obj):
     if odisseus_config_obj.ENABLE_WEB_SERVER:
         count += 1
 
+    master.terminate_all_processes()
     if count != len(names):
-        master.terminate_all_processes()
         error_msg = "ERROR in {0}: Not all processes were started. Should be {1} but started only {2} ".format(test_create_processes.__name__, count, len(names))
 
     return error_msg
@@ -55,7 +55,6 @@ if __name__ == '__main__':
 
         if PLATFORM == 'Ubuntu':
             odisseus_config_obj.ON_RASP_PI = False
-
 
     errors = []
     error_msg = test_create_processes(odisseus_config_obj=odisseus_config_obj)
