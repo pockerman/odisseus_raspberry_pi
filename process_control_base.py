@@ -36,7 +36,6 @@ class ProcessControlBase:
 
         return False
 
-
     def get_name(self):
         return self._name
 
