@@ -40,9 +40,9 @@ class MasterProcess:
 
     def add_cmd(self, cmd):
 
-        if cmd.__name__ == "TerminateProcessCMD":
+        if cmd.get_name() == "TerminateProcessCMD":
             self._terminate_process_queue.put(cmd)
-        elif cmd.__name__ == "StartProcessCMD":
+        elif cmd.get_name() == "StartProcessCMD":
             self._start_process_queue.put(cmd)
 
     def create_processes(self, **kwargs):
@@ -118,6 +118,8 @@ class MasterProcess:
             if UltrasoundSensorProcess.process_name() in self._processes.keys():
                 dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
                 print(dist_msg)
+            else:
+                print("No distance received")
 
 
 
