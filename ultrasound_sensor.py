@@ -51,7 +51,8 @@ class UltrasoundSensorPort:
         if self._odisseus_config.ENABLE_LOG:
             print("Adding distance...to queue")
 
-        msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id, timestamp=time.time())
+        msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id,
+                                  timestamp=time.time())
         self._queue.put(copy.deepcopy(msg))
         self._next_available_id +=1
 
