@@ -118,6 +118,8 @@ class MasterProcess:
             if UltrasoundSensorProcess.process_name() in self._processes.keys():
                 dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
                 print(dist_msg)
+            else:
+                print("No distance received")
 
 
 
