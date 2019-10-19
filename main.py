@@ -11,6 +11,7 @@ def main():
     Main driver for Odisseus
     """
     master = MasterProcess(odisseus_configuration=odisseus_config_obj)
+    master.create_processes()
     master.run()
 
 
