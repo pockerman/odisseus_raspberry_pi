@@ -29,4 +29,12 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+
+    try:
+        main()
+    except KeyboardInterrupt:
+        if odisseus_config_obj.ON_RASP_PI:
+            import RPi.GPIO as GPIO
+        else:
+            from gpio_mock import GPIOMock as GPIO
+        GPIO.cleanup()
