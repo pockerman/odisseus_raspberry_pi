@@ -24,6 +24,9 @@ def main():
     master.create_processes()
     master.run()
 
+    # once done clean up the pins
+    GPIO.cleanup()
+
 
 if __name__ == '__main__':
     main()

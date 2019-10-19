@@ -23,6 +23,7 @@ class MasterProcess:
         self._processes_created = False
         self._terminate_process_queue = Queue()
         self._start_process_queue = Queue()
+        self._ultrasound_sensor = None
 
     def get_processes_names(self):
         """
