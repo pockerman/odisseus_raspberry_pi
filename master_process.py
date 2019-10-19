@@ -23,6 +23,7 @@ class MasterProcess:
         self._processes_created = False
         self._terminate_process_queue = Queue()
         self._start_process_queue = Queue()
+        self._ultrasound_sensor = None
 
     def get_processes_names(self):
         """
@@ -113,6 +114,11 @@ class MasterProcess:
                 cmd = self._start_process_queue.get()
                 self.start_process(proc_name=cmd.get_value())
 
+            # query distance from ultrasound
+            if UltrasoundSensorProcess.process_name() in self._processes.keys():
+                dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
+                print(dist_msg)
+
 
 
             # check if there is any cmd coming from the server
@@ -142,6 +148,7 @@ class MasterProcess:
                                                                                                 port_max_size=self._config.ULTRASOUND_SENSOR_PORT_MAX_SIZE,
                                                                                                 distance_calculator=None)})
         self._processes[UltrasoundSensorProcess.process_name()].start(**kwargs)
+
 
     def _create_web_app_process(self, **kwargs):
 
