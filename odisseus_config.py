@@ -18,7 +18,7 @@ class OdisseusConfig:
     ENABLE_WARNINGS = True
     ENABLE_ULTRASOUND_SENSOR = True
     ENABLE_MOTORS = True
-    ENABLE_WEB_SERVER = True
+    ENABLE_WEB_SERVER = False
     ENABLE_CAMERA = False
     ENABLE_IR_SENSOR = False
 
