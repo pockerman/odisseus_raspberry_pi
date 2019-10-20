@@ -147,7 +147,7 @@ class MasterProcess:
         """
 
         self._processes.update({UltrasoundSensorProcess.process_name(): UltrasoundSensorProcess(odisseus_config=self._config,
-                                                                                                port_max_size=self._config.ULTRASOUND_SENSOR_PORT_MAX_SIZE,
+                                                                                                port_max_size=self._config.ULTRASOUND_PORT_MAX_SIZE,
                                                                                                 distance_calculator=None)})
         self._processes[UltrasoundSensorProcess.process_name()].start(**kwargs)
 
