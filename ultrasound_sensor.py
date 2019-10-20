@@ -171,7 +171,10 @@ class UltrasoundSensor:
 
             distance = self._distance_calculator(Gpio=self._GPIO,
                                                  ECHO_PIN=self._odisseus_config.ECHO_PIN)
-            print("Distance calculated: ",distance)
+
+            if self._odisseus_config.ENABLE_LOG:
+                print("Distance calculated: ",distance)
+
             self._port_inst.put(distance=distance)
 
     def get(self):
