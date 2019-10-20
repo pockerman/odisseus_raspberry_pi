@@ -47,6 +47,7 @@ class UltrasoundSensorPort:
             msg = self._queue.get()
             if self._odisseus_config.ENABLE_LOG:
                 print("Removing measurement: ", msg.id)
+                self._next_available_id = msg.id
 
         if self._odisseus_config.ENABLE_LOG:
             print("Adding distance...to queue")
@@ -54,14 +55,16 @@ class UltrasoundSensorPort:
         msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id,
                                   timestamp=time.time())
         self._queue.put(copy.deepcopy(msg))
-        self._next_available_id +=1
+        self._next_available_id += 1
 
     def get(self):
 
         """
         Returns the top distance calculation in the queue
         """
-        return self._queue.get()
+        item = self._queue.get()
+        self._next_available_id = item.id
+        return item
 
     def size(self):
 
