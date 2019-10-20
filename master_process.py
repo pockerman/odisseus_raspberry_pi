@@ -25,6 +25,42 @@ class MasterProcess:
         self._start_process_queue = Queue()
         self._ultrasound_sensor = None
 
+    def run(self, **kwargs):
+
+        """
+        Start running the master process
+        """
+
+        while True:
+
+            # check if a process should die
+            while self._terminate_process_queue.empty() is False:
+                cmd = self._terminate_process_queue.get()
+                self.terminate_process(proc_name=cmd.get_value())
+
+            # check if a process should start
+            while self._start_process_queue.empty() is False:
+                cmd = self._start_process_queue.get()
+                self.start_process(proc_name=cmd.get_value())
+
+            # query distance from ultrasound
+            if UltrasoundSensorProcess.process_name() in self._processes.keys():
+                dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
+                print(dist_msg)
+            else:
+                print("No distance received")
+
+
+
+            # check if there is any cmd coming from the server
+            # this will be high priority
+
+
+
+            # poll the sensors to get information about the world state
+            print("Running master process")
+
+
     def get_processes_names(self):
         """
         Returns all the names of the processes
@@ -93,43 +129,7 @@ class MasterProcess:
             self._create_web_app_process(**kwargs)
 
 
-    def run(self, **kwargs):
 
-        """
-        Start running the master process
-        """
-
-        #if self._processes_created is False:
-        #    self.create_processes(**kwargs)
-
-        while True:
-
-            # check if a process should die
-            while self._terminate_process_queue.empty() is False:
-                cmd = self._terminate_process_queue.get()
-                self.terminate_process(proc_name=cmd.get_value())
-
-            # check if a process should start
-            while self._start_process_queue.empty() is False:
-                cmd = self._start_process_queue.get()
-                self.start_process(proc_name=cmd.get_value())
-
-            # query distance from ultrasound
-            if UltrasoundSensorProcess.process_name() in self._processes.keys():
-                dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
-                print(dist_msg)
-            else:
-                print("No distance received")
-
-
-
-            # check if there is any cmd coming from the server
-            # this will be high priority
-
-
-
-            # poll the sensors to get information about the world state
-            print("Running master process")
 
     def _create_motors_process(self, **kwargs):
 

@@ -161,6 +161,7 @@ class UltrasoundSensor:
         Sense any obstacles around
         """
         while self._sense is True:
+
             self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
             time.sleep(self._odisseus_config.SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR)
 
@@ -172,3 +173,13 @@ class UltrasoundSensor:
                                                  ECHO_PIN=self._odisseus_config.ECHO_PIN)
             print("Distance calculated: ",distance)
             self._port_inst.put(distance=distance)
+
+    def get(self):
+
+        if self._sense == False:
+            raise ValueError("Sense flag for sensor  is False. This may block")
+
+        if self._is_setup == False:
+            raise ValueError("Sensor is not set up properly")
+
+        return self._port_inst.get()

@@ -35,11 +35,11 @@ class OdisseusConfig:
     NEEDED_CAMERA_ROTATION = 0.0
 
     # configuration for multiprocessing
-    USE_MULTIPROCESSING = False
-    QUEUE_MAX_SIZE = 2
+    #USE_MULTIPROCESSING = False
+    #QUEUE_MAX_SIZE = 2
 
-    control_queue = Queue()
-    display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
+    #control_queue = Queue()
+    #display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
 
     # Max frequency for motor PWM
     MOTOR_PWM_FREQUENCY = 1000
