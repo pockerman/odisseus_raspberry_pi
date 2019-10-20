@@ -19,7 +19,6 @@ def main():
     # need to set the board mode before doing anything with the pins
     GPIO.setmode(GPIO.BCM)
 
-
     master = MasterProcess(odisseus_configuration=odisseus_config_obj)
     master.create_processes()
     master.run()
