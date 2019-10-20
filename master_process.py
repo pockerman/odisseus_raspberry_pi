@@ -129,7 +129,7 @@ class MasterProcess:
 
 
             # poll the sensors to get information about the world state
-            #print("Running master process")
+            print("Running master process")
 
     def _create_motors_process(self, **kwargs):
 
