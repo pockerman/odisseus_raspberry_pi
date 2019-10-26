@@ -22,9 +22,6 @@ class OdisseusConfig:
     ENABLE_CAMERA = False
     ENABLE_IR_SENSOR = False
 
-    ULTRASOUND_SENSOR_PORT_MAX_SIZE = 20
-
-
     PORT = 5001
     HOST = '0.0.0.0'
 
@@ -38,11 +35,11 @@ class OdisseusConfig:
     NEEDED_CAMERA_ROTATION = 0.0
 
     # configuration for multiprocessing
-    USE_MULTIPROCESSING = False
-    QUEUE_MAX_SIZE = 2
+    #USE_MULTIPROCESSING = False
+    #QUEUE_MAX_SIZE = 2
 
-    control_queue = Queue()
-    display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
+    #control_queue = Queue()
+    #display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
 
     # Max frequency for motor PWM
     MOTOR_PWM_FREQUENCY = 1000

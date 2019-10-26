@@ -2,7 +2,7 @@
 Base class for deriving process control
 """
 
-class ProcessControlBase:
+class ProcessControlBase(object):
 
     def __init__(self, config, name):
         self._config = config

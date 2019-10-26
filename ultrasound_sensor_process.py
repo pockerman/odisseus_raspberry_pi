@@ -31,11 +31,15 @@ class UltrasoundSensorProcess(ProcessControlBase):
 
         # there is no point to start a new procees if this process is interrupted
         self.remove_interrupt()
+        self._sensor.set_sense_flag(value=True)
         self.set_process(proc=Process(target=self._sensor.run, kwargs={"ULTRA_SOUND_TRIGGER_PULSE_TIME":self.get_config().ULTRA_SOUND_TRIGGER_PULSE_TIME}))
         super(UltrasoundSensorProcess, self).start(**kwargs)
 
     def get(self):
-        return self._port_inst.get()
+        """
+        Returns a measurement
+        """
+        return self._sensor.get()
 
 
 

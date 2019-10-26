@@ -14,7 +14,7 @@ class UltrasoundSensorMsg:
         self.timestamp = timestamp
 
     def __str__(self):
-        return "Id: "+self.id+", Distance: "+self.distance+", Timestamp: "+self.timestamp
+        return "Id: "+str(self.id)+", Distance: "+str(self.distance)+", Timestamp: "+str(self.timestamp)
 
 
 class UltrasoundSensorPort:
@@ -47,6 +47,7 @@ class UltrasoundSensorPort:
             msg = self._queue.get()
             if self._odisseus_config.ENABLE_LOG:
                 print("Removing measurement: ", msg.id)
+                self._next_available_id = msg.id
 
         if self._odisseus_config.ENABLE_LOG:
             print("Adding distance...to queue")
@@ -54,14 +55,16 @@ class UltrasoundSensorPort:
         msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id,
                                   timestamp=time.time())
         self._queue.put(copy.deepcopy(msg))
-        self._next_available_id +=1
+        self._next_available_id += 1
 
     def get(self):
 
         """
         Returns the top distance calculation in the queue
         """
-        return self._queue.get()
+        item = self._queue.get()
+        self._next_available_id = item.id
+        return item
 
     def size(self):
 
@@ -161,6 +164,7 @@ class UltrasoundSensor:
         Sense any obstacles around
         """
         while self._sense is True:
+
             self._GPIO.output(self._odisseus_config.TRIG_PIN, self._GPIO.LOW)
             time.sleep(self._odisseus_config.SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR)
 
@@ -170,5 +174,18 @@ class UltrasoundSensor:
 
             distance = self._distance_calculator(Gpio=self._GPIO,
                                                  ECHO_PIN=self._odisseus_config.ECHO_PIN)
-            print("Distance calculated: ",distance)
+
+            if self._odisseus_config.ENABLE_LOG:
+                print("Distance calculated: ",distance)
+
             self._port_inst.put(distance=distance)
+
+    def get(self):
+
+        if self._sense == False:
+            raise ValueError("Sense flag for sensor  is False. This may block")
+
+        if self._is_setup == False:
+            raise ValueError("Sensor is not set up properly")
+
+        return self._port_inst.get()
