@@ -12,19 +12,15 @@ from propulsion import Propulsion
 from cmd_executor import CMDExecutor
 
 
-
 class PropulsionProcess(ProcessControlBase):
-
-    @staticmethod
-    def process_name():
-        return "PropulsionProcess"
 
     def __init__(self, odisseus_config):
 
-        ProcessControlBase.__init__(self, config=odisseus_config, name='PropulsionProcess')
+        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.PROPULSION_PROCESS_NAME)
         self._odisseus = None
         self._contorl_queue = Queue()
         self._cmd_executor = CMDExecutor(cmd_queue=self._contorl_queue)
+        self._controller = None
 
     def start(self, **kwargs):
 
@@ -32,6 +28,11 @@ class PropulsionProcess(ProcessControlBase):
         Start Odisseus: It creates a new instance of the robot and spawns a new process to run
         """
         propulsion = Propulsion.create_from_configuration(self.get_config())
+
+        if 'PropulsionProcessController' not in kwargs.keys():
+            raise KeyError("In PropulsionProcess-->start. The PropulsionProcessController has not been set")
+
+        self._controller = kwargs[self.get_config().PROPULSION_CONTROLLER_NAME]
 
         self._odisseus = Odisseus(odisseus_config=self.get_config(), propulsion=propulsion, cmd_executor=self._cmd_executor)
         self._cmd_executor.set_odisseus_instance(odisseus=self._odisseus)
@@ -71,7 +72,14 @@ class PropulsionProcess(ProcessControlBase):
         self.set_process(proc=Process(target=self._odisseus.run, kwargs={}))
 
     def add_cmd(self, cmd):
-        self._odisseus.add_cmd(copy.deepcopy(cmd))
+
+        # use the controller before adding the CMD
+        # to decide the CMD values
+
+        speed_value = self._controller.execute_from_cmd(self, cmd, odisseus_speed=100)
+        new_cmd = cmd.copy(cmd)
+        new_cmd.speed_value = speed_value
+        self._odisseus.add_cmd(copy.deepcopy(new_cmd))
 
     def cleanup_pins(self):
 

@@ -14,8 +14,13 @@ class ControlCmd(object):
     def get_name(self):
         return self._name
 
-    def get_duration(self):
+    @property
+    def duration(self):
         return self._duration
+
+    @duration.setter
+    def duration(self, value):
+        self._duration = value
 
     def get_value(self):
         return self._value
@@ -23,9 +28,15 @@ class ControlCmd(object):
     def set_value(self, value):
         self._value = value
 
+
+
 class PropulsionCmd(ControlCmd):
 
     DIRECTIONS = ["FWD", "REVERSE", "RIGHT", "LEFT", "STOP"]
+
+    @staticmethod
+    def copy(cmd):
+        return PropulsionCmd(direction=cmd.get_direction(), speed_value=cmd.speed_value(), duration=cmd.duration)
 
     def __init__(self, direction, speed_value, duration):
 
@@ -46,19 +57,32 @@ class PropulsionCmd(ControlCmd):
         """
         return self._direction
 
-    def get_speed_value(self):
+    @property
+    def speed_value(self):
 
         """
         Returns the speed of the motion
         """
         return self._speed_val
 
+    @speed_value.setter
+    def speed_value(self, value):
+        self._speed_val = value
+
+
 class TerminateProcessCMD(ControlCmd):
+    """
+    Terminate a given process
+    """
 
     def __init__(self, process_name):
         ControlCmd.__init__(self, name="TerminateProcessCMD", duration=None, value=process_name)
 
+
 class StartProcessCMD(ControlCmd):
+    """
+    Start a given process
+    """
 
     def __init__(self, process_name):
         ControlCmd.__init__(self, name="StartProcessCMD", duration=None, value=process_name)

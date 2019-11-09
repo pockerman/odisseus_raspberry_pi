@@ -122,12 +122,8 @@ class WebAppProcess(ProcessControlBase):
 
     web_app_process = None
 
-    @staticmethod
-    def process_name():
-        return "WebApp"
-
     def __init__(self, odisseus_config, master_process):
-        ProcessControlBase.__init__(self, config=odisseus_config, name="WebApp")
+        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.WEB_PROCESS_NAME)
         self._master_process = master_process
 
     def start(self, **kwargs):
@@ -172,7 +168,7 @@ if __name__ == '__main__':
             odisseus_config_obj.ON_RASP_PI = False
 
     master_process = MasterProcess(odisseus_configuration=odisseus_config_obj)
-    master_process.start_process(proc_name=WebAppProcess.process_name())
+    master_process.start_process(proc_name=odisseus_config_obj.WEB_PROCESS_NAME)
     web_app_process = master_process.get_process("WebApp")
 
     if web_app_process is None:

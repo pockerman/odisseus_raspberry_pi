@@ -2,11 +2,8 @@
 Unit tests for master process
 """
 
-import sys
-import getopt
-
-from odisseus_config import odisseus_config_obj
 from master_process import MasterProcess
+from pid import PIDControl
 
 """
 Test Scenario: Application starts Odisseus MasterProcess
@@ -16,7 +13,11 @@ def test_create_processes(odisseus_config_obj):
 
     error_msg = "No Erro in test"+test_create_processes.__name__
     master = MasterProcess(odisseus_configuration=odisseus_config_obj)
-    master.create_processes()
+
+    pid_control = PIDControl(Kp = odisseus_config_obj.PROPULSION_PID_Kp, Ki=odisseus_config_obj.PROPULSION_PID_Ki, Kd=odisseus_config_obj.PROPULSION_PID_Kd)
+    kwargs = dict()
+    kwargs[odisseus_config_obj.PROPULSION_CONTROLLER_NAME] = pid_control
+    master.create_processes(**kwargs)
 
     names = master.get_processes_names()
 
@@ -44,20 +45,9 @@ def test_create_processes(odisseus_config_obj):
     return error_msg
 
 
-if __name__ == '__main__':
-
-    opts, args = getopt.getopt(sys.argv, ["PLATFORM",])
-
-    print(args)
-
-    if len(args) == 2:
-        PLATFORM = args[1].split('=')[1]
-
-        if PLATFORM == 'Ubuntu':
-            odisseus_config_obj.ON_RASP_PI = False
-
+def test(odisseus_configuration):
     errors = []
-    error_msg = test_create_processes(odisseus_config_obj=odisseus_config_obj)
+    error_msg = test_create_processes(odisseus_config_obj=odisseus_configuration)
 
     if error_msg[0:5] == "ERROR":
         errors.append(error_msg)
@@ -67,3 +57,9 @@ if __name__ == '__main__':
 
         for error in errors:
             print(error)
+
+if __name__ == '__main__':
+
+    from odisseus_config import odisseus_config_obj
+    test(odisseus_configuration=odisseus_config_obj)
+
