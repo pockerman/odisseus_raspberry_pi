@@ -11,13 +11,9 @@ from ultrasound_sensor import UltrasoundSensorPort
 
 class UltrasoundSensorProcess(ProcessControlBase):
 
-    @staticmethod
-    def process_name():
-        return "UltrasoundSensorProcess"
-
     def __init__(self, odisseus_config, port_max_size, distance_calculator):
 
-        ProcessControlBase.__init__(self, config=odisseus_config, name="UltrasoundSensorProcess")
+        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.ULTRASOUND_SENSOR_PROCESS_NAME)
         self._port_inst = UltrasoundSensorPort(odisseus_config=self.get_config(), max_size=port_max_size)
         self._sensor = UltrasoundSensor(odisseus_config=self.get_config(), port_inst=self._port_inst, distance_calculator = distance_calculator)
 

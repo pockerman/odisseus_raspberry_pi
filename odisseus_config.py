@@ -11,6 +11,9 @@ class OdisseusConfig:
     Configuration class for Odisseus
     """
 
+    # The name of the MasterProcess
+    MASTER_PROCESS_NAME = "MasterProcess"
+
     # Flag indicating if we are on Pi or simply emulating
     ON_RASP_PI = True
     DEBUG = True
@@ -34,13 +37,6 @@ class OdisseusConfig:
     CAMERA_SLEEP_TIME = 0.05
     NEEDED_CAMERA_ROTATION = 0.0
 
-    # configuration for multiprocessing
-    #USE_MULTIPROCESSING = False
-    #QUEUE_MAX_SIZE = 2
-
-    #control_queue = Queue()
-    #display_queue = Queue(maxsize=QUEUE_MAX_SIZE)
-
     # Max frequency for motor PWM
     MOTOR_PWM_FREQUENCY = 1000
 
@@ -57,6 +53,14 @@ class OdisseusConfig:
     IN_PIN_2_MOTOR_2 = 27 # Board pin 13
     ENA_MOTOR_2_PIN_ID = 22 # Board pin 15
 
+    PROPULSION_PROCESS_NAME = "PropulsionProcess"
+
+    # weights of PID controller for Propulsion
+    PROPULSION_PID_Kp = 0.1
+    PROPULSION_PID_Ki = 0.5
+    PROPULSION_PID_Kd = 0.0
+    PROPULSION_CONTROLLER_NAME = 'PropulsionProcessController'
+
     # the IR sensor PIN ID
     IR_PIN_ID = None  # 18
 
@@ -67,17 +71,16 @@ class OdisseusConfig:
     ULTRA_SOUND_TRIGGER_PULSE_TIME = 0.00001
     MIN_DISTANCE_FROM_OBSTACLE = 15.0 # cm
     ULTRASOUND_PORT_MAX_SIZE = 20 # maximum size for the Ultrasound sensor port queue
+    ULTRASOUND_SENSOR_PROCESS_NAME = "UltrasoundSensorProcess"
 
+    WEB_PROCESS_NAME='WebApp'
+
+    TOLERANCE = 1.0e-3
 
 # the global configuration object for Odisseus
 odisseus_config_obj = OdisseusConfig()
 
-#if ON_RASP_PI:
-#    import cv2
 
-#if ON_RASP_PI:
-#    ENCODE_PARAMS = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
-    
 
 
 

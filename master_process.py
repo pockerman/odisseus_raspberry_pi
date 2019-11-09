@@ -5,19 +5,20 @@ point for controlling Odisseus
 """
 
 from multiprocessing import Queue
-
+from process_control_base import ProcessControlBase
 from propulsion_process import PropulsionProcess
 from ultrasound_sensor_process import UltrasoundSensorProcess
 from web_app_process import WebAppProcess
 
-class MasterProcess:
+class MasterProcess(ProcessControlBase):
 
     """
     The MasterProcess is the control point for Odisseus
     """
 
     def __init__(self, odisseus_configuration, **kwargs):
-        self._config = odisseus_configuration
+        ProcessControlBase.__init__(self, config=odisseus_configuration, name=odisseus_configuration.MASTER_PROCESS_NAME)
+        #self._config = odisseus_configuration
         self._propulsion_control = None
         self._processes = {}
         self._processes_created = False
@@ -44,7 +45,7 @@ class MasterProcess:
                 self.start_process(proc_name=cmd.get_value())
 
             # query distance from ultrasound
-            if UltrasoundSensorProcess.process_name() in self._processes.keys():
+            if self.get in self._processes.keys():
                 dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
                 print(dist_msg)
             else:
@@ -87,15 +88,15 @@ class MasterProcess:
         Create the processes needed for Odisseus
         """
 
-        if self._config.ENABLE_MOTORS is True:
+        if self.get_config().ENABLE_MOTORS is True:
             # launch the motor process
             self._create_motors_process(**kwargs)
 
-        if self._config.ENABLE_ULTRASOUND_SENSOR is True:
+        if self.get_config().ENABLE_ULTRASOUND_SENSOR is True:
             # launch the ultrasound sensor process
             self._create_ultrasound_process(**kwargs)
 
-        if self._config.ENABLE_WEB_SERVER is True:
+        if self.get_config().ENABLE_WEB_SERVER is True:
             self._create_web_app_process(**kwargs)
 
         self._processes_created = True
@@ -121,15 +122,12 @@ class MasterProcess:
 
     def start_process(self, proc_name, **kwargs):
 
-        if proc_name == PropulsionProcess.process_name():
+        if proc_name == self.get_config().PROPULSION_PROCESS_NAME:
             self._create_motors_process(**kwargs)
-        elif proc_name == UltrasoundSensorProcess.process_name():
+        elif proc_name == self.get_config().ULTRASOUND_SENSOR_PROCESS_NAME:
             self._create_ultrasound_process(**kwargs)
-        elif proc_name == WebAppProcess.process_name():
+        elif proc_name == self.get_config().WEB_PROCESS_NAME:
             self._create_web_app_process(**kwargs)
-
-
-
 
     def _create_motors_process(self, **kwargs):
 
@@ -137,8 +135,8 @@ class MasterProcess:
         Create the motor process
         """
 
-        self._processes.update({PropulsionProcess.process_name(): PropulsionProcess(odisseus_config=self._config)})
-        self._processes[PropulsionProcess.process_name()].start(**kwargs)
+        self._processes.update({self.get_config().PROPULSION_PROCESS_NAME: PropulsionProcess(odisseus_config=self._config)})
+        self._processes[self.get_config().PROPULSION_PROCESS_NAME].start(**kwargs)
 
     def _create_ultrasound_process(self, **kwargs):
 
@@ -146,11 +144,10 @@ class MasterProcess:
         Create the ultrasound process
         """
 
-        self._processes.update({UltrasoundSensorProcess.process_name(): UltrasoundSensorProcess(odisseus_config=self._config,
+        self._processes.update({self.get_config().ULTRASOUND_SENSOR_PROCESS_NAME: UltrasoundSensorProcess(odisseus_config=self._config,
                                                                                                 port_max_size=self._config.ULTRASOUND_PORT_MAX_SIZE,
                                                                                                 distance_calculator=None)})
-        self._processes[UltrasoundSensorProcess.process_name()].start(**kwargs)
-
+        self._processes[self.get_config().ULTRASOUND_SENSOR_PROCESS_NAME].start(**kwargs)
 
     def _create_web_app_process(self, **kwargs):
 
@@ -160,6 +157,6 @@ class MasterProcess:
 
         from web_app_process import WebAppProcess
         self._processes.update(
-            {WebAppProcess.process_name(): WebAppProcess(odisseus_config=self._config, master_process=self)})
-        self._processes[WebAppProcess.process_name()].start(**kwargs)
+            {self.get_config().WEB_PROCESS_NAME: WebAppProcess(odisseus_config=self._config, master_process=self)})
+        self._processes[self.get_config().WEB_PROCESS_NAME].start(**kwargs)
 
