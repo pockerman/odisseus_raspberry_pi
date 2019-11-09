@@ -11,13 +11,14 @@ echo "Select the tests you want to run:
 2. IR tests
 3. Ultrasound tests
 4. Camera tests
-5. All tests
+5. Master process tests
+6. All tests
 0. Quit
 "
 
-read  -p "Enter option [0-5] > "
+read  -p "Enter option [0-6] > "
 
-if [[ "$REPLY" =~ ^[0-5]$ ]]; then
+if [[ "$REPLY" =~ ^[0-6]$ ]]; then
 	if [[ "$REPLY" == 0 ]]; then
 		echo "Terminating program"
 		exit 
@@ -44,6 +45,11 @@ if [[ "$REPLY" =~ ^[0-5]$ ]]; then
 		exit 0
 	fi
 	if [[ "$REPLY" -eq 5 ]]; then
+	  echo "Master process tests..."
+	  python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+	  exit
+	fi
+	if [[ "$REPLY" -eq 6 ]]; then
 		echo "Running all tests..."
 		python3 run_tests.py PLATFORM=$NAME ID=$REPLY
 		exit 0

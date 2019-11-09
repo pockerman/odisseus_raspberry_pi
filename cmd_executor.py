@@ -57,14 +57,14 @@ class CMDExecutor:
             self._odisseus.stop_raw()
 
         elif cmd.get_direction() == "FWD":
-            self._odisseus.move_fwd_raw(cmd.get_speed_value(), **{'time': cmd.get_duration()})
+            self._odisseus.move_fwd_raw(cmd.speed_value(), **{'time': cmd.duration()})
 
         elif cmd.get_direction() == "REVERSE":
-            self._odisseus.move_reverse_raw(cmd.get_speed_value(), **{'time': cmd.get_duration()})
+            self._odisseus.move_reverse_raw(cmd.speed_value(), **{'time': cmd.duration()})
 
         elif cmd.get_direction() == "LEFT":
-            self._odisseus.move_left_raw(cmd.get_speed_value(), **{'time': cmd.get_duration()})
+            self._odisseus.move_left_raw(cmd.speed_value(), **{'time': cmd.duration()})
 
         elif cmd.get_direction() == "RIGHT":
-            self._odisseus.move_right_raw(cmd.get_speed_value(), **{'time': cmd.get_duration()})
+            self._odisseus.move_right_raw(cmd.speed_value(), **{'time': cmd.duration()})
 
