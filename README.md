@@ -40,7 +40,7 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 
 **TODO**
 
-### <a name="software"></a> Software
+### <a name="design_notes"></a> Design Notes
 
 Odisseus is a multiprocess application. All its sensors as well as its motors run on a separate process.
 These processes are
@@ -55,7 +55,7 @@ These processes are
 
 The following image shows the inheritance diagram
 
-![Process](imgs/design_1.png)
+![Process](doc/imgs/design_1.png)
 
 The processes communicate with each other via messages which are explained below.
 
@@ -64,7 +64,7 @@ The processes communicate with each other via messages which are explained below
 
 The ```MasterProcess``` 
 
-![MasterProcess](imgs/design_2.png)
+![MasterProcess](doc/imgs/design_2.png)
 
 #### <a name="webap_process"></a> The ```WebAppProcess```
 
@@ -83,7 +83,7 @@ the master process and create a command for the ```PropulsionProcess```. Pictori
 figure below
 
 
-![DecisionProcessFlow](imgs/design_3.png)
+![DecisionProcessFlow](doc/imgs/design_3.png)
 
 ## <a name="installation"></a> Installation
 
