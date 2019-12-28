@@ -21,37 +21,37 @@ read  -p "Enter option [0-6] > "
 if [[ "$REPLY" =~ ^[0-6]$ ]]; then
 	if [[ "$REPLY" == 0 ]]; then
 		echo "Terminating program"
-		exit 
+		exit
 	fi
 	if [[ "$REPLY" -eq 1 ]]; then
-		echo "Running Propulsion tests"	
-		python3 run_tests.py "PLATFORM=$NAME" "ID=$REPLY"
+		echo "Running Propulsion tests"
+		python3 -m pdb run_tests.py "PLATFORM=$NAME" "ID=$REPLY"
 		exit 0
 	fi
 	if [[ "$REPLY" -eq 2 ]]; then
 		echo "Running IR tests..."
-		echo "This is not enabled yet"	
-		python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+		echo "This is not enabled yet"
+		python3 -m pdb run_tests.py PLATFORM=$NAME ID=$REPLY
 		exit 0
 	fi
 	if [[ "$REPLY" -eq 3 ]]; then
 		echo "Ultrasound tests..."
-		python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+		python3 -m pdb run_tests.py PLATFORM=$NAME ID=$REPLY
 		exit 0
 	fi
 	if [[ "$REPLY" -eq 4 ]]; then
 		echo "Camera tests..."
-		python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+		python3 -m pdb run_tests.py PLATFORM=$NAME ID=$REPLY
 		exit 0
 	fi
 	if [[ "$REPLY" -eq 5 ]]; then
 	  echo "Master process tests..."
-	  python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+	  python3 -m pdb run_tests.py PLATFORM=$NAME ID=$REPLY
 	  exit
 	fi
 	if [[ "$REPLY" -eq 6 ]]; then
 		echo "Running all tests..."
-		python3 run_tests.py PLATFORM=$NAME ID=$REPLY
+		python3 -m pdb run_tests.py PLATFORM=$NAME ID=$REPLY
 		exit 0
 	fi
 else
