@@ -17,14 +17,13 @@ class MasterProcess(ProcessControlBase):
     """
 
     def __init__(self, odisseus_configuration, **kwargs):
-        ProcessControlBase.__init__(self, config=odisseus_configuration, name=odisseus_configuration.MASTER_PROCESS_NAME)
-        #self._config = odisseus_configuration
-        self._propulsion_control = None
+        ProcessControlBase.__init__(self, config=odisseus_configuration,
+                                    name=odisseus_configuration.MASTER_PROCESS_NAME)
+
         self._processes = {}
         self._processes_created = False
         self._terminate_process_queue = Queue()
         self._start_process_queue = Queue()
-        self._ultrasound_sensor = None
 
     def run(self, **kwargs):
 
@@ -51,12 +50,8 @@ class MasterProcess(ProcessControlBase):
             else:
                 print("No distance received")
 
-
-
             # check if there is any cmd coming from the server
             # this will be high priority
-
-
 
             # poll the sensors to get information about the world state
             print("Running master process")
