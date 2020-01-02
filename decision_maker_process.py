@@ -7,22 +7,33 @@ from process_control_base import ProcessControlBase
 from control_cmds import PropulsionCmd
 
 
-class DecisionMaker(ProcessControlBase):
+class DecisionMakerProcess(ProcessControlBase):
 
     @staticmethod
     def process_name():
         return "DecisionMakerProcess"
 
     def __init__(self, odisseus_config, process_map):
-        ProcessControlBase.__init__(self, config=odisseus_config, name="DecisionMakerProcess")
+        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.DECISION_MAKER_PROCESS_NAME)
+
+        # map holding the processes
         self._process_map = process_map
 
 
-    def get_cmd_based_on_distance(self):
+    def run(self):
+        """
+        Run the decision maker
+        :return:
+        """
+        pass
 
-        if self._ultrasound_process is not None:
-            # poll the process for a measurement
-            dist_msg = self._ultrasound_process.get()
+
+    def _get_cmd_based_on_distance(self):
+
+        if self._process_map[self.get_config().ULTRASOUND_SENSOR_PROCESS_NAME] is not None:
+
+            # poll the process for a measurement distance
+            dist_msg = self._process_map[self.get_config().ULTRASOUND_SENSOR_PROCESS_NAME].get()
 
             if self.get_config().ENABLE_LOG:
                 print("Received distance: ", dist_msg)
@@ -34,3 +45,9 @@ class DecisionMaker(ProcessControlBase):
                 return PropulsionCmd(direction="STOP", speed_value=0, duration=100)
 
         raise ValueError("You should not call this DecisionMaker.get_cmd_based_on_distance when UltrasoundProcess is None.")
+
+    def _get_camera_input(self):
+        pass
+
+    def _get_ir_input(self):
+        pass
