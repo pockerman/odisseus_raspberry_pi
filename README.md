@@ -91,10 +91,9 @@ figure below
 
 ### <a name="extended_kalman_filter"></a> Extended Kalman Filter
 
-## <a name="installation"></a> Installation
+- **TODO**
 
-Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_. 
-All in all you need to:
+## <a name="installation"></a> Installation
 
 - **TODO**
 
