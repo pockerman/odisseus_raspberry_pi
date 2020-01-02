@@ -17,6 +17,8 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 		* [The ```UltrasoundSensorProcess```](#ultrasound_process)
 		* [The ```PropulsionProcess```](#propulsion_process)
 		* [The ```DecisionMakerProcess```](#decision_process)
+* [Localization](#localization)
+		* [Extended Kalman Filter](#extended_kalman_filter)
 * [Installation](#installation)
 * [Useful Links](#useful_links)
 * [How To](#how_to)
@@ -84,6 +86,10 @@ figure below
 
 
 ![DecisionProcessFlow](doc/imgs/design_3.png)
+
+## <a name="localization"></a> Localization 
+
+### <a name="extended_kalman_filter"></a> Extended Kalman Filter
 
 ## <a name="installation"></a> Installation
 
