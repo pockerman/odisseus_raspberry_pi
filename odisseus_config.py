@@ -14,11 +14,21 @@ class OdisseusConfig:
     # The name of the MasterProcess
     MASTER_PROCESS_NAME = "MasterProcess"
 
+    # The name of the DecisionMakerProcess
+    DECISION_MAKER_PROCESS_NAME = "DecisionMakerProcess"
+
     # Flag indicating if we are on Pi or simply emulating
     ON_RASP_PI = True
+
+    # sample the sensors very SAMPLE_RATE
+    SAMPLING_RATE = 0.5
+
+    # various levels of info to record
     DEBUG = True
     ENABLE_LOG = True
     ENABLE_WARNINGS = True
+
+    # which sensors to enable
     ENABLE_ULTRASOUND_SENSOR = True
     ENABLE_MOTORS = True
     ENABLE_WEB_SERVER = True
@@ -75,7 +85,11 @@ class OdisseusConfig:
 
     WEB_PROCESS_NAME='WebApp'
 
+    # global tolerance to use
     TOLERANCE = 1.0e-3
+
+    # which method of fusion to use
+    SENSOR_FUSION_METHOD = "KalmanFilter"
 
 # the global configuration object for Odisseus
 odisseus_config_obj = OdisseusConfig()
