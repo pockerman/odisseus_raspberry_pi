@@ -2,12 +2,13 @@
 import numpy as np
 from matrix_descriptor import MatrixDescriptor
 
-__all__ = ["ExtendedKalmanFilter"]
+__all__ = ["ExtendedKalmanFilter",
+           "EKFMatrixDescription"]
 
 # Holds the names of the matrices used in the Kalman Filter class
 NAMES = ["A", "B", "H", "P", "K", "Q", "R"]
 
-class KFMatrixDescription(MatrixDescriptor):
+class EKFMatrixDescription(MatrixDescriptor):
     """
     Matrix description for Kalman Filter class
     """
@@ -45,18 +46,16 @@ class ExtendedKalmanFilter(object):
         # the matrix descriptor
         self._mat_desc = matrix_description
 
-        # set the matrices
-
     def iterate(self, u, z, **kwargs):
 
-        if 'v' in kwargs['v']:
+        if 'v' in kwargs.keys() :
             v = kwargs['v']
         else:
             v = np.array([0.0, 0.0])
 
         self.predict(u=u, v=v)
 
-        if 'w' in kwargs['w']:
+        if 'w' in kwargs.keys():
             w = kwargs['w']
         else:
             w = np.array([0.0, 0.0])
@@ -70,44 +69,75 @@ class ExtendedKalmanFilter(object):
         state_val = self._state.get_value()
 
         # use the motion model to predict state
-        state_pred = self._motion_model(xk=state_val, u=u, v=v )
+        state_pred = self._motion_model.value(xk=state_val, u=u, v=v )
 
         self._state.set_value(state_pred)
 
         P = self._mat_desc["P"]
         Q = self._mat_desc["Q"]
+
         L = self._motion_model.control_jacobian_matrix(xk=state_pred, u=u, v=v)
         L_T = L.T
+
         F = self._motion_model.state_jacobian_matrix(xk=state_pred, u=u, v=v)
         F_T = F.T
-        P = F * P * F_T + L * Q * L_T
+
+        P = F * P * F_T + np.dot(L , np.dot( Q,  L_T))
         self._mat_desc["P"] = P
 
     def update(self, z, w):
+
         """
-        Performs the update step of the Kalman Filter
+        Performs the update step of the Extended Kalman Filter
+
+        :param z: the sensor measurements
+        :type  z:
+
+        :param w: error vector associated with the meansuremnt
+
         """
 
-        zpred = self._observation_model.value
-
-        H = self._mat_desc["H"]
-        H_T = self._mat_desc["H"].T
         P = self._mat_desc["P"]
         R = self._mat_desc["R"]
 
-        S = H * P * H_T + R
-        S_inv = np.linalg.inv(S)
+        zpred = self._observation_model.sonar_value(xk=self._state.get_value(), point=z, w=w)
 
-        # compute gain matrix
-        self._mat_desc["K"] = P * H_T * S_inv
+        H = self._observation_model.sonar_model_jacobian(xk=self._state.get_value(), point=z, w=w)
+        H_T = H.T
 
-        innovation = z - H * self._state.get_value()
-        self._state += self._mat_desc["K"] * innovation
-        I = np.identity(self._state.get_value().shape)
+        M = self._observation_model.sonar_model_jacobian_wrt_error(xk=self._state.get_value(),
+                                                                   point=z, w=w, shape_diagonal=None)
 
-        # update covariance matrix
-        P = (I - self._mat_desc["K"] * H) * P
-        self._mat_desc["P"] = P
+        A = H * P * H_T
+        B = np.dot(M, np.dot(R, M.T))
+
+        S = A + B
+
+        try:
+            S_inv = np.linalg.inv(S)
+
+            # compute the gain matrix
+            K = P * H_T * S_inv
+
+            # compute gain matrix
+            self._mat_desc["K"] = K
+
+            innovation = z - zpred
+            self._state += self._mat_desc["K"] * innovation
+            I = np.identity(self._state.get_value().shape)
+
+            # update covariance matrix
+            P = (I - self._mat_desc["K"] * H) * P
+            self._mat_desc["P"] = P
+
+        except np.linalg.linalg.LinAlgError as exception:
+
+            if str(exception) == 'Singular matrix':
+                # this is a singular matrix what
+                # should we do?
+                raise
+
+
 
     def get_state(self):
         """
@@ -115,4 +145,13 @@ class ExtendedKalmanFilter(object):
         :return: :class.State
         """
         return self._state
+
+    def set_matrix(self, name, mat):
+        """
+        Set the matrix with name
+        :param name: The name of the matrix to set
+        :param mat: The matrix
+        :return:
+        """
+        self._mat_desc.set_matrix(name=name, mat=mat)
 

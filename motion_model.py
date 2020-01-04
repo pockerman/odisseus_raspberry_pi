@@ -4,6 +4,8 @@ import numpy as np
 class MotionModel(object):
 
 
+
+
     def value(self, xk, u, v):
         """
         Computes Odisseus next state dynamics

@@ -23,6 +23,9 @@ class OdisseusConfig:
     # sample the sensors very SAMPLE_RATE
     SAMPLING_RATE = 0.5
 
+    # The radius of the wheels (m)
+    WHEELS_RADIUS = 2.5/100.0
+
     # various levels of info to record
     DEBUG = True
     ENABLE_LOG = True
