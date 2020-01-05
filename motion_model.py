@@ -4,8 +4,6 @@ import numpy as np
 class MotionModel(object):
 
 
-
-
     def value(self, xk, u, v):
         """
         Computes Odisseus next state dynamics
@@ -24,8 +22,8 @@ class MotionModel(object):
         :return: np.array
         """
 
-        x_next = xk[0] + (u[0] + v[0]) * np.cos(xk[2] + u[1] * 0.5 + v[1])
-        y_next = xk[1] + (u[0] + v[0]) * np.sin(xk[2] + u[1] * 0.5 + v[1])
+        x_next = xk[0] + (u[0] + v[0]) * np.cos(xk[2] + u[1] + v[1])
+        y_next = xk[1] + (u[0] + v[0]) * np.sin(xk[2] + u[1] + v[1])
         psi_next = xk[2] + u[1] + v[1]
 
         return np.array([x_next, y_next, psi_next])
@@ -46,12 +44,11 @@ class MotionModel(object):
         :return:
         """
 
-        return np.array([[1.0, 0.0, (u[0] + v[0]) * np.sin(np.cos(xk[2] + u[1] * 0.5 + v[1]))],
-                         [0.0, 1.0, -(u[0] + v[0]) * np.cos(xk[2] + u[1] * 0.5 + v[1])],
+        return np.array([[1.0, 0.0,  (u[0] + v[0]) * np.sin(xk[2] + u[1] + v[1])],
+                         [0.0, 1.0, -(u[0] + v[0]) * np.cos(xk[2] + u[1] + v[1])],
                          [0.0, 0.0, 1.0]])
 
-
-    def control_jacobian_matrix(self, xk, u, v):
+    def l_matrix(self, xk, u, v):
         """
         Returns a 3x3 jacobian matrix of the dynamics matrix
 
@@ -67,6 +64,6 @@ class MotionModel(object):
         :return:
         """
 
-        return np.array([[np.cos(xk[2] + u[1] *0.5  + v[1]), 0.5*(u[0] + v[0])*np.sin(np.cos(xk[2] + u[1] * 0.5 + v[1]))],
-                         [np.sin(xk[2] + u[1] * 0.5 + v[1]), -0.5**(u[0] + v[0])*np.cos(np.cos(xk[2] + u[1] * 0.5 + v[1]))],
+        return np.array([[np.cos(xk[2] + u[1] + v[1]),  (u[0] + v[0])*np.sin(xk[2] + u[1] + v[1])],
+                         [np.sin(xk[2] + u[1] + v[1]), -(u[0] + v[0])*np.cos(xk[2] + u[1] + v[1])],
                          [0.0, 1.0]])

@@ -13,9 +13,8 @@ class ObservationModel(object):
 
     def sonar_model_jacobian(self, xk, point, w):
 
-        return np.array([1.0/np.sqrt((xk[0] - point[0])**2 + (xk[1] - point[1])**2),
-                         1.0/np.sqrt((xk[0] - point[0])**2 + (xk[1] - point[1])**2),
-                         0.0])
+        return np.array([[1.0/np.sqrt((xk[0] - point[0])**2 + (xk[1] - point[1])**2), 0.0, 0.0],
+                         [0.0, 1.0/np.sqrt((xk[0] - point[0])**2 + (xk[1] - point[1])**2), 0.0]])
 
     def sonar_model_jacobian_wrt_error(self, xk, point, w, shape_diagonal=None):
         """

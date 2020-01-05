@@ -76,7 +76,7 @@ class ExtendedKalmanFilter(object):
         P = self._mat_desc["P"]
         Q = self._mat_desc["Q"]
 
-        L = self._motion_model.control_jacobian_matrix(xk=state_pred, u=u, v=v)
+        L = self._motion_model.l_matrix(xk=state_pred, u=u, v=v)
         L_T = L.T
 
         F = self._motion_model.state_jacobian_matrix(xk=state_pred, u=u, v=v)
@@ -106,38 +106,35 @@ class ExtendedKalmanFilter(object):
         H_T = H.T
 
         M = self._observation_model.sonar_model_jacobian_wrt_error(xk=self._state.get_value(),
-                                                                   point=z, w=w, shape_diagonal=None)
-
-        A = H * P * H_T
-        B = np.dot(M, np.dot(R, M.T))
-
-        S = A + B
+                                                                   point=z, w=w, shape_diagonal=R.shape)
 
         try:
-            S_inv = np.linalg.inv(S)
+            # S = H*P*H^T + M*R*M^T
+            S_inv = np.linalg.inv(np.dot(H, np.dot( P , H_T)) + np.dot(M, np.dot(R, M.T)))
 
             # compute the gain matrix
-            K = P * H_T * S_inv
+            K = np.dot(P, np.dot( H_T , S_inv))
 
             # compute gain matrix
             self._mat_desc["K"] = K
 
             innovation = z - zpred
-            self._state += self._mat_desc["K"] * innovation
-            I = np.identity(self._state.get_value().shape)
+            self._state += np.dot(self._mat_desc["K"], innovation)
+
+            I = np.zeros(shape=(len(self._state), len(self._state)))
+            np.fill_diagonal(I, 1.0)
 
             # update covariance matrix
-            P = (I - self._mat_desc["K"] * H) * P
+            P = (I - np.dot(self._mat_desc["K"], H)) * P
             self._mat_desc["P"] = P
 
         except np.linalg.linalg.LinAlgError as exception:
 
             if str(exception) == 'Singular matrix':
                 # this is a singular matrix what
-                # should we do?
+                # should we do? Simply use the predicted
+                # values and log the fact that there was a singular matrix
                 raise
-
-
 
     def get_state(self):
         """
