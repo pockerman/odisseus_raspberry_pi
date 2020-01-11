@@ -91,7 +91,34 @@ figure below
 
 ### <a name="extended_kalman_filter"></a> Extended Kalman Filter
 
-- **TODO**
+The Extended Kalman Filter is an extension for non-linear systems of the very popular <a href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a>.
+Just like the original Kalman Filter algorithm, the EKF algorithm also has two steps namely predict and update. 
+The main difference of EKF over Kalman Filter is that it introduces a linearization of the non-linear system. Overall the algorithm is as follows
+
+#### Predict Step
+
+![PredictStateEKF](imgs/ekf_1.gif)
+
+![PredictCovarianceEKF](imgs/ekf_2.gif)
+
+where the following notation is used
+
+![PredictCovarianceEKF](imgs/ekf_3.gif)
+
+Just like the Kalman Filter, EKF maintains the notion of the covariance matrix. 
+The update step is summarized below. 
+
+#### Update Step
+
+![ComputeSMatrixEKF](imgs/ekf_4.gif)
+
+![UpdateGainEKF](imgs/ekf_5.gif)
+
+![UpdateStateEKF](imgs/ekf_6.gif)
+
+![UpdateCovarianceEKF](imgs/ekf_7.gif)
+
+
 
 ## <a name="installation"></a> Installation
 
