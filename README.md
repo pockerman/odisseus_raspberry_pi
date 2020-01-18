@@ -17,6 +17,7 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 		* [The ```UltrasoundSensorProcess```](#ultrasound_process)
 		* [The ```PropulsionProcess```](#propulsion_process)
 		* [The ```DecisionMakerProcess```](#decision_process)
+* [Modeling](#modeling)
 * [Localization](#localization)
 		* [Extended Kalman Filter](#extended_kalman_filter)
 * [Installation](#installation)
@@ -40,7 +41,7 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 
 ### <a name="dependencies"></a> Dependencies
 
-**TODO**
+- **```RPi.GPIO```**
 
 ### <a name="design_notes"></a> Design Notes
 
@@ -87,12 +88,66 @@ figure below
 
 ![DecisionProcessFlow](doc/imgs/design_3.png)
 
+## <a name="modeling"></a> Modeling
+
+Odisseus is using the following kinematic model 
+
+![OdiModelX](imgs/odi_model_1.gif)
+
+![OdiModelY](imgs/odi_model_2.gif)
+
+![OdiModelTheta](imgs/odi_model_3.gif)
+
+where 
+
+![OdiModelPos](imgs/odi_model_4.gif)
+
+![OdiModelYaw](imgs/odi_model_5.gif)
+
+and 
+
+![OdiModelVelocity](imgs/odi_model_6.gif)
+
+The velocity is one of the inputs that is given to the system. Namely, it is calculated according to
+
+![OdiModelVelocity2](imgs/odi_model_7.gif)
+
+where 
+
+![OdiModelRadius](imgs/odi_model_8.gif)
+
+and 
+
+![OdiModelWheelAngularSpeed](imgs/odi_model_9.gif)
+
+Similarly the second input to the system is the angular velocity of the robot which is given by 
+
+![OdiModelAngularSpeed](imgs/odi_model_10.gif)
+
+This kinematic model is used as a motion model in the Extended Kalman Filter below. Concretely, the following discretized 
+form is utilized 
+
+![OdiModelXDiscrete](imgs/odi_model_12.gif)
+
+![OdiModelYDiscrete](imgs/odi_model_13.gif)
+
+![OdiModelThetaDiscrete](imgs/odi_model_14.gif)
+
+where
+
+![OdiModelSamplingPeriod](imgs/odi_model_15.gif)
+
+and
+
+![OdiModelErrorW](imgs/odi_model_16.gif)
+
+
 ## <a name="localization"></a> Localization 
 
 ### <a name="extended_kalman_filter"></a> Extended Kalman Filter
 
 The Extended Kalman Filter is an extension for non-linear systems of the very popular <a href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a>.
-Just like the original Kalman Filter algorithm, the EKF algorithm also has two steps namely predict and update. 
+Just like the original Kalman Filter algorithm, the EKF also has two steps namely predict and update. 
 The main difference of EKF over Kalman Filter is that it introduces a linearization of the non-linear system. Overall the algorithm is as follows
 
 #### Predict Step
@@ -119,10 +174,25 @@ The update step is summarized below.
 ![UpdateCovarianceEKF](imgs/ekf_7.gif)
 
 
+#### Straight Motion Scenario
+
+![StraightMotionScenarioEKF](imgs/ekf_straight_motion_1.png)
+
+#### Change Direction Scenario
+
+![ChangeDirectionScenarioEKF](imgs/ekf_change_direction_1.png)
 
 ## <a name="installation"></a> Installation
 
-- **TODO**
+Install the following components
+
+- **```RPi.GPIO```**
+
+```
+sudo apt-get install python-dev
+sudo apt-get install python-rpi.gpio
+
+```
 
 ## <a name="how_to"></a> How To
 
