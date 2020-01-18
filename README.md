@@ -19,7 +19,7 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 		* [The ```DecisionMakerProcess```](#decision_process)
 * [Modeling](#modeling)
 * [Localization](#localization)
-		* [Extended Kalman Filter](#extended_kalman_filter)
+	* [Extended Kalman Filter](#extended_kalman_filter)
 * [Installation](#installation)
 * [Useful Links](#useful_links)
 * [How To](#how_to)
