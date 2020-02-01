@@ -38,68 +38,6 @@ There is also a simulation based on ROS which is in progress here: https://githu
 Checkout the design notes <a href="doc/notes.pdf">here</a>.
 
 
-## <a name="modeling"></a> Modeling
-
-Odisseus is using the following kinematic model 
-
-![OdiModelX](imgs/odi_model_1.gif)
-
-![OdiModelY](imgs/odi_model_2.gif)
-
-![OdiModelTheta](imgs/odi_model_3.gif)
-
-where 
-
-![OdiModelPos](imgs/odi_model_4.gif)
-
-![OdiModelYaw](imgs/odi_model_5.gif)
-
-and 
-
-![OdiModelVelocity](imgs/odi_model_6.gif)
-
-The velocity is one of the inputs that is given to the system. Namely, it is calculated according to
-
-![OdiModelVelocity2](imgs/odi_model_7.gif)
-
-where 
-
-![OdiModelRadius](imgs/odi_model_8.gif)
-
-and 
-
-![OdiModelWheelAngularSpeed](imgs/odi_model_9.gif)
-
-Similarly the second input to the system is the angular velocity of the robot which is given by 
-
-![OdiModelAngularSpeed](imgs/odi_model_10.gif)
-
-This kinematic model is used as a motion model in the Extended Kalman Filter below. Concretely, the following discretized 
-form is utilized 
-
-![OdiModelXDiscrete](imgs/odi_model_12.gif)
-
-![OdiModelYDiscrete](imgs/odi_model_13.gif)
-
-![OdiModelThetaDiscrete](imgs/odi_model_14.gif)
-
-where
-
-![OdiModelSamplingPeriod](imgs/odi_model_15.gif)
-
-and
-
-![OdiModelErrorW](imgs/odi_model_16.gif)
-
-
-## <a name="localization"></a> Localization 
-
-### <a name="extended_kalman_filter"></a> Extended Kalman Filter
-
-The Extended Kalman Filter is an extension for non-linear systems of the very popular <a href="https://en.wikipedia.org/wiki/Kalman_filter">Kalman Filter</a>.
-Just like the original Kalman Filter algorithm, the EKF also has two steps namely predict and update. 
-The main difference of EKF over Kalman Filter is that it introduces a linearization of the non-linear system. Overall the algorithm is as follows
-
 #### Predict Step
 
 ![PredictStateEKF](imgs/ekf_1.gif)
