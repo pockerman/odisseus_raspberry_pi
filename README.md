@@ -2,24 +2,14 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
-This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi. There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
-
+This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi. 
+There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
 
 ## Contents
 * [Hardware](#hardware)
 * [Software](#software)
 	* [Dependencies](#dependencies)
 	* [Desing Notes](#design_notes) 
-		* [The ```MasterProcess```](#master_process)
-		* [The ```WebAppProcess```](#webap_process)
-		* [The ```CameraProcess```](#camera_process)
-		* [The ```IRProcess```](#ir_process)
-		* [The ```UltrasoundSensorProcess```](#ultrasound_process)
-		* [The ```PropulsionProcess```](#propulsion_process)
-		* [The ```DecisionMakerProcess```](#decision_process)
-* [Modeling](#modeling)
-* [Localization](#localization)
-	* [Extended Kalman Filter](#extended_kalman_filter)
 * [Installation](#installation)
 * [Useful Links](#useful_links)
 * [How To](#how_to)
@@ -45,11 +35,7 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 
 ### <a name="design_notes"></a> Design Notes
 
-
-
-
-
-
+Checkout the design notes <a href="doc/notes.pdf">here</a>.
 
 
 ## <a name="modeling"></a> Modeling
