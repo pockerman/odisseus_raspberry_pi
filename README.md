@@ -62,14 +62,6 @@ The update step is summarized below.
 ![UpdateCovarianceEKF](imgs/ekf_7.gif)
 
 
-#### Straight Motion Scenario
-
-![StraightMotionScenarioEKF](imgs/ekf_straight_motion_1.png)
-
-#### Change Direction Scenario
-
-![ChangeDirectionScenarioEKF](imgs/ekf_change_direction_1.png)
-
 ## <a name="installation"></a> Installation
 
 Install the following components
