@@ -1,0 +1,60 @@
+\section{Modeling}
+\label{modeling}
+
+This section discusses the modeling approach that Odisseus follows
+
+\subsection{Kinemtics Model}
+\label{kinemtatics_model}
+
+Odisseus is using the following kinematic model 
+
+\begin{eqnarray}
+\frac{dx}{dt} = v cos(\theta) \\
+\frac{dy}{dt} = v sin(\theta) \\
+\frac{d\theta}{dt} = \omega 
+\end{eqnarray}
+
+where $x,y$ are are the coordinates of the reference point, $\theta$ is the yaw angle, $v$ is the input velocity
+and $\omega$ is the input angular velocity of the robotic platform.
+
+The state vector $\mathbf{x}$ has three components; the $x, y$ components of the 
+reference point and the orientation or yaw angle $\theta$. Mathematically, this is written as
+
+\begin{equation}
+\mathbf{x} = (x, y, \theta)
+\label{state_vector}
+\end{equation}
+
+As mentioned previously, the velocity $v$ is one of the inputs that is given to the system. Namely, it is calculated according to
+
+\begin{equation}
+v = \frac{v_L*R + v_R *R}{2}
+\label{odisseus_velocity}
+\end{equation}
+
+where $R$ is the wheels radius and $v_R,v_L$ are the right and left wheels velocities respectively. Similarly the second input to the system is the angular velocity of 
+the robot which is given by
+
+\begin{equation}
+\omega = \frac{\omega_L*R + \omega_R *R}{L}
+\label{odisseus_angular_velocity}
+\end{equation}
+
+where $L$ is the axle length connecting the two motorized wheels. $\omega_L, \omega_R$ are the angular velocities of the left and right wheels respectively.
+
+This kinematic model is used as a motion model in the Extended Kalman Filter discussed in section \ref{extended_kalman_filter}. Concretely, the following discretized 
+form is utilized 
+
+
+\begin{eqnarray}
+x_k = x_{k-1} + (\Delta t v_k + \mathbf{w}_{1,k})cos(\theta_{k-1} +  \Delta t \omega_k + \mathbf{w}_{2,k}) \\
+y_k = y_{k-1} + (\Delta t v_k + \mathbf{w}_{1,k})sin(\theta_{k-1} +  \Delta t \omega_k + \mathbf{w}_{2,k}) \\
+\theta_k = \theta_{k -1} + \Delta t \omega_k + \mathbf{w}_{2,k}
+\label{odisseus_discrete}
+\end{eqnarray}
+
+where $\Delta t$ is the sampling rate and $\mathbf{w}$ is an error vector such that
+
+\begin{equation}
+E[\mathbf{w}] = \mathbf{0}
+\end{equation}

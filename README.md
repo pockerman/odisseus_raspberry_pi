@@ -45,48 +45,12 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 
 ### <a name="design_notes"></a> Design Notes
 
-Odisseus is a multiprocess application. All its sensors as well as its motors run on a separate process.
-These processes are
-
-- ```MasterProcess```
-- ```WebAppProcess```
-- ```CameraProcess```
-- ```IRProcess```
-- ```UltrasoundSensorProcess```
-- ```PropulsionProcess```
-- ```DecisionMakerProcess```
-
-The following image shows the inheritance diagram
-
-![Process](doc/imgs/design_1.png)
-
-The processes communicate with each other via messages which are explained below.
 
 
-#### <a name="master_process"></a> The ```MasterProcess``` 
-
-The ```MasterProcess``` 
-
-![MasterProcess](doc/imgs/design_2.png)
-
-#### <a name="webap_process"></a> The ```WebAppProcess```
-
-#### <a name="camera_process"></a> The ```CameraProcess```
-
-#### <a name="ir_process"></a> The ```IRProcess```
-
-#### <a name="ultrasound_process"></a> The ```UltrasoundSensorProcess```
-
-#### <a name="propulsion_process"></a> The ```PropulsionProcess```
-
-#### <a name="decision_process"></a> The ```DecisionProcess```
-
-This process is perhaps the busiest of all. Its main task is to receive messages form the sensors and 
-the master process and create a command for the ```PropulsionProcess```. Pictorially, this is shown in the
-figure below
 
 
-![DecisionProcessFlow](doc/imgs/design_3.png)
+
+
 
 ## <a name="modeling"></a> Modeling
 
