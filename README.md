@@ -37,31 +37,6 @@ There is also a simulation based on ROS which is in progress here: https://githu
 
 Checkout the design notes <a href="doc/notes.pdf">here</a>.
 
-
-#### Predict Step
-
-![PredictStateEKF](imgs/ekf_1.gif)
-
-![PredictCovarianceEKF](imgs/ekf_2.gif)
-
-where the following notation is used
-
-![PredictCovarianceEKF](imgs/ekf_3.gif)
-
-Just like the Kalman Filter, EKF maintains the notion of the covariance matrix. 
-The update step is summarized below. 
-
-#### Update Step
-
-![ComputeSMatrixEKF](imgs/ekf_4.gif)
-
-![UpdateGainEKF](imgs/ekf_5.gif)
-
-![UpdateStateEKF](imgs/ekf_6.gif)
-
-![UpdateCovarianceEKF](imgs/ekf_7.gif)
-
-
 ## <a name="installation"></a> Installation
 
 Install the following components
