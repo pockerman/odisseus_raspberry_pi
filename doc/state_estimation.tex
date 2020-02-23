@@ -6,114 +6,55 @@ implemented in Odisseus.
 
 \subsection{Extended Kalman Filter}
 \label{extended_kalman_filter}
-The Extended Kalman Filter is a popular state estimation technique for non-linear systems. 
+The Extended Kalman Filter is a state estimation technique for non-linear systems. 
 It is an extension of the very popular Kalman Filter (see \url{https://en.wikipedia.org/wiki/Kalman_filter}).
-Just like the original Kalman Filter algorithm, the EKF also has two steps namely predict and update. 
-The main difference of EKF over Kalman Filter is that it introduces a linearization of the non-linear system. Overall the algorithm is as follows
+Just like the original Kalman Filter algorithm, the EKF has also two steps namely predict and update. 
+The main difference of EKF over Kalman Filter is that it introduces a linearization of the non-linear system. 
+Overall the algorithm is as follows
+
+\subsubsection{Predict}
+
+At this step an estimate of both the state vector $\mathbf{x}$ and the covariance matrix $\mathbf{P}$ is made.
+This is done according to
 
 \begin{equation}
-\mathbf{h} = \begin{pmatrix}
-h_{sonar} \\
-h_{camera} \\
-h_{ir}
-\end{pmatrix}
+\bar{\mathbf{x}}_k = \mathbf{f}(\hat{\mathbf{x}}_{k-1}, \mathbf{u}_k, \mathbf{w}_k)
 \end{equation}
 
-
-Odisseus is equipped with the following three types of sensors
-
-\begin{itemize}
-	\item Ultrasound sensor
-	\item Camera sensor
-	\item infrared sensor
-\end{itemize}
-
-\subsubsection{Ultasound Sensor Model}
-
-As mentioned previously $\mathbf{h}$ represents a vector valued function and $h_{sonar}$ is the modeled measurement from the
-sonar sensor. Odisseus is using the following model
+where $\mathbf{f}$ is described by equations \ref{equ1},  \ref{equ2} and \ref{equ3}. $\hat{\mathbf{x}}_{k-1}$ is the state at the previous
+time step. $\mathbf{u}_k, \mathbf{w}$ are the input vector and error vector associated with the process. The covariance matrix is estimated via 
 
 \begin{equation}
-h_{sonar}(\mathbf{x}, \mathbf{v}_{sonar}) = \sqrt{(x - x_o)^2 + (y - y_o)^2} +  \mathbf{v}_{sonar}
-\label{sonar_h}
+\bar{\mathbf{P}}_k = \mathbf{F}_k \mathbf{P}_{k-1} \mathbf{F}_{k}^T + \mathbf{L}_k\mathbf{Q}_k\mathbf{L}_{k}^T
+\end{equation}
+
+where $\mathbf{F}$ is the Jacobian matrix of $\mathbf{f}$ with respect to the state variables. 
+$\mathbf{Q}_k$ is the covariance matrix of the error and $\mathbf{L}_k$ is the Jacobian matrix of the motion
+model, i.e. $\mathbf{f}$, with respect to $\mathbf{w}$.
+
+\subsubsection{Update}
+
+The update step established the predicted state vector and covariance matrix. Overall this step is summarized by
+the equations below
+
+\begin{equation}
+\mathbf{S}_k = \mathbf{H}_k \bar{\mathbf{P}}_k \mathbf{H}_{k}^T + \mathbf{M}_k\mathbf{R}_k\mathbf{M}_{k}^T
+\end{equation}
+
+\begin{equation}
+\mathbf{K}_k = \bar{\mathbf{P}}_k \mathbf{H}_{k}^T\mathbf{S}_{k}^{-1}
+\label{gain_matrix} 
 \end{equation} 
 
-where $\mathbf{v}_{sonar}$ is the error vector associated with the sonar. $x_o, y_o$ are the coordinates of the
-obstacle detected by the sensor.
-
-
-\subsection{EKF Simulation Verification}
-This section presents some simulation results that verify the EKF implementation on Odisseus
-
-\subsubsection{Test 1}
-
-In this test the following input data was used
-
 \begin{equation}
-R = 
-\begin{pmatrix}
- 1.0 & 0.0 \\
-0.0 & 1.0 
-\end{pmatrix}
+\mathbf{x}_{k} = \bar{\mathbf{x}}_{k} + \mathbf{K}(\mathbf{z}_k - \mathbf{h}(\bar{\mathbf{x}}_k, \mathbf{v}_k))
 \end{equation}
 
 \begin{equation}
-Q = 
-\begin{pmatrix}
-0.001 & 0.0 \\
-0.0 & 0.001 
-\end{pmatrix}
+\mathbf{P}_k = (\mathbf{I} - \mathbf{K}_k\mathbf{H}_k)\bar{\mathbf{P}}_k
 \end{equation}
 
-The motion model $\mathbf{f}$ is according to equation \ref{odisseus_discrete} where the error vector $\mathbf{w}$ was set to zero.
-
-The observation model function $\mathbf{h}$ was simply the identity function meaning returning the passed state vector
-
-\begin{equation}
-\mathbf{h}(\mathbf{x}, \mathbf{v}) = \mathbf{x}
-\end{equation}
-
-The error vector $\mathbf{v}$ was set to
-
-\begin{equation}
-\mathbf{v} = (0.0, 0.0)
-\end{equation}
-
-Finally, the following data was used
-
-\begin{enumerate}
-	\item $\Delta t = 0.5$
-	\item $R = 2.5 cm$
-	\item $v_L = v_R = 50 RPM$
-	\item $L= 15 cm$ 
-\end{enumerate}
-
-
-\begin{figure}[!htb]
-	\begin{center}
-		\includegraphics[scale=0.480]{imgs/ekf_straight_motion_1.png}
-	\end{center}
-	\caption{ Straight motion test 1.}
-	\label{ekf_straight_motion_1}
-\end{figure}
-
-\begin{figure}[!htb]
-	\begin{center}
-		\includegraphics[scale=0.480]{imgs/ekf_change_direction_1.png}
-	\end{center}
-	\caption{ Change direction test 1.}
-	\label{ekf_change_direction_1}
-\end{figure}
-
-\subsubsection{Test 2}
-
-The second simulation test uses equation \ref{sonar_h} to model the sonar measurement
-
-\begin{figure}[!htb]
-	\begin{center}
-		\includegraphics[scale=0.480]{imgs/ekf_straight_motion_2.png}
-	\end{center}
-	\caption{ Straight motion test 2.}
-	\label{ekf_straight_motion_2}
-\end{figure}
+where $\mathbf{H}$ is the Jacobian matrix of the observation model $\mathbf{h}$. $\mathbf{M}$ is the Jacobian matrix of 
+the observation model with respect to the error vector $\mathbf{v}$.  $\mathbf{K}$ is the
+gain matrix and $\mathbf{R}$ is the covariance matrix related to the error vector $\mathbf{v}$.
  

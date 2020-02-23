@@ -47,10 +47,10 @@ form is utilized
 
 
 \begin{eqnarray}
-x_k = x_{k-1} + (\Delta t v_k + \mathbf{w}_{1,k})cos(\theta_{k-1} +  \Delta t \omega_k + \mathbf{w}_{2,k}) \\
-y_k = y_{k-1} + (\Delta t v_k + \mathbf{w}_{1,k})sin(\theta_{k-1} +  \Delta t \omega_k + \mathbf{w}_{2,k}) \\
+x_k = x_{k-1} + (\Delta t v_k + \mathbf{w}_{1,k})cos(\theta_{k-1} +  \Delta t \omega_k + \mathbf{w}_{2,k}) \label{equ1} \\
+y_k = y_{k-1} + (\Delta t v_k + \mathbf{w}_{1,k})sin(\theta_{k-1} +  \Delta t \omega_k + \mathbf{w}_{2,k}) \label{equ2}\\
 \theta_k = \theta_{k -1} + \Delta t \omega_k + \mathbf{w}_{2,k}
-\label{odisseus_discrete}
+\label{equ3}
 \end{eqnarray}
 
 where $\Delta t$ is the sampling rate and $\mathbf{w}$ is an error vector such that
