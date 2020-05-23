@@ -52,6 +52,8 @@ class MasterProcess(ProcessControlBase):
 
             # check if there is any cmd coming from the server
             # this will be high priority
+            
+            self
 
             # poll the sensors to get information about the world state
             print("Running master process")
@@ -93,6 +95,11 @@ class MasterProcess(ProcessControlBase):
 
         if self.get_config().ENABLE_WEB_SERVER is True:
             self._create_web_app_process(**kwargs)
+            
+        # a decision maker should always be created
+        # we have it last in order to pass the created 
+        # processes
+        self._create_decision_maker_process(**kwargs)
 
         self._processes_created = True
 
@@ -154,4 +161,8 @@ class MasterProcess(ProcessControlBase):
         self._processes.update(
             {self.get_config().WEB_PROCESS_NAME: WebAppProcess(odisseus_config=self._config, master_process=self)})
         self._processes[self.get_config().WEB_PROCESS_NAME].start(**kwargs)
+        
+        
+    def _create_decision_maker_process(self, **kwargs):
+        pass
 
