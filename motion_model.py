@@ -6,8 +6,22 @@ class MotionModel(object):
 
     def __init__(self, Dt, tol):
       self._state = np.array([0.0, 0.0, 0.0])
+      self._Dt = Dt
       self._tol = tol
+      self._matrices = {"F": np.zeros(shape=(3,3)),
+                        "L": np.zeros(shape=(3,2))}
 
+    @property
+    def F(self):
+      return self._matrices["F"]
+
+    @property
+    def L(self):
+      return self._matrices["L"]
+
+    @property
+    def state(self):
+      return self._state
 
     def value(self, u, werr):
         """
@@ -24,6 +38,9 @@ class MotionModel(object):
         :return: np.array
         """
 
+        # update the matrix description of the model
+        self.update_matrix_description(u, werr)
+
         # the angular velocity
         w = u[1]
         theta = self._state[2]
@@ -39,45 +56,66 @@ class MotionModel(object):
           self._state[0] += (u[0]/(2*w) + werr[0])*(np.sin(self._state[2]) - np.sin(theta))
           self._state[1] -= (u[0]/(2*w) + werr[0])*(np.cos(self._state[2]) - np.cos(theta))
 
-
         return self._state
 
-    def state_jacobian_matrix(self, xk, u, v):
-        """
-        Returns a 3x3 jacobian matrix of the dynamics matrix
+    def update_matrix_description(self, u, werr):
 
-        :param xk: array of length 3 storing the previous state
-        :type  xk: array
+      distance = 0.5*u[0]*self._Dt
+      orientation = u[1]*self._Dt
 
-        :param u: control input if length 2
-        :type  u: array
+      if np.fabs(u[1]) < self._tol:
 
-        :param v: array of length 2 represents unpredictable process noise
-        :type  v: array
+        F = self._matrices["F"]
 
-        :return:
-        """
+        F(0, 0) = 1.0;
+        F(0, 1) = 0.0;
+        F(0, 2) = (distance + werr[0])*np.sin(values[2] + orientation + werr[1]);
 
-        return np.array([[1.0, 0.0,  (u[0] + v[0]) * np.sin(xk[2] + u[1] + v[1])],
-                         [0.0, 1.0, -(u[0] + v[0]) * np.cos(xk[2] + u[1] + v[1])],
-                         [0.0, 0.0, 1.0]])
+        F(1, 0) = 0.0;
+        F(1, 1) = 1.0;
+        F(1, 2) = -(distance + werr[0])*np.cos(values[2] + orientation + werr[1]);
 
-    def l_matrix(self, xk, u, v):
-        """
-        Returns a 3x3 jacobian matrix of the dynamics matrix
+        F(2, 0) = 0.0;
+        F(2, 1) = 0.0;
+        F(2, 2) = 1.0;
 
-        :param xk: array of length 3 storing the previous state
-        :type  xk: array
+        L = self._matrices["L"]
 
-        :param u: control input if length 2
-        :type  u: array
+        L(0, 0) = np.cos(values[2] + orientation + werr[1]);
+        L(0, 1) = (distance + werr[0])*np.sin(values[2] + orientation + werr[1]);
 
-        :param v: array of length 2 represents unpredictable process noise
-        :type  v: array
+        L(1, 0) = np.sinsin(values[2] + orientation + werr[1]);
+        L(1, 1) = -(distance + werr[0])*np.cos(values[2] + orientation + werr[1]);
 
-        :return:
-        """
+        L(2, 0) = 0.0;
+        L(2, 1) = 1.0;
+      else:
 
-        return np.array([[np.cos(xk[2] + u[1] + v[1]),  (u[0] + v[0])*np.sin(xk[2] + u[1] + v[1])],
-                         [np.sin(xk[2] + u[1] + v[1]), -(u[0] + v[0])*np.cos(xk[2] + u[1] + v[1])],
-                         [0.0, 1.0]])
+        F = self._matrices["F"]
+
+        F(0, 0) = 1.0;
+        F(0, 1) = 0.0;
+        F(0, 2) = -(distance + werr[0])*np.cos(values[2] + orientation + werr[1]) +
+                   (distance + werr[0])*np.cos(values[2]);
+
+        F(1, 0) = 0.0;
+        F(1, 1) = 1.0;
+        F(1, 2) = -(distance + errors[0])*np.sin(values[2] + orientation + werr[1]) +
+                   (distance + errors[0])*np.sin(values[2]);
+
+        F(2, 0) = 0.0;
+        F(2, 1) = 0.0;
+        F(2, 2) = 1.0;
+
+        L = self._matrices["L"]
+
+        L(0, 0) = np.sin(values[2] + orientation + werr[1])- np.sin(values[2]);
+
+        L(0, 1) = -((v/2.0*w) + werr[0])*np.cos(values[2] + orientation + werr[1])*
+                  np.sin(values[2] + orientation + werr[1]);
+
+        L(1, 0) = -np.cos(values[2] + orientation + werr[1]) + np.cos(values[2]);
+        L(1, 1) = ((v/2.0*w) + werr[0])*np.sin(values[2] + orientation + werr[1]);
+
+        L(2, 0) = 0.0;
+        L(2, 1) = 1.0;
