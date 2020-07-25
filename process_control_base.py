@@ -10,11 +10,14 @@ class ProcessControlBase(object):
         self._process = None
         self._interrupted = False
 
+    def set_config(self, config):
+        self._config = config
+
     def interrupt(self):
         """
         Signal the process for interrupt
         """
-        if self._config.ENABLE_WARNINGS:
+        if self._config["ENABLE_WARNINGS"]:
             print("Process: " + self._name + " was interrupted...")
         self._interrupted = True
 
@@ -22,7 +25,7 @@ class ProcessControlBase(object):
         """
         Set the interrupt flag to false
         """
-        if self._config.ENABLE_WARNINGS and self._interrupted == True:
+        if self._config["ENABLE_WARNINGS"] and self._interrupted == True:
             print("Process: "+self._name+" has interrupt flag removed...")
         self._interrupted = False
 
@@ -50,7 +53,7 @@ class ProcessControlBase(object):
         if self._process is not None:
             self._process.start()
 
-            if self.get_config().ENABLE_LOG:
+            if self.get_config()["ENABLE_LOG"]:
                 print("Spawn a new " + self.get_name() + " process...")
 
     def stop(self):

@@ -16,7 +16,8 @@ class PropulsionProcess(ProcessControlBase):
 
     def __init__(self, odisseus_config):
 
-        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.PROPULSION_PROCESS_NAME)
+        ProcessControlBase.__init__(self, config=odisseus_config,
+                                    name=odisseus_config["PROPULSION_PROCESS_NAME"])
         self._odisseus = None
         self._contorl_queue = Queue()
         self._cmd_executor = CMDExecutor(cmd_queue=self._contorl_queue)
@@ -25,16 +26,20 @@ class PropulsionProcess(ProcessControlBase):
     def start(self, **kwargs):
 
         """
-        Start Odisseus: It creates a new instance of the robot and spawns a new process to run
+        Start Odisseus: It creates a new instance of the
+        robot and spawns a new process to run
         """
         propulsion = Propulsion.create_from_configuration(self.get_config())
 
-        if 'PropulsionProcessController' not in kwargs.keys():
-            raise KeyError("In PropulsionProcess-->start. The PropulsionProcessController has not been set")
+        #if 'PropulsionProcessController' not in kwargs.keys():
+        #    raise KeyError("In PropulsionProcess-->start. The PropulsionProcessController has not been set")
 
-        self._controller = kwargs[self.get_config().PROPULSION_CONTROLLER_NAME]
+        #self._controller = kwargs[self.get_config()["PROPULSION_CONTROLLER_NAME"]]
 
-        self._odisseus = Odisseus(odisseus_config=self.get_config(), propulsion=propulsion, cmd_executor=self._cmd_executor)
+        self._odisseus = Odisseus(odisseus_config=self.get_config(),
+                                  propulsion=propulsion,
+                                  cmd_executor=self._cmd_executor)
+
         self._cmd_executor.set_odisseus_instance(odisseus=self._odisseus)
         self.spawn_odisseus_process()
         super(PropulsionProcess, self).start(**kwargs)
@@ -57,7 +62,7 @@ class PropulsionProcess(ProcessControlBase):
         """
 
         if self._odisseus is None:
-                if self.get_config().ENABLE_LOG:
+                if self.get_config()["ENABLE_LOG"]:
                     print("Cannot spawn an " + self.get_name()+"  process when Odisseus is None")
                 return
 
@@ -87,8 +92,11 @@ class PropulsionProcess(ProcessControlBase):
         cleanup the pins. Should call reset_mode after this to get functional again
         """
 
-        if self.get_config().ON_RASP_PI:
+        if self.get_config()["ON_RASP_PI"]:
             import RPi.GPIO as GPIO
+            GPIO.cleanup()
+        else:
+            import GPIOMock as GPIO
             GPIO.cleanup()
 
     def reset_mode(self, mod=None):
@@ -96,7 +104,11 @@ class PropulsionProcess(ProcessControlBase):
         """
         Reset the pins mode
         """
-        if self.get_config().ON_RASP_PI:
+        if self.get_config()["ON_RASP_PI"]:
             import RPi.GPIO as GPIO
             GPIO.setmode(GPIO.BCM)
+        else:
+            import GPIOMock as GPIO
+            GPIO.setmode(GPIO.BCM)
+
 

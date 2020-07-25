@@ -5,6 +5,7 @@ and Odisseus state
 
 from process_control_base import ProcessControlBase
 from control_cmds import PropulsionCmd
+from extended_kalman_filter import ExtendedKalmanFilter
 
 
 class DecisionMakerProcess(ProcessControlBase):
@@ -13,12 +14,13 @@ class DecisionMakerProcess(ProcessControlBase):
     def process_name():
         return "DecisionMakerProcess"
 
-    def __init__(self, odisseus_config, process_map):
-        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.DECISION_MAKER_PROCESS_NAME)
+    def __init__(self, odisseus_config, process_map, state_estimator):
+        ProcessControlBase.__init__(self, config=odisseus_config,
+                                    name=odisseus_config["DECISION_MAKER_PROCESS_NAME"])
 
         # map holding the processes
         self._process_map = process_map
-
+        self._state_estimator = state_estimator
 
     def run(self):
         """
