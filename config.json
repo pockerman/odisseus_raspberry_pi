@@ -6,7 +6,7 @@
   "DEBUG": true,
   "ENABLE_LOG": true,
   "ENABLE_WARNINGS": true,
-  "ENABLE_ULTRASOUND_SENSOR":false,
+  "ENABLE_ULTRASOUND_SENSOR":true,
   "ENABLE_MOTORS":true,
   "ENABLE_WEB_SERVER": false,
   "ENABLE_CAMERA": false,

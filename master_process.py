@@ -8,10 +8,14 @@ import json
 import numpy as np
 
 from multiprocessing import Queue
+from multiprocessing import Manager
+
 from process_control_base import ProcessControlBase
 from propulsion_process import PropulsionProcess
 from ultrasound_sensor_process import UltrasoundSensorProcess
 from web_app_process import WebAppProcess
+from decision_maker_process import DecisionMakerProcess
+
 
 class MasterProcess(ProcessControlBase):
 
@@ -38,10 +42,12 @@ class MasterProcess(ProcessControlBase):
         self._processes_created = False
         self._terminate_process_queue = Queue()
         self._start_process_queue = Queue()
-        self._state = np.array([0., 0., 0.])
-        self._motion_model = None
+        self._manager = Manager()
+        self._state = None
 
-    def get_state(self):
+
+    @property
+    def state(self):
         """
         Returns the state of Odisseus
         """
@@ -107,24 +113,34 @@ class MasterProcess(ProcessControlBase):
         """
         Create the processes needed for Odisseus
         """
+        try:
+            if self.get_config()["ENABLE_MOTORS"] is True:
+                # launch the motor process
+                self._create_motors_process(**kwargs)
 
-        if self.get_config()["ENABLE_MOTORS"] is True:
-            # launch the motor process
-            self._create_motors_process(**kwargs)
+            if self.get_config()["ENABLE_ULTRASOUND_SENSOR"] is True:
+                # launch the ultrasound sensor process
+                self._create_ultrasound_process(**kwargs)
 
-        if self.get_config()["ENABLE_ULTRASOUND_SENSOR"] is True:
-            # launch the ultrasound sensor process
-            self._create_ultrasound_process(**kwargs)
+            if self.get_config()["ENABLE_WEB_SERVER"] is True:
+                self._create_web_app_process(**kwargs)
 
-        if self.get_config()["ENABLE_WEB_SERVER"] is True:
-            self._create_web_app_process(**kwargs)
-            
-        # a decision maker should always be created
-        # we have it last in order to pass the created 
-        # processes
-        self._create_decision_maker_process(**kwargs)
+            # a decision maker should always be created
+            # we have it last in order to pass the created
+            # processes
 
-        self._processes_created = True
+            # parallel list for process communication
+            self._state = self._manager.list()
+            for i in range(3):
+                self._state.append(0.0)
+
+            self._create_decision_maker_process(**kwargs)
+            self._processes_created = True
+        except Exception:
+            self.terminate_all_processes()
+            self._processes_created = False
+            raise
+
 
     def terminate_all_processes(self):
 
@@ -153,6 +169,8 @@ class MasterProcess(ProcessControlBase):
             self._create_ultrasound_process(**kwargs)
         elif proc_name == self.get_config()["WEB_PROCESS_NAME"]:
             self._create_web_app_process(**kwargs)
+        elif proc_name == self.get_config()["DECISION_MAKER_PROCESS_NAME"]:
+            self._create_decision_maker_process(**kwargs)
 
     def _create_motors_process(self, **kwargs):
 
@@ -170,10 +188,13 @@ class MasterProcess(ProcessControlBase):
         Create the ultrasound process
         """
 
+        #self._processes.update({self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"]:
+        #                            UltrasoundSensorProcess(odisseus_config=self._config,
+        #                                                    port_max_size=self._config["ULTRASOUND_PORT_MAX_SIZE"],
+        #                                                    distance_calculator=None)})
+
         self._processes.update({self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"]:
-                                    UltrasoundSensorProcess(odisseus_config=self._config,
-                                                            port_max_size=self._config["ULTRASOUND_PORT_MAX_SIZE"],
-                                                            distance_calculator=None)})
+                                    UltrasoundSensorProcess(odisseus_config=self._config, sonar=kwargs["sonar"])})
 
         self._processes[self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"]].start(**kwargs)
 
@@ -188,8 +209,13 @@ class MasterProcess(ProcessControlBase):
             {self.get_config()["WEB_PROCESS_NAME"]:
                  WebAppProcess(odisseus_config=self._config, master_process=self)})
         self._processes[self.get_config()["WEB_PROCESS_NAME"]].start(**kwargs)
-        
-        
+
     def _create_decision_maker_process(self, **kwargs):
-        pass
+
+        self._processes.update(
+            {self.get_config()["DECISION_MAKER_PROCESS_NAME"]:
+                 DecisionMakerProcess(odisseus_config=self._config, process_map=None,
+                                      state_estimator=kwargs["state_estimator"], state_vector=self._state)})
+
+        self._processes[self.get_config()["DECISION_MAKER_PROCESS_NAME"]].start(**kwargs)
 

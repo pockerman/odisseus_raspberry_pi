@@ -25,12 +25,12 @@ class UltrasoundSensorPort:
     any distance calculation from the sensor
     """
 
-    def __init__(self, odisseus_config, max_size):
+    def __init__(self, odisseus_config):
 
         self._odisseus_config = odisseus_config
-        self._queue = Queue(maxsize=max_size)
+        self._queue = Queue(maxsize=odisseus_config["ULTRASOUND_PORT_MAX_SIZE"])
         self._next_available_id = 0
-        self._max_size = max_size
+        self._max_size = odisseus_config["ULTRASOUND_PORT_MAX_SIZE"]
 
     def put(self, distance):
 
@@ -106,7 +106,7 @@ class UltrasoundSensor:
         distance = round(distance, 2)
         return distance
 
-    def __init__(self, odisseus_config, port_inst, distance_calculator = None):
+    def __init__(self, odisseus_config, port_inst, distance_calculator=None):
 
         self._odisseus_config = odisseus_config
         self._port_inst = port_inst

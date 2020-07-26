@@ -17,9 +17,25 @@ class ObservationModel(object):
     def H(self):
       return self._matrices["H"]
 
+    @H.setter
+    def H(self, value):
+
+        if value.shape != (2,3):
+            raise ValueError("Invalid matrix shape")
+
+        self._matrices["H"] = value
+
     @property
     def M(self):
       return self._matrices["M"]
+
+    @M.setter
+    def M(self, value):
+        if value.shape != (2, 2):
+            raise ValueError("Invalid matrix shape")
+
+        self._matrices["M"] = value
+
 
 
     def value(self, state, obs, verr):

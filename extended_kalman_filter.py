@@ -28,7 +28,11 @@ class EKFMatrixDescription(MatrixDescriptor):
 
 class ExtendedKalmanFilter(object):
 
-    def __init__(self, state, motion_model, observation_model,
+    """
+    Extended Kalman Filter implementation
+    """
+
+    def __init__(self, motion_model, observation_model,
                  matrix_description, odisseus_config):
 
         # configuration of odisseus
@@ -56,7 +60,7 @@ class ExtendedKalmanFilter(object):
         """
         self._mat_desc.set_matrix(name=name, mat=mat)
 
-    def iterate(self, u, z, w, ,v, **kwargs):
+    def iterate(self, u, z, w, v, **kwargs):
 
         self.predict(u=u, w=w)
         self.update(z=z, v=v)

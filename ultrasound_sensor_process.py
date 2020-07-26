@@ -11,11 +11,25 @@ from ultrasound_sensor import UltrasoundSensorPort
 
 class UltrasoundSensorProcess(ProcessControlBase):
 
-    def __init__(self, odisseus_config, port_max_size, distance_calculator):
+    def __init__(self, odisseus_config,
+                 port_max_size,
+                 distance_calculator, sonar):
 
-        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.ULTRASOUND_SENSOR_PROCESS_NAME)
-        self._port_inst = UltrasoundSensorPort(odisseus_config=self.get_config(), max_size=port_max_size)
-        self._sensor = UltrasoundSensor(odisseus_config=self.get_config(), port_inst=self._port_inst, distance_calculator = distance_calculator)
+        ProcessControlBase.__init__(self, config=odisseus_config,
+                                    name=odisseus_config["ULTRASOUND_SENSOR_PROCESS_NAME"])
+
+
+
+        #self._port_inst = UltrasoundSensorPort(odisseus_config=self.get_config(),
+        #                                       max_size=port_max_size)
+
+        self._sonar = sonar
+        #self.
+
+        # the sensor instance
+        #self._sensor = UltrasoundSensor(odisseus_config=self.get_config(),
+        #                                port_inst=self._port_inst,
+        #                                distance_calculator = distance_calculator)
 
     def start(self, **kwargs):
 
@@ -27,8 +41,9 @@ class UltrasoundSensorProcess(ProcessControlBase):
 
         # there is no point to start a new procees if this process is interrupted
         self.remove_interrupt()
-        self._sensor.set_sense_flag(value=True)
-        self.set_process(proc=Process(target=self._sensor.run, kwargs={"ULTRA_SOUND_TRIGGER_PULSE_TIME":self.get_config().ULTRA_SOUND_TRIGGER_PULSE_TIME}))
+        #self._sensor.set_sense_flag(value=True)
+        self.set_process(proc=Process(target=self._sensor.run,
+                                      kwargs={"ULTRA_SOUND_TRIGGER_PULSE_TIME": self.get_config()["ULTRA_SOUND_TRIGGER_PULSE_TIME"]}))
         super(UltrasoundSensorProcess, self).start(**kwargs)
 
     def get(self):

@@ -55,6 +55,8 @@ class ProcessControlBase(object):
 
             if self.get_config()["ENABLE_LOG"]:
                 print("Spawn a new " + self.get_name() + " process...")
+        else:
+            raise Exception("Low level  process instance is None")
 
     def stop(self):
 

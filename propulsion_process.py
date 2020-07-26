@@ -36,6 +36,8 @@ class PropulsionProcess(ProcessControlBase):
 
         #self._controller = kwargs[self.get_config()["PROPULSION_CONTROLLER_NAME"]]
 
+        # create the robot.
+        # TODO: this should change
         self._odisseus = Odisseus(odisseus_config=self.get_config(),
                                   propulsion=propulsion,
                                   cmd_executor=self._cmd_executor)
