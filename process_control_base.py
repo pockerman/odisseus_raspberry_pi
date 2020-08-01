@@ -25,7 +25,7 @@ class ProcessControlBase(object):
         """
         Set the interrupt flag to false
         """
-        if self._config["ENABLE_WARNINGS"] and self._interrupted == True:
+        if self._config["ENABLE_WARNINGS"] and self._interrupted is True:
             print("Process: "+self._name+" has interrupt flag removed...")
         self._interrupted = False
 

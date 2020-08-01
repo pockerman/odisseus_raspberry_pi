@@ -1,5 +1,5 @@
 """
-Main module for controlling Odisseus ultrasound sensor
+UltrasoundSensorProcess
 """
 
 from multiprocessing import Process
@@ -10,39 +10,39 @@ from ultrasound_sensor import UltrasoundSensorPort
 
 
 class UltrasoundSensorProcess(ProcessControlBase):
+    """
+    UltrasoundSensorProcess class handles the ultrasound sensor
+    HC-SR04. Odisseus can query the interface of this class to get
+    measurements of distances from objects
+    """
 
-    def __init__(self, odisseus_config,
-                 port_max_size,
-                 distance_calculator, sonar):
+    def __init__(self, odisseus_config, sonar):
+        """
+        Constructor. create an instance by passing Odisseus configuration map and the
+        sonar instance that is handled by the process.
+        :param odisseus_config: The configuration map for Odisseus
+        :param sonar: The sonar instance handled by the process
+        """
+
+        if sonar is None:
+            raise ValueError("SensorProcess needs a sonar object")
 
         ProcessControlBase.__init__(self, config=odisseus_config,
                                     name=odisseus_config["ULTRASOUND_SENSOR_PROCESS_NAME"])
-
-
-
-        #self._port_inst = UltrasoundSensorPort(odisseus_config=self.get_config(),
-        #                                       max_size=port_max_size)
-
         self._sonar = sonar
-        #self.
-
-        # the sensor instance
-        #self._sensor = UltrasoundSensor(odisseus_config=self.get_config(),
-        #                                port_inst=self._port_inst,
-        #                                distance_calculator = distance_calculator)
 
     def start(self, **kwargs):
 
         # is there a reason to spawn the process if it is active?
         if self.is_alive():
-            if self.get_config().ENABLE_LOG:
+            if self.get_config()["ENABLE_LOG"]:
                 print(self.get_name() + " process is alive nothing to do here...")
             return
 
         # there is no point to start a new procees if this process is interrupted
         self.remove_interrupt()
-        #self._sensor.set_sense_flag(value=True)
-        self.set_process(proc=Process(target=self._sensor.run,
+
+        self.set_process(proc=Process(target=self._sonar.run,
                                       kwargs={"ULTRA_SOUND_TRIGGER_PULSE_TIME": self.get_config()["ULTRA_SOUND_TRIGGER_PULSE_TIME"]}))
         super(UltrasoundSensorProcess, self).start(**kwargs)
 
@@ -50,7 +50,7 @@ class UltrasoundSensorProcess(ProcessControlBase):
         """
         Returns a measurement
         """
-        return self._sensor.get()
+        return self._sonar.get()
 
 
 

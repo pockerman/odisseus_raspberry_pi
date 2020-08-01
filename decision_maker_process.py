@@ -49,17 +49,23 @@ class DecisionMakerProcess(ProcessControlBase):
             # understand the world
             # create input for state estimator
             # run state estimator
-            u = np.array([1.0, 0.0])
-            w = np.array([0.0, 0.0])
-            z = np.array([0.0, 0.0])
-            v = np.array([0.0, 0.0])
-            self._state_estimator.iterate(u=u, z=z, w=w, v=v)
 
-            # update the state vector
-            for i in range(len(self._state_estimator.state)):
-                self._state_vector[i] = self._state_estimator.state[i]
+            # sonar default value
+            sonar_val = 0.0
 
-            #print("Odisseus state: ", self._state_estimator.state)
+            # we may not have sonar enabled..however even if it is
+            # enabled this may not be working properly
+            if self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"] in self._process_map:
+                sonar_val = self._process_map[self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"]].get()
+
+            # IR sensor
+            ir_sensor_val = 0.0
+
+            self.estimate_state(sonar_val.distance, ir_val=ir_sensor_val, camera_val=None)
+
+            # make decision based on state and world
+            # given the state have the RL agent to decide upon
+            # the behavior
 
             # sleep for half a second
             time.sleep(0.5)
@@ -84,6 +90,23 @@ class DecisionMakerProcess(ProcessControlBase):
     @property
     def state(self):
         return self._state_estimator.state
+
+
+    def estimate_state(self, sonar_val, ir_val, camera_val):
+        """
+        Estimate the state of Odisseus
+        :return:
+        """
+
+        u = np.array([1.0, 0.0])
+        w = np.array([0.0, 0.0])
+        z = np.array([sonar_val, ir_sensor_val])
+        v = np.array([0.0, 0.0])
+        self._state_estimator.iterate(u=u, z=z, w=w, v=v)
+
+        # update the state vector
+        for i in range(len(self._state_estimator.state)):
+            self._state_vector[i] = self._state_estimator.state[i]
 
     def _get_cmd_based_on_distance(self):
 

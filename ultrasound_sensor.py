@@ -6,6 +6,25 @@ import time
 from multiprocessing import Queue
 
 
+def default_distance_calculator(Gpio, ECHO_PIN):
+    """
+    Default distance calculator. Uses default speed of sound 34300 cm/sec
+    """
+
+    SPEED_OF_SOUND = 34300.0  # cm/sec
+
+    while Gpio.input(ECHO_PIN) == 0:
+        pulse_start = time.time()
+
+    while Gpio.input(ECHO_PIN) == 1:
+        pulse_end = time.time()
+
+    pulse_duration = pulse_end - pulse_start
+    distance = 0.5 * pulse_duration * SPEED_OF_SOUND
+    distance = round(distance, 2)
+    return distance
+
+
 class UltrasoundSensorMsg:
 
     def __init__(self, distance, id, timestamp):
@@ -45,12 +64,12 @@ class UltrasoundSensorPort:
         # oldest measurement
         if self._queue.qsize() == self._max_size:
             msg = self._queue.get()
-            if self._odisseus_config.ENABLE_LOG:
-                print("Removing measurement: ", msg.id)
-                self._next_available_id = msg.id
+            #if self._odisseus_config["ENABLE_LOG"]:
+                #print("Removing measurement: ", msg.id)
+            self._next_available_id = msg.id
 
-        if self._odisseus_config.ENABLE_LOG:
-            print("Adding distance...to queue")
+        #if self._odisseus_config["ENABLE_LOG"]:
+            #print("Adding distance...to queue")
 
         msg = UltrasoundSensorMsg(distance=distance, id=self._next_available_id,
                                   timestamp=time.time())
@@ -86,27 +105,8 @@ class UltrasoundSensor:
     Models the HC-SR04 ultrasound sensor
     """
 
-    @staticmethod
-    def default_distance_calculator(Gpio, ECHO_PIN):
-
-        """
-        Default distance calculator. Uses default speed of sound 34300 cm/sec
-        """
-
-        SPEED_OF_SOUND = 34300.0 #cm/sec
-
-        while Gpio.input(ECHO_PIN) == 0:
-            pulse_start = time.time()
-
-        while Gpio.input(ECHO_PIN) == 1:
-            pulse_end = time.time()
-
-        pulse_duration = pulse_end - pulse_start
-        distance = 0.5*pulse_duration * SPEED_OF_SOUND
-        distance = round(distance, 2)
-        return distance
-
-    def __init__(self, odisseus_config, port_inst, distance_calculator=None):
+    def __init__(self, odisseus_config, port_inst,
+                 distance_calculator=default_distance_calculator):
 
         self._odisseus_config = odisseus_config
         self._port_inst = port_inst
@@ -114,7 +114,7 @@ class UltrasoundSensor:
         self._sense = False
 
         if distance_calculator is None:
-            self._distance_calculator = UltrasoundSensor.default_distance_calculator
+            self._distance_calculator = default_distance_calculator
         else:
             self._distance_calculator = distance_calculator
 
@@ -143,7 +143,7 @@ class UltrasoundSensor:
         Setup the pins for the ultrasound sensor
         """
 
-        if self._odisseus_config.ENABLE_LOG:
+        if self._odisseus_config["ENABLE_LOG"]:
             print("Setting up Ultrasound sensor...this will take: {0} seconds".format(self._odisseus_config.SLEEP_TIME_FOR_SETTING_UP_ULTRA_SENSOR))
 
         self._GPIO.setup(self._odisseus_config.TRIG_PIN, self._GPIO.OUT)

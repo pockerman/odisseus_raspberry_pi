@@ -88,18 +88,16 @@ class ExtendedKalmanFilter(object):
 
         """
         Performs the update step of the Extended Kalman Filter
-
         :param z: the sensor measurements
         :type  z:
-
-        :param w: error vector associated with the meansuremnt
-
+        :param v: error vector associated with the meansuremnt
         """
 
         P = self._mat_desc["P"]
         R = self._mat_desc["R"]
         state = self._motion_model.state
 
+        # get the value predicted by the observation model
         zpred = self._observation_model.value(state=state, obs=z, verr=v)
 
         H = self._observation_model.H

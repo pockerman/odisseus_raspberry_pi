@@ -134,13 +134,13 @@ class MasterProcess(ProcessControlBase):
             for i in range(3):
                 self._state.append(0.0)
 
+            # this should go last as it queries the processes
             self._create_decision_maker_process(**kwargs)
             self._processes_created = True
         except Exception:
             self.terminate_all_processes()
             self._processes_created = False
             raise
-
 
     def terminate_all_processes(self):
 
@@ -214,7 +214,7 @@ class MasterProcess(ProcessControlBase):
 
         self._processes.update(
             {self.get_config()["DECISION_MAKER_PROCESS_NAME"]:
-                 DecisionMakerProcess(odisseus_config=self._config, process_map=None,
+                 DecisionMakerProcess(odisseus_config=self._config, process_map=self._processes,
                                       state_estimator=kwargs["state_estimator"], state_vector=self._state)})
 
         self._processes[self.get_config()["DECISION_MAKER_PROCESS_NAME"]].start(**kwargs)
