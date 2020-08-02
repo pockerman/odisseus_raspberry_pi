@@ -108,11 +108,22 @@ class MasterProcess(ProcessControlBase):
         elif cmd.get_name() == "StartProcessCMD":
             self._start_process_queue.put(cmd)
 
+    def create_state(self, **kwargs):
+        # parallel list for inter-process
+        # state communication
+        self._state = self._manager.list()
+        for i in range(3):
+            self._state.append(0.0)
+
     def create_processes(self, **kwargs):
 
         """
         Create the processes needed for Odisseus
         """
+
+        if self._state is  None:
+            raise ValueError("inter-process communication state vector has not been created")
+
         try:
             if self.get_config()["ENABLE_MOTORS"] is True:
                 # launch the motor process
@@ -129,17 +140,12 @@ class MasterProcess(ProcessControlBase):
             # we have it last in order to pass the created
             # processes
 
-            # parallel list for process communication
-            self._state = self._manager.list()
-            for i in range(3):
-                self._state.append(0.0)
-
             # this should go last as it queries the processes
             self._create_decision_maker_process(**kwargs)
             self._processes_created = True
+
         except Exception:
             self.terminate_all_processes()
-            self._processes_created = False
             raise
 
     def terminate_all_processes(self):
@@ -152,6 +158,7 @@ class MasterProcess(ProcessControlBase):
 
             for proc_name in self._processes:
                 self._processes[proc_name].stop()
+            self._processes_created = False
 
     def terminate_process(self, proc_name):
 
