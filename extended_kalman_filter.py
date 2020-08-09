@@ -81,7 +81,7 @@ class ExtendedKalmanFilter(object):
         P = self._mat_desc["P"]
         Q = self._mat_desc["Q"]
 
-        P = F * P * F_T + np.dot(L , np.dot( Q,  L_T))
+        P = F * P * F_T + np.dot(L, np.dot(Q, L_T))
         self._mat_desc["P"] = P
 
     def update(self, z, v):
@@ -98,7 +98,16 @@ class ExtendedKalmanFilter(object):
         state = self._motion_model.state
 
         # get the value predicted by the observation model
-        zpred = self._observation_model.value(state=state, obs=z, verr=v)
+        # z is actually a vector that includes all the measurements
+        # done by the sensoring system
+        zpred = self._observation_model.value(measurement=z, measurement_error=v)
+
+        # if the predicted measurement is None
+        # then set it to zero in order to proceed
+        # if the measurement z is None then the model
+        # is expected to handle this
+        if zpred is None:
+            zpred = np.array([0.0 for i in range(len(z))])
 
         H = self._observation_model.H
         H_T = H.T
@@ -107,19 +116,20 @@ class ExtendedKalmanFilter(object):
 
         try:
             # S = H*P*H^T + M*R*M^T
-            S_inv = np.linalg.inv(np.dot(H, np.dot( P , H_T)) + np.dot(M, np.dot(R, M.T)))
+            S_inv = np.linalg.inv(np.dot(H, np.dot(P, H_T)) + np.dot(M, np.dot(R, M.T)))
 
             # compute the gain matrix
-            K = np.dot(P, np.dot( H_T , S_inv))
+            K = np.dot(P, np.dot(H_T, S_inv))
 
             # compute gain matrix
             self._mat_desc["K"] = K
 
-            innovation = z - zpred
+            innovation = self._calculate_innovation(z=z, zpred=zpred)
             state += np.dot(self._mat_desc["K"], innovation)
 
-            I = np.zeros(shape=(len(state), len(state)))
-            np.fill_diagonal(I, 1.0)
+            #I = np.zeros(shape=(len(state), len(state)))
+            #np.fill_diagonal(I, 1.0)
+            I = np.eye(len(state))
 
             # update covariance matrix
             P = (I - np.dot(self._mat_desc["K"], H)) * P
@@ -132,3 +142,12 @@ class ExtendedKalmanFilter(object):
                 # should we do? Simply use the predicted
                 # values and log the fact that there was a singular matrix
                 raise
+
+    def _calculate_innovation(self, z, zpred):
+
+        innovation = np.array([0.0 for i in range(len(z))])
+
+        for i in range(len(z)):
+            if z[i] != self._config["INVALID_SIGNAL"]:
+                innovation[i] = z[i] - zpred[i]
+        return innovation

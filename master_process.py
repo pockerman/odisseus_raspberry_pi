@@ -45,7 +45,6 @@ class MasterProcess(ProcessControlBase):
         self._manager = Manager()
         self._state = None
 
-
     @property
     def state(self):
         """
@@ -60,6 +59,9 @@ class MasterProcess(ProcessControlBase):
         """
 
         while True:
+
+            # report state
+            print(self._state)
 
             # check if a process should die
             while self._terminate_process_queue.empty() is False:
@@ -108,12 +110,22 @@ class MasterProcess(ProcessControlBase):
         elif cmd.get_name() == "StartProcessCMD":
             self._start_process_queue.put(cmd)
 
-    def create_state(self, **kwargs):
+    def create_state(self, values=None, **kwargs):
         # parallel list for inter-process
         # state communication
         self._state = self._manager.list()
-        for i in range(3):
-            self._state.append(0.0)
+
+        if values is None:
+
+            for i in range(3):
+                self._state.append(0.0)
+        else:
+
+            if len(values) != 3:
+                raise ValueError("Invalid state size. Size should be three and not {0}".format(len(values)))
+
+            for i in range(3):
+                self._state.append(values[i])
 
     def create_processes(self, **kwargs):
 
@@ -121,7 +133,7 @@ class MasterProcess(ProcessControlBase):
         Create the processes needed for Odisseus
         """
 
-        if self._state is  None:
+        if self._state is None:
             raise ValueError("inter-process communication state vector has not been created")
 
         try:

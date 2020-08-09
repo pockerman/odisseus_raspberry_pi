@@ -36,6 +36,8 @@ class DecisionMakerProcess(ProcessControlBase):
         self._process_map = process_map
         self._state_estimator = state_estimator
         self._state_vector = state_vector
+        self._goal_radius = None
+        self._goal = None
 
     def run(self):
         """
@@ -45,13 +47,18 @@ class DecisionMakerProcess(ProcessControlBase):
 
         while not self.is_interrupted():
 
+            # check if we reached the goal
+            # if yes go to a sleep mode or exit
+            # the decision if we reached the goal
+            # or not is taken based on the position
+
             # get all the input from the sensors
             # understand the world
             # create input for state estimator
             # run state estimator
 
             # sonar default value
-            sonar_val = 0.0
+            sonar_val = self.get_config()["ULTRASOUND_INVALID_VALUE"]
 
             # we may not have sonar enabled..however even if it is
             # enabled this may not be working properly
@@ -91,17 +98,20 @@ class DecisionMakerProcess(ProcessControlBase):
     def state(self):
         return self._state_estimator.state
 
-
     def estimate_state(self, sonar_val, ir_val, camera_val):
         """
         Estimate the state of Odisseus
-        :return:
         """
 
-        u = np.array([1.0, 0.0])
-        w = np.array([0.0, 0.0])
-        z = np.array([sonar_val, ir_sensor_val])
-        v = np.array([0.0, 0.0])
+        # how do we estimate these
+        u = [1.0, 0.0]
+        w = [0.0, 0.0]
+
+        if sonar_val == self.get_config()["ULTRASOUND_INVALID_VALUE"]:
+            sonar_val = self.get_config()["INVALID_SIGNAL"]
+
+        z = [sonar_val, ir_val]
+        v = [0.0, 0.0]
         self._state_estimator.iterate(u=u, z=z, w=w, v=v)
 
         # update the state vector
@@ -124,7 +134,8 @@ class DecisionMakerProcess(ProcessControlBase):
             elif dist_msg - 2.0*self.get_config()["MIN_DISTANCE_FROM_OBSTACLE"] < self.get_config()["TOLERANCE"]:
                 return PropulsionCmd(direction="STOP", speed_value=0, duration=100)
 
-        raise ValueError("You should not call this DecisionMaker.get_cmd_based_on_distance when UltrasoundProcess is None.")
+        raise ValueError("You should not call this DecisionMaker."
+                         "get_cmd_based_on_distance when UltrasoundProcess is None.")
 
     def _get_camera_input(self):
         pass
