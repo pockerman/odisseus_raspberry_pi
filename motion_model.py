@@ -22,7 +22,7 @@ class MotionModel(object):
     def state(self):
         return self._state
 
-    def value(self, u, werr):
+    def step(self, u, werr):
         """
         Computes Odisseus next state dynamics
         The model adopted is a simple kinematic model for
