@@ -3,9 +3,9 @@ import numpy as np
 
 class MotionModel(object):
 
-    def __init__(self, Dt, tol):
-        self._state = np.array([0.0, 0.0, 0.0])
-        self._Dt = Dt
+    def __init__(self, dt, tol, init_state=np.array([0.0, 0.0, 0.0])):
+        self._state = init_state
+        self._Dt = dt
         self._tol = tol
         self._matrices = {"F": np.zeros(shape=(3, 3)),
                           "L": np.zeros(shape=(3, 2))}
@@ -21,6 +21,13 @@ class MotionModel(object):
     @property
     def state(self):
         return self._state
+
+    @state.setter
+    def state(self, value):
+        self._state = value
+
+    def act(self, u, werr):
+        self.step(u=u, werr=werr)
 
     def step(self, u, werr):
         """
