@@ -19,3 +19,7 @@ jobs:
         run: |
             echo "ERROR: You can only merge to main branch from develop branch or a hot_fix_ branch."
             exit 1
+        else:
+        run: |
+            echo "OK: ${{github.head_ref}}."
+
