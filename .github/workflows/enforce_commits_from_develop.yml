@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Disallow any merging to master if this is not coming from develop
+name: 'Disallow any merging to master if this is not coming from develop'
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Check branch
         if: github.base_ref == 'main' && github.head_ref != 'develop'
+        run: |
+            echo "ERROR: ${{github.head_ref}}."
         run: |
             echo "ERROR: You can only merge to main branch from develop branch or a hot_fix_ branch."
             exit 1
