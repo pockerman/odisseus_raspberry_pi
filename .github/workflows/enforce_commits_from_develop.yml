@@ -7,6 +7,8 @@ name: 'Disallow any merging to master if this is not coming from develop'
 on:
   pull_request:
 
+# for this PR set the contains_hot_fix to zero and then update it
+# only if the branch starts with hto_fix_
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   check_branch:
@@ -15,14 +17,19 @@ jobs:
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
-        run: |
-# for this PR set the contains_hot_fix to zero and then update it
-# only if the branch starts with hto_fix_
+        run: | 
             echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
-            if [[$github.head_ref == "hot_fix_"* ]]; then
+
+            # echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
+            if [[ $GITHUB_HEAD_REF == *"hot_fix_"* ]]; then
                 echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
             fi
-
+      - name: Message System Hot Fix
+        if: steps.search_hot_fix.outputs.contains_hot_fix == 1
+        run: echo "Branch name contains hot_fix_."
+      - name: Message System Not Hot Fix
+        if: steps.search_hot_fix.outputs.contains_hot_fix == 0
+        run: echo "Branch name does not contain hot_fix_." 
       - name: Check branch
         if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
         run: |
