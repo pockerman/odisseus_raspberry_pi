@@ -19,9 +19,9 @@ jobs:
 # for this PR set the contains_hot_fix to zero and then update it
 # only if the branch starts with hto_fix_
             echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
-            if [[$github.head_ref == "hot_fix_"* ]]; then
-                echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
-            fi
+            #if [[$github.head_ref == "hot_fix_"* ]]; then
+            #    echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
+            #fi
 
       - name: Check branch
         if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
