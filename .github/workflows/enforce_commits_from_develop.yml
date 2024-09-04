@@ -21,7 +21,7 @@ jobs:
             echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
 
             # echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
-            if [[$github.head_ref == *"hot_fix_"* ]]; then
+            if [[ $GITHUB_HEAD_REF == *"hot_fix_"* ]]; then
                 echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
             fi
       - name: Message System Hot Fix
