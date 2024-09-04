@@ -12,8 +12,17 @@ jobs:
   check_branch:
     runs-on: ubuntu-latest
     steps:
+      - name: Extract branch name
+        id: search_hot_fix
+        shell: bash
+        run: |
+            echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
+            if [[$github.head_ref == *"hot_fix"* ]]; then
+                echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
+            fi
+
       - name: Check branch
-        if: github.base_ref == 'main' && github.head_ref != 'develop' && github.head_ref.contains('hot_fix_') == false
+        if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
         run: |
             echo "ERROR: You can only merge to main branch from develop branch or a hot_fix_ branch."
             exit 1
