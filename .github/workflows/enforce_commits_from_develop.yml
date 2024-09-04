@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Disallow any merging to master if this is not coming from develop
+name: 'Disallow any merging to master if this is not coming from develop'
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -16,8 +16,10 @@ jobs:
         id: search_hot_fix
         shell: bash
         run: |
+# for this PR set the contains_hot_fix to zero and then update it
+# only if the branch starts with hto_fix_
             echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
-            if [[$github.head_ref == *"hot_fix"* ]]; then
+            if [[$github.head_ref == "hot_fix_"* ]]; then
                 echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
             fi
 
