@@ -49,7 +49,7 @@ class Motor:
         self._name = name
         self._params = params
 
-        if self._odisseus_config.ON_RASP_PI:
+        if self._odisseus_config["ON_RASP_PI"]:
             import RPi.GPIO as GPIO
             self._GPIO = GPIO
         else:
@@ -75,7 +75,7 @@ class Motor:
             self._GPIO.setup(self._params[1], self._GPIO.OUT)
             self._GPIO.setup(self._params[2], self._GPIO.OUT)
 
-        elif self._odisseus_config.ENABLE_WARNINGS:
+        elif self._odisseus_config["ENABLE_WARNINGS"]:
             print(" Either of the pins for motor ", self._name, " is None ")
 
 
@@ -129,9 +129,12 @@ class Propulsion:
         :return:  Propulsion instance
         """
 
-        prop_params = PropulsionParams(in_pin_1_motor_1=odisseus_config.IN_PIN_1_MOTOR_1, in_pin_2_motor_1=odisseus_config.IN_PIN_2_MOTOR_1,
-                                       en_pin_motor_1=odisseus_config.ENA_MOTOR_1_PIN_ID, in_pin_1_motor_2=odisseus_config.IN_PIN_1_MOTOR_2,
-                                       in_pin_2_motor_2=odisseus_config.IN_PIN_2_MOTOR_2, en_pin_motor_2=odisseus_config.ENA_MOTOR_2_PIN_ID)
+        prop_params = PropulsionParams(in_pin_1_motor_1=odisseus_config["IN_PIN_1_MOTOR_1"],
+                                       in_pin_2_motor_1=odisseus_config["IN_PIN_2_MOTOR_1"],
+                                       en_pin_motor_1=odisseus_config["ENA_MOTOR_1_PIN_ID"],
+                                       in_pin_1_motor_2=odisseus_config["IN_PIN_1_MOTOR_2"],
+                                       in_pin_2_motor_2=odisseus_config["IN_PIN_2_MOTOR_2"],
+                                       en_pin_motor_2=odisseus_config["ENA_MOTOR_2_PIN_ID"])
 
         propulsion = Propulsion(odisseus_config=odisseus_config, params=prop_params)
         return propulsion
@@ -159,8 +162,8 @@ class Propulsion:
         """
 
         # clamp the max speed to 100 as this is the max dutty speed
-        if speed > self._odisseus_config.MAX_DUTY_CYCLE:
-            speed = self._odisseus_config.MAX_DUTY_CYCLE
+        if speed > self._odisseus_config["MAX_DUTY_CYCLE"]:
+            speed = self._odisseus_config["MAX_DUTY_CYCLE"]
 
         if self.motor_A.is_enabled():
             p1 = self.motor_A.forward(**kwargs)
@@ -179,8 +182,8 @@ class Propulsion:
         """
 
         # clamp the max speed to 100 as this is the max dutty speed
-        if speed > self._odisseus_config.MAX_DUTY_CYCLE:
-            speed = self._odisseus_config.MAX_DUTY_CYCLE
+        if speed > self._odisseus_config["MAX_DUTY_CYCLE"]:
+            speed = self._odisseus_config["MAX_DUTY_CYCLE"]
 
         p1 = self.motor_A.backward(**kwargs)
         p2 = self.motor_B.backward(speed=speed, **kwargs)
@@ -195,8 +198,8 @@ class Propulsion:
         """
 
         # clamp the max speed to 100 as this is the max dutty speed
-        if speed > self._odisseus_config.MAX_DUTY_CYCLE:
-            speed = self._odisseus_config.MAX_DUTY_CYCLE
+        if speed > self._odisseus_config["MAX_DUTY_CYCLE"]:
+            speed = self._odisseus_config["MAX_DUTY_CYCLE"]
 
         if self.motor_B.is_enabled():
             self.motor_B.stop()
@@ -213,8 +216,8 @@ class Propulsion:
         """
 
         # clamp the max speed to 100 as this is the max dutty speed
-        if speed > self._odisseus_config.MAX_DUTY_CYCLE:
-            speed = self._odisseus_config.MAX_DUTY_CYCLE
+        if speed > self._odisseus_config["MAX_DUTY_CYCLE"]:
+            speed = self._odisseus_config["MAX_DUTY_CYCLE"]
 
         if self.motor_A.is_enabled():
             self.motor_A.stop()

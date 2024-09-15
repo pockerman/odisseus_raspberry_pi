@@ -123,7 +123,8 @@ class WebAppProcess(ProcessControlBase):
     web_app_process = None
 
     def __init__(self, odisseus_config, master_process):
-        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.WEB_PROCESS_NAME)
+        ProcessControlBase.__init__(self, config=odisseus_config,
+                                    name=odisseus_config.WEB_PROCESS_NAME)
         self._master_process = master_process
 
     def start(self, **kwargs):
@@ -140,7 +141,9 @@ class WebAppProcess(ProcessControlBase):
 
         self.remove_interrupt()
         WebAppProcess.web_app_process = self
-        self.set_process(proc=Process(target=app.run, kwargs={"host":self.get_config().HOST, "debug":self.get_config().DEBUG, "port":self.get_config().PORT}))
+        self.set_process(proc=Process(target=app.run, kwargs={"host": self.get_config().HOST,
+                                                              "debug": self.get_config().DEBUG,
+                                                              "port": self.get_config().PORT}))
         super(WebAppProcess, self).start(**kwargs)
 
     def terminate_odisseus_process(self):
