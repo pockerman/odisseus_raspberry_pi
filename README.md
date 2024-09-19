@@ -2,6 +2,8 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
+Should see this in develop.
+
 This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi. 
 There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
 
