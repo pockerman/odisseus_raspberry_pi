@@ -1,0 +1,46 @@
+# This workflow merges a hotfix_ branch into dev
+# when the branch is a hotfix_. A hotfix_ branch branches
+# from main so we may forget to merge it back into dev
+
+name: merge-hot-fix-branch
+
+on:
+  merge:
+    branches: [ master ]
+
+# for this PR set the variable contains_hot_fix to zero and then update it
+# only if the branch starts with hotfix_
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Extract branch name
+        id: search_hot_fix
+        shell: bash
+        run: | 
+            echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
+
+            if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
+                echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
+            fi
+      - name: Message System Hot Fix
+        if: steps.search_hot_fix.outputs.contains_hot_fix == 1
+        run: echo "Branch name contains hot_fix_."
+      - name: Message System Not Hot Fix
+        if: steps.search_hot_fix.outputs.contains_hot_fix == 0
+        run: echo "Branch name does not contain hot_fix_." 
+      - name: Check branch
+        if: github.base_ref == 'main' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
+        run: |
+            echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
+            exit 1
+      - name: Merge master -> develop
+        uses: pockerman/merge-branch@master
+        with:
+          type: now
+          target_branch: develop
+          message: Merge main branch
+          github_token: ${{secrets.GITHUB_TOKEN}}
+        
