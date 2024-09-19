@@ -5,8 +5,9 @@
 name: merge-hot-fix-branch
 
 on:
-  merge:
-    branches: [ master ]
+  push:
+    branches: 
+      - 'hotfix_*/*'
 
 # for this PR set the variable contains_hot_fix to zero and then update it
 # only if the branch starts with hotfix_
