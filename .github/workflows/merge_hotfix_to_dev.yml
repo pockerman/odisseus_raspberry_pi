@@ -7,7 +7,7 @@ name: merge-hot-fix-branch
 on:
   push:
     branches: 
-      - 'hotfix_*/*'
+      - 'master'
 
 # for this PR set the variable contains_hot_fix to zero and then update it
 # only if the branch starts with hotfix_
@@ -41,6 +41,7 @@ jobs:
         uses: pockerman/merge-branch@master
         with:
           type: now
+          from_branch: master
           target_branch: develop
           message: Merge main branch
           github_token: ${{secrets.GITHUB_TOKEN}}
