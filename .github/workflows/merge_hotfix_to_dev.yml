@@ -37,7 +37,7 @@ jobs:
             echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
             exit 1
       - name: Merge master -> develop
-        uses: pockerman/odisseus_raspberry_pi/merge-branch@master
+        uses: pockerman/odisseus_raspberry_pi@master
         with:
           type: now
           from_branch: master
