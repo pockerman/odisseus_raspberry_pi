@@ -28,10 +28,10 @@ jobs:
             fi
       - name: Message System Hot Fix
         if: steps.search_hot_fix.outputs.contains_hot_fix == 1
-        run: echo "Branch name contains hot_fix_."
+        run: echo "Branch name contains hotfix_."
       - name: Message System Not Hot Fix
         if: steps.search_hot_fix.outputs.contains_hot_fix == 0
-        run: echo "Branch name does not contain hot_fix_." 
+        run: echo "Branch name does not contain hotfix_." 
       - name: Check branch
         if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
         run: |
