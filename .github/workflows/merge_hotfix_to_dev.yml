@@ -16,6 +16,7 @@ jobs:
   check_branch:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
