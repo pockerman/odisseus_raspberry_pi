@@ -40,6 +40,7 @@ jobs:
       - name: Merge master -> develop
         shell: bash
         run: |
+             git branch
              git checkout origin/develop
              git merge master
         
