@@ -2,12 +2,16 @@
 
 name: 'Disallow any merging to master if this is not coming from develop'
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+# Controls when the action will run. 
+# Workflow is triggered when a PR is opened
+
 on:
   pull_request:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
+# for this PR set the variable contains_hot_fix to zero and then update it
+# only if the branch starts with hotfix_
+
 jobs:
   check_branch:
     runs-on: ubuntu-latest
@@ -15,16 +19,21 @@ jobs:
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
-        run: |
-# for this PR set the contains_hot_fix to zero and then update it
-# only if the branch starts with hto_fix_
+        run: | 
             echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
-            if [[$github.head_ref == "hot_fix_"* ]]; then
+
+
+            if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
                 echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
             fi
-
+      - name: Message System Hot Fix
+        if: steps.search_hot_fix.outputs.contains_hot_fix == 1
+        run: echo "Branch name contains hot_fix_."
+      - name: Message System Not Hot Fix
+        if: steps.search_hot_fix.outputs.contains_hot_fix == 0
+        run: echo "Branch name does not contain hot_fix_." 
       - name: Check branch
         if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
         run: |
-            echo "ERROR: You can only merge to main branch from develop branch or a hot_fix_ branch."
+            echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
             exit 1
