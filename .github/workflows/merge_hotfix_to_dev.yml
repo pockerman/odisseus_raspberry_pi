@@ -2,7 +2,7 @@
 # when the branch is a hotfix_. A hotfix_ branch branches
 # from main so we may forget to merge it back into dev
 
-name: merge-hot-fix-branch
+name: merge-hotfix-branch
 
 on:
   pull_request:
@@ -13,10 +13,15 @@ on:
 # only if the branch starts with hotfix_
 
 jobs:
-  merge-master-back-to-dev:
+  merge-master-to-dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+         ref: ${{ github.event.pull_request.merge_commit_sha }}
+         fetch-depth: '0'
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
@@ -28,10 +33,10 @@ jobs:
             fi
       - name: Message System Hot Fix
         if: steps.search_hot_fix.outputs.contains_hot_fix == 1
-        run: echo "Branch name contains hot_fix_."
+        run: echo "Branch name contains hotfix_."
       - name: Message System Not Hot Fix
         if: steps.search_hot_fix.outputs.contains_hot_fix == 0
-        run: echo "Branch name does not contain hot_fix_." 
+        run: echo "Branch name does not contain hotfix_." 
       - name: Check branch
         if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
         run: |
@@ -42,10 +47,15 @@ jobs:
         run: |
           git config --global user.email "a.giavaras@gmail.com"
           git config --global user.name "pockerman"
-          git fetch --unshallow
+          git pull origin master
+          git fetch
           git checkout develop
-          git pull
-          git merge --no-ff master -m "Auto-merge master back to dev"
-          git push
+          git merge --no-ff origin/master -m "Auto-merge master back to dev"
+          git push origin develop
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+         WITH_V: true
+         PRERELEASE: false
 
         
