@@ -5,17 +5,18 @@
 name: merge-hot-fix-branch
 
 on:
-  merge:
+  pull_request:
     branches: [ master ]
+    types: [closed]
 
 # for this PR set the variable contains_hot_fix to zero and then update it
 # only if the branch starts with hotfix_
 
 jobs:
-  check_branch:
+  merge-master-back-to-dev:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
@@ -37,10 +38,11 @@ jobs:
             echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
             exit 1
       - name: Merge master -> develop
-        uses: pockerman/merge-branch@master
-        with:
-          type: now
-          target_branch: develop
-          message: Merge main branch
-          github_token: ${{secrets.GITHUB_TOKEN}}
+        if: github.event.pull_request.merged == true
+        run: |
+          git fetch --unshallow
+          git checkout dev
+          git pull
+          git merge --no-ff master -m "Auto-merge master back to dev"
+          git push
         
