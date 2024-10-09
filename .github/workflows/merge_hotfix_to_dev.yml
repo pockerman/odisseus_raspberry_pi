@@ -20,8 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-        ref: ${{ github.event.pull_request.merge_commit_sha }}
-        fetch-depth: '0'
+         ref: ${{ github.event.pull_request.merge_commit_sha }}
+         fetch-depth: '0'
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
