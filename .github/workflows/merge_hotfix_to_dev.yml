@@ -13,10 +13,15 @@ on:
 # only if the branch starts with hotfix_
 
 jobs:
-  merge-master-back-to-dev:
+  merge-master-to-dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+        ref: ${{ github.event.pull_request.merge_commit_sha }}
+        fetch-depth: '0'
       - name: Extract branch name
         id: search_hot_fix
         shell: bash
@@ -47,5 +52,10 @@ jobs:
           git pull
           git merge --no-ff master -m "Auto-merge master back to dev"
           git push
+     - name: Bump version and push tag
+       uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+       env:
+        WITH_V: true
+        PRERELEASE: false
 
         
