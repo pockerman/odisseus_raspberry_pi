@@ -2,7 +2,7 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
-This is a very serious error to be fixed. I am fixing it now. Seriously.
+This is a very serious error to be fixed. I am fixing it now. Seriously...........
 
 This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi. 
 There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
