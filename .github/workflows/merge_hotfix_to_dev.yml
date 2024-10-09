@@ -52,10 +52,10 @@ jobs:
           git pull
           git merge --no-ff master -m "Auto-merge master back to dev"
           git push
-     - name: Bump version and push tag
-       uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
-       env:
-        WITH_V: true
-        PRERELEASE: false
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+         WITH_V: true
+         PRERELEASE: false
 
         
