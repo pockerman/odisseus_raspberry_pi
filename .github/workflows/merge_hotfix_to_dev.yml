@@ -47,11 +47,11 @@ jobs:
         run: |
           git config --global user.email "a.giavaras@gmail.com"
           git config --global user.name "pockerman"
+          git pull origin master
           git fetch
           git checkout develop
-          git pull
           git merge --no-ff master -m "Auto-merge master back to dev"
-          git push
+          git push origin develop
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
