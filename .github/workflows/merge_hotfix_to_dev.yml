@@ -50,7 +50,7 @@ jobs:
           git pull origin master
           git fetch
           git checkout develop
-          git merge --no-ff master -m "Auto-merge master back to dev"
+          git merge --no-ff origin/master -m "Auto-merge master back to dev"
           git push origin develop
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
