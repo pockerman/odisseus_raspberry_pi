@@ -40,6 +40,8 @@ jobs:
       - name: Merge master -> develop
         if: github.event.pull_request.merged == true
         run: |
+          git config --global user.email "a.giavaras@gmail.com"
+          git config --global user.name "pockerman"
           git fetch --unshallow
           git checkout develop
           git pull
