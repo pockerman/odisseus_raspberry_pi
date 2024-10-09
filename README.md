@@ -2,9 +2,25 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
-This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi. There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
+This is a very serious error to be fixed.
 
-## Hardware
+This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi. 
+There is also a simulation based on ROS which is in progress here: https://github.com/pockerman/odisseus_ros  
+
+## Contents
+* [Hardware](#hardware)
+* [Software](#software)
+	* [Dependencies](#dependencies)
+	* [Desing Notes](#design_notes) 
+* [Installation](#installation)
+* [Useful Links](#useful_links)
+* [How To](#how_to)
+	* [Start the Flask-based Control Server](#start_control_server)
+* [Useful Links](#useful_links)
+
+ 
+
+## <a name="hardware"></a> Hardware
 
 - 2 Wheels
 - 2 DC motors
@@ -13,22 +29,37 @@ This is my attempt to develop a two wheels multi-sensor robot using Raspberry Pi
 - An IR sensor
 - An L289N H-bridge
 
-## Software
+## <a name="software"></a> Software
 
-## Installation
+### <a name="dependencies"></a> Dependencies
 
-Make sure that the raspberry pi used satisfies the  requirements in _requirements.txt_. 
-All in all you need to:
+- **```RPi.GPIO```**
 
-- **TODO**
+### <a name="design_notes"></a> Design Notes
 
-## Start the Flask-based control server of Odisseus
+Checkout the design notes <a href="doc/notes.pdf">here</a>.
 
+## <a name="installation"></a> Installation
+
+Install the following components
+
+- **```RPi.GPIO```**
+
+```
+sudo apt-get install python-dev
+sudo apt-get install python-rpi.gpio
+
+```
+
+## <a name="how_to"></a> How To
+
+
+### <a name="start_control_server"></a> Start the Flask-based control server
 
 
 - ```python3 odisseus_web_app.py```
 
-## Useful Links
+## <a name="useful_links"></a> Useful Links
 
 - **Installing CircuitPython Libraries on Raspberry Pi:** https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi
 - https://cdn-learn.adafruit.com/downloads/pdf/adafruit-dc-and-stepper-motor-hat-for-raspberry-pi.pdf
