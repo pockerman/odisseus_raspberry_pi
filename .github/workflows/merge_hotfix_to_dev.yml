@@ -64,4 +64,5 @@ jobs:
     needs: [check-branch, merge-master-to-dev, bump-version-and-push-tag]
     steps:
       shell: bash
-      run: echo "Successfully merged hotfix, merge main branch into dev and created tag"
+      run: |
+        echo "Successfully merged hotfix, merge main branch into dev and created tag"
