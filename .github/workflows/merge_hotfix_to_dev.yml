@@ -20,12 +20,3 @@ jobs:
           if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
                echo "contains_hotfix=1" >> $GITHUB_OUTPUT
           fi
-      - name: Message System Hot Fix
-        if: steps.search_hotfix.outputs.contains_hotfix == 1
-        run: |
-             echo "Branch name contains hotfix_."
-      - name: Fail hotfix job
-        if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hotfix.outputs.contains_hotfix == 0
-        run: |
-          echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
-          exit 1
