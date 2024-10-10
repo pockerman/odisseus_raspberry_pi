@@ -2,7 +2,7 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
-This is a major change.
+This is a major change. On hotfix 1.
 
 This is a very serious error to be fixed. I am fixing it now. Seriously...........
 This is a very serious error to be fixed. I am fixing it now. Seriously.
