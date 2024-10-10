@@ -2,21 +2,13 @@
 name: merge-hotfix-branch
 on:
   pull_request:
-    branches:
-      - master
-    types:
-      - closed
+    branches: [master]
+    types: [closed]
 jobs:
   check-branch:
     name: check-hotfix-branch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - id: search_hotfix
-      - name: Extract branch name
+      - name: Print hello
         shell: bash
-        run: |
-          echo "contains_hotfix=0" >> $GITHUB_OUTPUT
-          if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
-               echo "contains_hotfix=1" >> $GITHUB_OUTPUT
-          fi
+        run: echo "Heloo...."
