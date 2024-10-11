@@ -2,7 +2,7 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
-This fixes hotfix_branch_5 
+This fixes hotfix_branch_7 
 This is a normal branch that fixes things
 
 This is a major change. On hotfix 2.
