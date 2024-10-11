@@ -12,8 +12,18 @@ jobs:
     runs-on: ubuntu-latest
    
     steps:
+      - name: Set contains_hotfix var
+        run: echo "contains_hotfix=0" >> $GITHUB_OUTPUT
       - name: Check branch name
-      - uses: actions/checkout@v4
+        id: search_hotfix
+        shell: bash
+        run: |
+             if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
+               echo "Branch name has hotfix_ prefix"
+               echo "contains_hotfix=1" >> $GITHUB_OUTPUT
+             else
+               echo "Branch name does not have  hotfix_ prefix"
+             fi
       
           
       
