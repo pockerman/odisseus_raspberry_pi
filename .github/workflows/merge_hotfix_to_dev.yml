@@ -15,7 +15,6 @@ jobs:
       - name: Print hello
         shell: bash
         run: echo "Heloo...."
-      - name: Extract branch name
       - uses: actions/checkout@v4
       - id: search_hotfix
         shell: bash
