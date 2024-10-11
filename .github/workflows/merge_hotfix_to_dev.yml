@@ -50,7 +50,7 @@ jobs:
     needs: [check-branch, merge-master-to-dev]
     steps:
       - name: Create tag
-      - uses: anothrNick/github-tag-action@v1
+        uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
           WITH_V: true
