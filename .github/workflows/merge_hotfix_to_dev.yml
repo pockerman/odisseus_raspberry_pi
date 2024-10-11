@@ -24,6 +24,12 @@ jobs:
              else
                echo "Branch name does not have  hotfix_ prefix"
              fi
+      - name: Fail if not hotfix
+        shell: bash
+        if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hotfix.outputs.contains_hotfix == 0
+        run: |
+          echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
+          exit 1
       
           
       
