@@ -2,7 +2,9 @@
 
 ![Odisseus](imgs/odi_3.JPG)
 
+
 This is a normal branch that fixes things
+
 This is a major change. On hotfix 2.
 
 This is a very serious error to be fixed. I am fixing it now. Seriously...........
