@@ -1,4 +1,6 @@
-
+# merges the master branch after a hotfix branch
+# has been merged into the master branch and then
+# creates a tag
 name: merge-hotfix-branch
 on:
   pull_request:
@@ -8,7 +10,25 @@ jobs:
   check-branch:
     name: check-hotfix-branch
     runs-on: ubuntu-latest
+   
     steps:
       - name: Print hello
         shell: bash
         run: echo "Heloo...."
+      - name: Extract branch name
+      - uses: actions/checkout@v4
+      - id: search_hotfix
+        shell: bash
+        run: |
+          echo "contains_hotfix=0" >> $GITHUB_OUTPUT
+          if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
+               echo "contains_hotfix=1" >> $GITHUB_OUTPUT
+          else
+               echo "Branch does not have  hotfix_ prefix"
+          fi
+      - name: Fail if not hotfix
+        if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hotfix.outputs.contains_hotfix == 0
+        run: |
+          echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
+          exit 1
+      
