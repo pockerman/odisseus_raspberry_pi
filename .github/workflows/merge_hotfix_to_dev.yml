@@ -12,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
    
     steps:
-      - name: Print hello
-        shell: bash
-        run: echo "Heloo...."
+      - name: Check branch name
       - uses: actions/checkout@v4
       - id: search_hotfix
         shell: bash
