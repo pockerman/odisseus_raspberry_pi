@@ -1,62 +1,52 @@
-# This workflow merges a hotfix_ branch into dev
-# when the branch is a hotfix_. A hotfix_ branch branches
-# from main so we may forget to merge it back into dev
-
+# merges the master branch after a hotfix branch
+# has been merged into the master branch and then
+# creates a tag
 name: merge-hotfix-branch
-
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     types: [closed]
-
-# for this PR set the variable contains_hot_fix to zero and then update it
-# only if the branch starts with hotfix_
-
 jobs:
-  merge-master-to-dev:
+  check-branch:
+    name: check-branch
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+   
     steps:
-      - uses: actions/checkout@v4
-        with:
-         ref: ${{ github.event.pull_request.merge_commit_sha }}
-         fetch-depth: '0'
-      - name: Extract branch name
-        id: search_hot_fix
+      - name: Set contains_hotfix var
+        run: echo "contains_hotfix=0" >> $GITHUB_OUTPUT
+      - name: Check branch name
+        id: search_hotfix
         shell: bash
-        run: | 
-            echo "contains_hot_fix=0" >> $GITHUB_OUTPUT
-
-            if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
-                echo "contains_hot_fix=1" >> $GITHUB_OUTPUT
-            fi
-      - name: Message System Hot Fix
-        if: steps.search_hot_fix.outputs.contains_hot_fix == 1
-        run: echo "Branch name contains hotfix_."
-      - name: Message System Not Hot Fix
-        if: steps.search_hot_fix.outputs.contains_hot_fix == 0
-        run: echo "Branch name does not contain hotfix_." 
-      - name: Check branch
-        if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hot_fix.outputs.contains_hot_fix == 0
         run: |
-            echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
-            exit 1
-      - name: Merge master -> develop
-        if: github.event.pull_request.merged == true
+             if [[ $GITHUB_HEAD_REF == *"hotfix_"* ]]; then
+               echo "Branch name has hotfix_ prefix"
+               echo "contains_hotfix=1" >> $GITHUB_OUTPUT
+             else
+               echo "Branch name does not have  hotfix_ prefix"
+             fi
+      - name: Fail if not hotfix
+        shell: bash
+        if: github.base_ref == 'master' && github.head_ref != 'develop' && steps.search_hotfix.outputs.contains_hotfix == 0
         run: |
-          git config --global user.email "a.giavaras@gmail.com"
-          git config --global user.name "pockerman"
-          git pull origin master
-          git fetch
-          git checkout develop
-          git merge --no-ff origin/master -m "Auto-merge master back to dev"
-          git push origin develop
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
-        env:
-         GITHUB_TOKEN: ${{ secrets.MERGE_HOT_FIX_SECRET }}
-         WITH_V: true
-         PRERELEASE: false
-
+          echo "ERROR: You can only merge to main branch from develop branch or a hotfix_ branch."
+          exit 1
+  merge-master-to-dev:
+    name: merge-master-to-dev
+    runs-on: ubuntu-latest
+    needs:  check-branch
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Merge master to develop
+        uses: mtanzi/action-automerge@v1
+        id: merge
+        with:
+          github_token: ${{ github.token }}
+          source: 'master'
+          target: 'develop'
         
+      
+    
+      
+          
+      
