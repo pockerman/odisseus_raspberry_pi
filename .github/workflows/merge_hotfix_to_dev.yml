@@ -43,7 +43,7 @@ jobs:
           echo "Running merge master into develop..."
           git config --global user.email "a.giavaras@gmail.com"
           git config --global user.name "pockerman"
-          git pull origin master
+          git pull origin master --allow-unrelated-histories
           git fetch
           git checkout develop
           git merge --no-ff origin/master -m "Auto-merge master back to dev"
