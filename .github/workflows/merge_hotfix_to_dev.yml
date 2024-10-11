@@ -59,6 +59,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           WITH_V: true
           PRERELEASE: false
+          DEFAULT_BUMP: patch
 
         
       
