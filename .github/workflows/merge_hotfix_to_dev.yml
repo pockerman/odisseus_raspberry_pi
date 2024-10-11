@@ -35,19 +35,15 @@ jobs:
     runs-on: ubuntu-latest
     needs:  check-branch
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Merge master to develop
-        shell: bash
-        if: github.event.pull_request.merged == true
-        run: |
-          echo "Running merge master into develop..."
-          git config --global user.email "a.giavaras@gmail.com"
-          git config --global user.name "pockerman"
-          git pull origin master --allow-unrelated-histories
-          git fetch
-          git checkout develop
-          git merge --allow-unrelated-histories --no-ff origin/master -m "Auto-merge master back to dev"
-          git push origin develop
+        uses: mtanzi/action-automerge@v1
+        id: merge
+        with:
+          github_token: ${{ github.token }}
+          source: 'master'
+          target: 'develop'
         
       
     
