@@ -46,7 +46,7 @@ jobs:
           git pull origin master --allow-unrelated-histories
           git fetch
           git checkout develop
-          git merge --no-ff origin/master -m "Auto-merge master back to dev"
+          git merge --allow-unrelated-histories --no-ff origin/master -m "Auto-merge master back to dev"
           git push origin develop
         
       
