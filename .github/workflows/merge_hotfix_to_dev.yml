@@ -40,6 +40,7 @@ jobs:
         shell: bash
         if: github.event.pull_request.merged == true
         run: |
+          echo "Running merge master into develop..."
           git config --global user.email "a.giavaras@gmail.com"
           git config --global user.name "pockerman"
           git pull origin master
