@@ -2,34 +2,34 @@
 Main driver for Odisseus
 """
 
-from odisseus_config import odisseus_config_obj
+
 from master_process import MasterProcess
 
-if odisseus_config_obj.ON_RASP_PI:
-    import RPi.GPIO as GPIO
-else:
-    from gpio_mock import GPIOMock as GPIO
 
-def main():
+def main(configuration):
 
     """
     Main driver for Odisseus
     """
-
-    # need to set the board mode before doing anything with the pins
-    GPIO.setmode(GPIO.BCM)
-
-    master = MasterProcess(odisseus_configuration=odisseus_config_obj)
+    master = MasterProcess(odisseus_configuration=configuration)
     master.create_processes()
     master.run()
-
-    # once done clean up the pins
-    GPIO.cleanup()
 
 
 if __name__ == '__main__':
 
+    CONFIG_FILENAME = "config.json"
+    config = MasterProcess.read_config(filename=CONFIG_FILENAME)
+
+    if config["ON_RASP_PI"]:
+        import RPi.GPIO as GPIO
+    else:
+        from gpio_mock import GPIOMock as GPIO
+
+    # need to set the board mode before doing anything with the pins
+    GPIO.setmode(GPIO.BCM)
+
     try:
-        main()
-    except KeyboardInterrupt:
+        main(configuration=config)
+    finally:
         GPIO.cleanup()
