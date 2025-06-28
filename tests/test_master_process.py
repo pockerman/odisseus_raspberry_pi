@@ -2,7 +2,7 @@
 Unit tests for master process
 """
 
-from master_process import MasterProcess
+from processes.master_process import MasterProcess
 from pid import PIDControl
 
 """

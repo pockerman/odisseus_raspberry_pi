@@ -1,0 +1,2 @@
+class MotorCMD:
+    pass

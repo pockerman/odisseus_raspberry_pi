@@ -7,10 +7,11 @@ point for controlling Odisseus
 import json
 import numpy as np
 
+
 from multiprocessing import Queue
 from multiprocessing import Manager
 
-from process_control_base import ProcessControlBase
+from process_base import ProcessControlBase
 from propulsion_process import PropulsionProcess
 from ultrasound_sensor_process import UltrasoundSensorProcess
 from web_app_process import WebAppProcess
@@ -18,7 +19,6 @@ from decision_maker_process import DecisionMakerProcess
 
 
 class MasterProcess(ProcessControlBase):
-
     """
     The MasterProcess is the control point for Odisseus
     """
@@ -34,9 +34,9 @@ class MasterProcess(ProcessControlBase):
             configuration = json.load(json_file)
             return configuration
 
-    def __init__(self, odisseus_configuration, **kwargs):
-        ProcessControlBase.__init__(self, config=odisseus_configuration,
-                                    name=odisseus_configuration["MASTER_PROCESS_NAME"])
+    def __init__(self, config: dict, **kwargs):
+        super().__init__(self, config=config,
+                         name=config["MASTER_PROCESS_NAME"])
 
         self._processes = {}
         self._processes_created = False
@@ -44,6 +44,7 @@ class MasterProcess(ProcessControlBase):
         self._start_process_queue = Queue()
         self._manager = Manager()
         self._state = None
+        self._arduino_serial = None
 
     @property
     def state(self):
@@ -74,19 +75,19 @@ class MasterProcess(ProcessControlBase):
                 self.start_process(proc_name=cmd.get_value())
 
             # query distance from ultrasound
-            #if self.get() in self._processes.keys():
+            # if self.get() in self._processes.keys():
             #    dist_msg = self._processes[UltrasoundSensorProcess.process_name()].get()
             #    print(dist_msg)
-            #else:
-             #   print("No distance received")
+            # else:
+            #   print("No distance received")
 
             # check if there is any cmd coming from the server
             # this will be high priority
-            
-            #self
+
+            # self
 
             # poll the sensors to get information about the world state
-            #print("Running master process")
+            # print("Running master process")
 
             # update state
 
@@ -153,6 +154,8 @@ class MasterProcess(ProcessControlBase):
             # processes
 
             # this should go last as it queries the processes
+
+
             self._create_decision_maker_process(**kwargs)
             self._processes_created = True
 
@@ -207,7 +210,7 @@ class MasterProcess(ProcessControlBase):
         Create the ultrasound process
         """
 
-        #self._processes.update({self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"]:
+        # self._processes.update({self.get_config()["ULTRASOUND_SENSOR_PROCESS_NAME"]:
         #                            UltrasoundSensorProcess(odisseus_config=self._config,
         #                                                    port_max_size=self._config["ULTRASOUND_PORT_MAX_SIZE"],
         #                                                    distance_calculator=None)})
@@ -237,4 +240,3 @@ class MasterProcess(ProcessControlBase):
                                       state_estimator=kwargs["state_estimator"], state_vector=self._state)})
 
         self._processes[self.get_config()["DECISION_MAKER_PROCESS_NAME"]].start(**kwargs)
-

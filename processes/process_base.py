@@ -2,13 +2,22 @@
 Base class for deriving process control
 """
 
-class ProcessControlBase(object):
 
-    def __init__(self, config, name):
+class ProcessBase:
+
+    def __init__(self, config: dict, name: str):
         self._config = config
         self._name = name
         self._process = None
         self._interrupted = False
+
+    @property
+    def arduino_serial_port(self) -> str:
+        return self._config['ARDUINO_SERIAL_PORT']
+
+    @property
+    def arduino_serial_port_rate(self) -> int:
+        return self._config["ARDUINO_SERIAL_PORT_RATE"]
 
     def set_config(self, config):
         self._config = config
@@ -26,7 +35,7 @@ class ProcessControlBase(object):
         Set the interrupt flag to false
         """
         if self._config["ENABLE_WARNINGS"] and self._interrupted is True:
-            print("Process: "+self._name+" has interrupt flag removed...")
+            print("Process: " + self._name + " has interrupt flag removed...")
         self._interrupted = False
 
     def is_interrupted(self):
@@ -63,4 +72,3 @@ class ProcessControlBase(object):
         if self._process is not None:
             self._process.terminate()
             self._process = None
-

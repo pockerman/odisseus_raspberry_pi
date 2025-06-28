@@ -5,11 +5,9 @@ and Odisseus state
 
 import time
 from multiprocessing import Process
-import numpy as np
 
-from process_control_base import ProcessControlBase
+from processes.process_base import ProcessControlBase
 from control_cmds import PropulsionCmd
-from extended_kalman_filter import ExtendedKalmanFilter
 
 
 class DecisionMakerProcess(ProcessControlBase):

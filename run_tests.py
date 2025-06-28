@@ -32,7 +32,7 @@ def run():
 
         if test_id =='1':
             print("Executing Propulsion tests")
-            import test_propulsion
+            from tests import test_propulsion
             test_propulsion.test(odisseus_configuration=odisseus_config_obj)
 
         if test_id =='2':
@@ -40,7 +40,7 @@ def run():
 
         if test_id =='3':
             print("Executing Ultrasound tests")
-            import test_ultrasound
+            from tests import test_ultrasound
             test_ultrasound.test(odisseus_configuration=odisseus_config_obj)
 
         if test_id =='4':
@@ -48,18 +48,18 @@ def run():
 
         if test_id == '5':
             print("Executing Master Process tests")
-            import test_master_process
+            from tests import test_master_process
             test_master_process.test(odisseus_configuration=odisseus_config_obj)
 
         if test_id == '6':
             print("Executing Propulsion tests")
-            import test_propulsion
+            from tests import test_propulsion
             test_propulsion.test(odisseus_configuration=odisseus_config_obj)
             print("Executing Ultrasound tests")
-            import test_ultrasound
+            from tests import test_ultrasound
             test_ultrasound.test(odisseus_configuration=odisseus_config_obj)
             print("Executing Master Process tests")
-            import test_master_process
+            from tests import test_master_process
             test_master_process.test(odisseus_configuration=odisseus_config_obj)
 
     except getopt.GetoptError as e:

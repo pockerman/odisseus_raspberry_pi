@@ -46,5 +46,7 @@
   "WEB_PROCESS_NAME":"WebApp",
   "TOLERANCE": 1.0e-3,
   "SENSOR_FUSION_METHOD": "KalmanFilter",
-  "INVALID_SIGNAL": "-inf"
+  "INVALID_SIGNAL": "-inf",
+  "ARDUINO_SERIAL_PORT": "/dev/ttyUSB0",
+  "ARDUINO_SERIAL_PORT_RATE": 3600
 }

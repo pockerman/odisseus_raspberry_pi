@@ -3,7 +3,7 @@ Main driver for Odisseus
 """
 
 
-from master_process import MasterProcess
+from processes.master_process import MasterProcess
 
 
 def main(configuration):
@@ -18,6 +18,7 @@ def main(configuration):
 
 if __name__ == '__main__':
 
+    # Read the configuration
     CONFIG_FILENAME = "config.json"
     config = MasterProcess.read_config(filename=CONFIG_FILENAME)
 

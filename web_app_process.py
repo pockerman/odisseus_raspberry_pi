@@ -9,7 +9,7 @@ from flask import render_template
 from flask import Response
 from flask import request
 
-from process_control_base import ProcessControlBase
+from processes.process_base import ProcessControlBase
 from control_cmds import TerminateProcessCMD
 from control_cmds import StartProcessCMD
 from control_cmds import PropulsionCmd
@@ -158,7 +158,7 @@ class WebAppProcess(ProcessControlBase):
 
 if __name__ == '__main__':
     from odisseus_config import odisseus_config_obj
-    from master_process import MasterProcess
+    from processes.master_process import MasterProcess
 
     opts, args = getopt.getopt(sys.argv, ["PLATFORM", ])
 
