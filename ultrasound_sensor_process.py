@@ -6,7 +6,7 @@ from multiprocessing import Process
 
 from process_control_base import ProcessControlBase
 from ultrasound_sensor import UltrasoundSensor
-from ultrasound_sensor import UltrasoundSensorPort
+#from ultrasound_sensor import UltrasoundSensorPort
 
 
 class UltrasoundSensorProcess(ProcessControlBase):
