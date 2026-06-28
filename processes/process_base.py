@@ -2,19 +2,31 @@
 Base class for deriving process control
 """
 
-class ProcessControlBase(object):
 
-    def __init__(self, config, name):
+class ProcessBase:
+
+    def __init__(self, config: dict, name: str):
         self._config = config
         self._name = name
         self._process = None
         self._interrupted = False
 
+    @property
+    def arduino_serial_port(self) -> str:
+        return self._config['ARDUINO_SERIAL_PORT']
+
+    @property
+    def arduino_serial_port_rate(self) -> int:
+        return self._config["ARDUINO_SERIAL_PORT_RATE"]
+
+    def set_config(self, config):
+        self._config = config
+
     def interrupt(self):
         """
         Signal the process for interrupt
         """
-        if self._config.ENABLE_WARNINGS:
+        if self._config["ENABLE_WARNINGS"]:
             print("Process: " + self._name + " was interrupted...")
         self._interrupted = True
 
@@ -22,8 +34,8 @@ class ProcessControlBase(object):
         """
         Set the interrupt flag to false
         """
-        if self._config.ENABLE_WARNINGS and self._interrupted == True:
-            print("Process: "+self._name+" has interrupt flag removed...")
+        if self._config["ENABLE_WARNINGS"] and self._interrupted is True:
+            print("Process: " + self._name + " has interrupt flag removed...")
         self._interrupted = False
 
     def is_interrupted(self):
@@ -50,12 +62,13 @@ class ProcessControlBase(object):
         if self._process is not None:
             self._process.start()
 
-            if self.get_config().ENABLE_LOG:
+            if self.get_config()["ENABLE_LOG"]:
                 print("Spawn a new " + self.get_name() + " process...")
+        else:
+            raise Exception("Low level  process instance is None")
 
     def stop(self):
 
         if self._process is not None:
             self._process.terminate()
             self._process = None
-

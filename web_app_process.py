@@ -9,7 +9,7 @@ from flask import render_template
 from flask import Response
 from flask import request
 
-from process_control_base import ProcessControlBase
+from processes.process_base import ProcessControlBase
 from control_cmds import TerminateProcessCMD
 from control_cmds import StartProcessCMD
 from control_cmds import PropulsionCmd
@@ -123,7 +123,8 @@ class WebAppProcess(ProcessControlBase):
     web_app_process = None
 
     def __init__(self, odisseus_config, master_process):
-        ProcessControlBase.__init__(self, config=odisseus_config, name=odisseus_config.WEB_PROCESS_NAME)
+        ProcessControlBase.__init__(self, config=odisseus_config,
+                                    name=odisseus_config.WEB_PROCESS_NAME)
         self._master_process = master_process
 
     def start(self, **kwargs):
@@ -140,7 +141,9 @@ class WebAppProcess(ProcessControlBase):
 
         self.remove_interrupt()
         WebAppProcess.web_app_process = self
-        self.set_process(proc=Process(target=app.run, kwargs={"host":self.get_config().HOST, "debug":self.get_config().DEBUG, "port":self.get_config().PORT}))
+        self.set_process(proc=Process(target=app.run, kwargs={"host": self.get_config().HOST,
+                                                              "debug": self.get_config().DEBUG,
+                                                              "port": self.get_config().PORT}))
         super(WebAppProcess, self).start(**kwargs)
 
     def terminate_odisseus_process(self):
@@ -155,7 +158,7 @@ class WebAppProcess(ProcessControlBase):
 
 if __name__ == '__main__':
     from odisseus_config import odisseus_config_obj
-    from master_process import MasterProcess
+    from processes.master_process import MasterProcess
 
     opts, args = getopt.getopt(sys.argv, ["PLATFORM", ])
 
